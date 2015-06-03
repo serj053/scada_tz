@@ -5,7 +5,7 @@ if(isset($_GET['state'])){
     
 }else{
     
-    require('view/main.php');
+ header('Location:view/main.php');
     
 }
 
