@@ -12,8 +12,9 @@
         
     </head>
     <body >
-        <form>
-            <input type="button" value="button" onclick="getData('text.txt','insert')"/>
+        <form method="get">
+            <input type="button" value="button"
+             onclick="getData('data.php?c=control','insert')"/>
         </form>
         <div id="insert"></div>
         
