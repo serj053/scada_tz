@@ -1,0 +1,46 @@
+
+html, body{
+	margin:0;
+	padding:0;
+}
+
+	#control_panel{
+		width:264px;
+		height:408px;
+		outline:1px solid;
+		margin-left:40px;
+		margin-top:40px;
+		background:#EDEDED;
+	}
+	.function{
+		height:60px;
+		border-bottom:1px solid;	
+	}
+	#system{
+		background:#fff;
+		height:44px;		
+	}	
+		#manual_startup_label{
+			padding-left:40px;
+			font-size:10px;
+			height:30px;
+			/* padding-top:10px; */
+			font-weight:bold;
+		}
+			#control{
+				height:30px;
+			}
+			#start_stop{
+				height:30px;
+				width:180px;
+				background:#ccc;
+				float:left;	
+			}
+			#fan_img{
+				width:84px;
+				height:30px;
+				background:#ddd;
+				float:left;	
+			}
+	
+
