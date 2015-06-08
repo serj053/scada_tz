@@ -3,11 +3,41 @@ html, body{
 	margin:0;
 	padding:0;
 }
+.font{
+	font-family:Arial, sans-serif;
+}
+.font_title{
+	font-size:10px;
+}
+.font_content{
+	font-size:10px;
+}
+.label_control_panel{
+	padding-left:20px;
+	font-size:10px;
+	height:30px;			
+	font-weight:bold;
+	line-height:3;
+}
+#top_1{
+	margin:2px auto;
+	width:20px;
+}
+#systm{
+	margin-left:20px;
+	text-align:center;
+	font-weight:bold;
+}
+#sys_state{
+	color:#37CD23;
+	width:100px;
+	margin:auto;
+}
 
 	#control_panel{
 		width:264px;
 		height:408px;
-		outline:1px solid;
+		outline:2px solid #ddd;
 		margin-left:40px;
 		margin-top:40px;
 		background:#EDEDED;
@@ -20,27 +50,99 @@ html, body{
 		background:#fff;
 		height:44px;		
 	}	
-		#manual_startup_label{
-			padding-left:40px;
-			font-size:10px;
-			height:30px;
-			/* padding-top:10px; */
-			font-weight:bold;
+		#manual_startup_label{			
+			
+			
 		}
+			#manual_startup_label_div{
+				margin-top:10px;
+			}
 			#control{
 				height:30px;
 			}
 			#start_stop{
 				height:30px;
-				width:180px;
-				background:#ccc;
+				width:150px;
+				margin-left:20px;
 				float:left;	
+				font-size:10px;
 			}
-			#fan_img{
-				width:84px;
-				height:30px;
-				background:#ddd;
-				float:left;	
+			
+			#start_stop img{
+				display:block;
+				float:left;
+				
 			}
+			
+			#start , #stop{
+				float:left;
+				padding:2px;
+				cursor:pointer;
+			}
+			#start{
+				margin-right:10px;
+			}
+			#stop{
+				margin-left:10px;
+			}
+			#fan_img img{
+				position:relative;
+				bottom:8px;
+			}
+			
+			/*
+		input[type=range] {
+			-webkit-appearance: none;
+			}	
+			
+			input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	background-color: #ecf0f1;
+	border: 1px solid #bdc3c7;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+			
+	*/
+	#run_table span {
+		margin-left:20px;
+		margin-right:5px;
+	}
+	
+	#run_timetable input{
+		width:20px;
+		height:10px		
+	}
+	#activate{
+		color:white;
+		background:black;
+		font-weight:bold;
+		font-size:9px;
+	}
+	#summer, #winter, #work_mode img{
+		float:left;
+	}
+	#summer{
+		margin-right:10px;
+		cursor:pointer;
+	}
+	#winter{
+		margin-left:10px;
+		cursor:pointer;
+	}
+	#work_mode{
+		margin-left:20px;
+	}
+	 #lamp_img, #work_mode{
+		float:left;
+		position:relative;
+		
+	 }
+	 #lamp_img{
+		bottom:20px;
+		left:40px;
+	 }
 	
 

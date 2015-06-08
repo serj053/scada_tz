@@ -10,7 +10,7 @@
             
             
             <form action='main.php' method='get'>
-        РџСѓСЃРє        
+        Пуск        
             <input type='range' id='weight' min='0'
                    value='<?php
                    
@@ -25,7 +25,7 @@
                    max='2000' step='10'
                    name="range">
             
-        РЎС‚РѕРї  
+        Стоп  
             <br>       
             <input type="submit" value="send"/>
             </form>
