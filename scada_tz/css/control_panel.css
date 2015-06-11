@@ -23,11 +23,7 @@ html, body{
 	margin:2px auto;
 	width:20px;
 }
-#systm{
-	margin-left:20px;
-	text-align:center;
-	font-weight:bold;
-}
+
 #sys_state{
 	color:#37CD23;
 	width:100px;
@@ -50,10 +46,7 @@ html, body{
 		background:#fff;
 		height:44px;		
 	}	
-		#manual_startup_label{			
-			
-			
-		}
+
 			#manual_startup_label_div{
 				margin-top:10px;
 			}
@@ -86,7 +79,7 @@ html, body{
 				margin-left:10px;
 			}
 			#fan_img img{
-				position:relative;
+				position:relative;/**/
 				bottom:8px;
 			}
 			
@@ -121,9 +114,13 @@ html, body{
 		font-weight:bold;
 		font-size:9px;
 	}
-	#summer, #winter, #work_mode img{
+	#summer, #winter {
+		float:left;		
+	} 
+	#img_check{
 		float:left;
 	}
+	/*
 	#summer{
 		margin-right:10px;
 		cursor:pointer;
@@ -135,7 +132,9 @@ html, body{
 	#work_mode{
 		margin-left:20px;
 	}
-	 #lamp_img, #work_mode{
+	#lamp_img{
+		margin-left:20px;
+		width:50px;
 		float:left;
 		position:relative;
 		
@@ -143,6 +142,9 @@ html, body{
 	 #lamp_img{
 		bottom:20px;
 		left:40px;
+	 }*/
+	 #working_mode{
+		
 	 }
 	
 

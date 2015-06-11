@@ -1,0 +1,39 @@
+<html>
+<head><title></title>
+<style type="text/css">
+	#div_1{
+		width:60px; height:60px; border:1px solid; border-radius:15px;margin:100px;
+	}
+</style>
+<script type="text/javascript">
+    function getEvent(e){
+        e = e || window.event;
+    //получаем объект событие для EE    
+        if(e.pageX ==null && e.clientX != null){
+            var html = document.documentElement;
+            var body = document.body;
+            e.pageX = e.clientX + (html && html.scrollLeft ||
+                    body && body.scrollLeft || 0) - html.clientLeft;
+            e.pageY = e.clientY + (html && html.scrollTop ||
+                    body && body.scrollTop ||0) - html.clientTop;
+            
+        }
+    //добавляем which EE - обработка нажатия кнопок
+                if (!e.which && e.button) {
+          if (e.button & 1) e.which = 1
+          else if (e.button & 4) e.which = 2
+          else if (e.button & 2) e.which = 3
+        }
+
+        
+    }
+
+</script>
+
+</head>
+<body>
+	<div id="div_0"> </div>
+	<div id="div_1"> </div>
+
+</body>
+</html>
