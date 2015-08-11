@@ -1,39 +1,48 @@
 <html>
 <head><title></title>
-<style type="text/css">
-	#div_1{
-		width:60px; height:60px; border:1px solid; border-radius:15px;margin:100px;
+<style>
+	#dv{
+		width:60px;
+		height:60px;
+		border:1px solid;
+		border-radius:10px;
+		line-height:4;
+		text-align:center;
+		cursor:pointer;
 	}
 </style>
-<script type="text/javascript">
-    function getEvent(e){
-        e = e || window.event;
-    //получаем объект событие для EE    
-        if(e.pageX ==null && e.clientX != null){
-            var html = document.documentElement;
-            var body = document.body;
-            e.pageX = e.clientX + (html && html.scrollLeft ||
-                    body && body.scrollLeft || 0) - html.clientLeft;
-            e.pageY = e.clientY + (html && html.scrollTop ||
-                    body && body.scrollTop ||0) - html.clientTop;
-            
-        }
-    //добавляем which EE - обработка нажатия кнопок
-                if (!e.which && e.button) {
-          if (e.button & 1) e.which = 1
-          else if (e.button & 4) e.which = 2
-          else if (e.button & 2) e.which = 3
-        }
+<script>
+window.onload = function(){
+	var el = document.getElementById('dv');
+	el.onmousedown = function(e){
 
-        
-    }
-
+		var el = this;
+		el.style.position ='absolute';
+		
+			var dx = e.pageX - el.offsetLeft;
+			var dy = e.pageY - el.offsetTop;
+		
+		el.onmousemove = function(e){
+			
+		
+			el.style.left = e.pageX-dx+'px';
+			el.style.top = e.pageY-dy+'px';
+			
+			
+			el.innerHTML = e.pageX +' - '+el.offsetLeft;
+		}
+		
+		el.onmouseup = function(){
+			el= null;
+		}
+		
+	}
+}
 </script>
-
 </head>
 <body>
-	<div id="div_0"> </div>
-	<div id="div_1"> </div>
+	<div id="dv">	
+	</div>
 
 </body>
 </html>
