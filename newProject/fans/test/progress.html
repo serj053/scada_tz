@@ -1,0 +1,139 @@
+<html>
+<head><title></title>
+<style type="text/css">
+	#div_1{
+		width:16px;
+		height:16px;
+		border:1px solid;
+		border-radius:8px;
+		background:black;
+	}
+	progress {
+
+
+	border-radius: 19px;
+}
+
+progress::-webkit-progress-bar {
+	background-color:black;
+	height:3px;
+}
+progress::-webkit-progress-value {
+	border:1px solid;
+	border-radius:7px;
+	position:relative;
+	top:-5px;
+	height:15px;
+	background-color:black;
+	left:0px;
+}
+progress {
+	/* стили */
+}
+progress::-webkit-progress-bar {
+	/* стили  */
+}
+progress::-webkit-progress-value {
+	/* стили */
+}
+progress::-moz-progress-bar {
+	/* стили */
+}
+#test{
+	width:80px;
+	height:80px;
+	border:1px solid;
+	
+}
+#test > div{
+	width:60px;
+	height:60px;
+	border:1px solid;
+	margin:auto;
+}
+#test > div > div{
+	width:40px;
+	height:40px;
+	border:1px solid;
+	margin:auto;
+}
+#test > div > div > div{
+	width:20px;
+	height:20px;
+	border:1px solid;
+	margin:auto;
+}
+#element{
+	width:60px;
+	height:60px;
+	border:1px solid;
+	background:#ddd;
+	margin-left:200px;
+	}
+
+</style>
+<script type="text/javascript">
+window.onload = function(){
+
+	function fixEvent(e){
+		
+	}
+	var el2 = document.getElementById('element');
+	element.onmousedown= function (e){
+		var el = this;
+		//el2.innerHTML = e.pageX;
+		//document.body.appendChild(el)
+		el.style.position ='absolute';
+		el.style.margin = 0;
+		el.style.padding =0;
+		move(e);
+		;
+		
+		/**/
+		function move(e){
+			el.style.left = e.pageX+'px';
+			el.style.top = e.pageY+'px';
+		}
+		
+		
+		document.onmousemove = function(e){
+			move(e);
+		}
+		
+		document.onmouseup = function(){
+			document.onmousemove = null;
+		}
+		
+	}
+	
+	el2.ondgarstart = function(){
+		return false;
+	}
+
+}	
+</script>
+</head>
+<body>
+
+	<div id="div_1">	</div>
+	<hr>
+	<div style="margin:40px;">
+	<progress  value='10' max='100'> <progress/>
+	<br>	
+	</div>
+
+	<div id="test"  class="Ogog" >
+		<div id="1" class="Serj">
+			<div id="2" class="Djon">
+				<div id="3" class="Inner">
+				
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div id='element'> 
+
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+<html>
+<head><title></title>
+<style>
+	#dv{
+		width:60px;
+		height:60px;
+		border:1px solid;
+		border-radius:10px;
+		line-height:4;
+		text-align:center;
+		cursor:pointer;
+	}
+</style>
+<script>
+window.onload = function(){
+	var el = document.getElementById('dv');
+	el.onmousedown = function(e){
+
+		var el = this;
+		el.style.position ='absolute';
+		
+			var dx = e.pageX - el.offsetLeft;
+			var dy = e.pageY - el.offsetTop;
+		
+		el.onmousemove = function(e){
+			
+		
+			el.style.left = e.pageX-dx+'px';
+			el.style.top = e.pageY-dy+'px';
+			
+			
+			el.innerHTML = e.pageX +' - '+el.offsetLeft;
+		}
+		
+		el.onmouseup = function(){
+			el= null;
+		}
+		
+	}
+}
+</script>
+</head>
+<body>
+	<div id="dv">	
+	</div>
+
+</body>
+</html>
