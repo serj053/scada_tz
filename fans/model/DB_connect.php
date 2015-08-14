@@ -167,7 +167,7 @@
 //var_dump($sth);   
      // return($sth->fetchAll(PDO::FETCH_ASSOC));
     }
-/*выводим все записи из таблицы P1_messages базы данных_*/	
+/*выводим все записи из таблицы P1_messages базы данных для определенной установки*/
 	function selectAllValue(){
 		$fan_num = $_GET['fan_num'];
 	    $sq = 'select * from p1_value where fan_number="'.$fan_num.'"';
@@ -179,7 +179,8 @@
 	}
 	
 
-	/*выводим все записи ПО КРИТЕРИЮ какая вкладка из базы данных"FAIL_FAN_BTN","FAIL_FREEZ_BTN","FAIL_VALVE_BTN","RESET"  */	
+	/*выводим все записи которые были занесены с помощью кнопок :"FAIL_FAN_BTN","FAIL_FREEZ_BTN",
+	"FAIL_VALVE_BTN","RESET"  */
 	function selectSomeMsg($arr, $flag=''){
 		$fan = $_GET['fan_num'];	
 		if($flag =='operation' || $flag == 'event'){
