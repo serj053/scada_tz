@@ -32,7 +32,7 @@
 	   if(isset($_GET['fan_val'])){//скорость вращения	
 		    $fan_val = $_GET['fan_val'];	
 		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -51,8 +51,8 @@
 	   }
 	   if(isset($_GET['tmp_val'])){//уставка
 		   $tmp_val = $_GET['tmp_val'];
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -70,8 +70,8 @@
 	   }	
 	   if(isset($_GET['TE3'])){// в канале
 		   $te3 = $_GET['TE3'];	   
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -89,8 +89,8 @@
 	   }
 	    if(isset($_GET['TE2'])){
 		   $te2 = $_GET['TE2'];	   
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+			$row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -108,8 +108,8 @@
 	   }	
 	   if(isset($_GET['TE1'])){
 		   $te1 = $_GET['TE1'];	   
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -127,8 +127,8 @@
 	   }
 		if(isset($_GET['INC_NUM'])){
 		   $inc_num = $_GET['INC_NUM'];	   
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+			$row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
@@ -146,8 +146,8 @@
 		}
 		if(isset($_GET['WATERBACK_IND'])){
 		   $wat = $_GET['WATERBACK_IND'];	   
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value';
+		   $fan_num = $_GET['fan_num'];
+			$row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
 				if($elem != false){
