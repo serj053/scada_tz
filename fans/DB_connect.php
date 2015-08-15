@@ -276,35 +276,3 @@
 
 
 
-/*
-function insertMsg(){
-		$arr = array('stop'=>'stop','button'=>'button','comm'=>'нажата кнопка stop','cheked'=>'true');
-        $sq = 'insert into all_messages(type,source,message, status)
-				values(:stop,:button,:comm,:cheked)';
-        $dbh = self::getDbh();
-        $dbh->exec("SET NAMES utf8"); 
-       $sth = $dbh->prepare($sq);
-       $sth->execute($arr);
-	var_dump($sth);   
-     // return($sth->fetchAll(PDO::FETCH_ASSOC));
-    }
-
-
-
- static function getAll(){
-        $sq = 'select * from '.static::$table;
-        $dbh = self::getDbh();
-        $dbh->exec("SET NAMES utf8");
-       $sth = $dbh->prepare($sq);
-       $sth->execute();
-      return($sth->fetchAll(PDO::FETCH_ASSOC));
-    }
-
-    static function getOne($id){
-        $sq = 'select * from '.static::$table.' where id_art = :id';
-        $arr = array(':id' => $id);
-        $dbh = self::getDbh();
-        $dbh->exec("SET NAMES utf8");
-        $sth = $dbh->prepare($sq);
-        $sth->execute($arr);
-        retur

@@ -6,8 +6,8 @@
  
     static function getDbh(){
         if(self::$dbh == null) {
-            $dbh = "mysql:host=localhost;dbname=fan_log";
-			$dbh =	new Pdo($dbh, 'root', '3141');
+            $dbh = "mysql:host=localhost;dbname=whatcanru";
+			$dbh =	new Pdo($dbh, 'whatcanru', 'serj0531serj');
 			$dbh->exec("SET NAMES utf8");
             return $dbh;
         }else{
