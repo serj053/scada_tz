@@ -1,5 +1,5 @@
 <?php 
-	
+/*-1-*/	
 	class DB_connect{
 		
     static private $dbh = null;
@@ -204,7 +204,7 @@
 	function selectAllMsg(){
 //echo 'IN selectAllMessage() ';
 		$fan = $_GET['fan_num'];	
-	    $sq = 'select * from P1_messages where fan_number="'.$fan.'"';
+	    $sq = 'select * from p1_messages where fan_number="'.$fan.'"';
         $dbh = self::getDbh();
 		$sth = $dbh->prepare($sq);
 		$sth->execute();
@@ -249,7 +249,7 @@
 		$true_false = $_GET['what'];	
 //echo 'id - '.$id.'<br>';
 //echo 'what - '.$true_false.'<br>';		
-	    $sq = 'update P1_messages  set status = "'.$true_false.'" where id ="'.$id.'"';
+	    $sq = 'update p1_messages  set status = "'.$true_false.'" where id ="'.$id.'"';
 	
         $dbh = self::getDbh();
 		$sth = $dbh->prepare($sq);
