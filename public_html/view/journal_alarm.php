@@ -11,7 +11,11 @@ if(isset($ms)){
 		<div class="source_td"><?php echo $v['source'] ?></div>
 		<div class="message_td"><?php echo $v['message'] ?></div>
 		<div class="status_td">
-			<input type="checkbox" <?php echo $v['status']; ?> />Ознакомлен
+			<input type="checkbox" <?php echo $v['status']; ?> />
+                       <?php
+                            if($v['status'] == 'checked') echo '"УСТР."';
+                            else echo'"АКТ."';
+                          ?>
 		</div>
 		<div class="hidden"><?php echo $v['id'] ?></div>
 	</div>	
