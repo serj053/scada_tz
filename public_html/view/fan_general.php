@@ -217,7 +217,7 @@
                                         <div class="mash_label">ТЕМПЕРАТУРА В КАНАЛЕ</div>
                                         <div id="TE2_2"> 
                                                 <form action="" method="">
-                                                        <input type="text" id="input_TE2_2"/>
+                                                        <input type="text" id="input_TE2_2" value="<?php echo $TE2;?>"/>
                                                 </form>
                                         </div>
                                 </div>

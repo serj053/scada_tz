@@ -2,17 +2,17 @@
 
 <html>
 <head>
-	<title>Список ВУ</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">	
-	<script type="text/javascript" src=""></script>
-	<link rel="stylesheet" href="css/list.css" type="text/css">
-	<script type="text/javascript">
-		
-	</script>
+        <title>Список ВУ</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">	
+        <script type="text/javascript" src=""></script>
+        <link rel="stylesheet" href="css/list.css" type="text/css">
+        <script type="text/javascript">
+
+        </script>
 </head>
 <body>
-	<div id="wrap">
+        <div id="wrap">
             <div id="cap">
                     <div id="">УСТАНОВКА</div>
                     <div id="">№ ПОМЕЩЕНИЯ</div>
@@ -27,8 +27,10 @@
             </div>
             <div id="str_ms">
 
-            ОБЩЕОБМЕННАЯ ВЕНТИЛЯЦИЯ
+                             ОБЩЕОБМЕННАЯ ВЕНТИЛЯЦИЯ
+
             </div>
+
             <div id="list">
             <?php 
             $count_content =0;
@@ -55,6 +57,56 @@
             </a>		
             <?php };?>
             </div>
+            
+              <div id="marg">  </div>
+              
+                     
+              
+
+
+              <div id="logging">
+                <div id="buttons_list">	<!--линия указателей аварийности-->
+                        <div id="EVENT"  class="button_off" onmousedown = "logging_on_off('EVENT')"> СОБЫТИЯ</div>
+                        <div id ="ALARM" class="button_off" onmousedown = "logging_on_off('ALARM')">ПРЕДУПРЕЖДЕНИЯ </div>
+                        <div id="LOG" class="button_off" onmousedown = "logging_on_off('LOG')">ЖУРНАЛ ОПЕРАЦИЙ</div>
+                        <div id ="ALL" class="button_on" onmousedown = "logging_on_off('ALL')">ВСЕ </div>
+                </div>
+
+                        <div id="table_list">
+                            <div id="top_name">
+                                <div id="DATA"  class="date_lt">ДАТА</div>
+                                <div id="SOURCE"  class="source_lt">ИСТОЧНИК</div>
+                                <div id="MESSAGE"  class="message_lt">СООБЩЕНИЕ</div>
+                                <div id="STATUS"  class="status_lt">СТАТУС</div>
+                            </div>    
+
+                                <div id="scroll_area" >
+                                     <?php foreach($item as $pt): ?>
+                                        <div id="gen_journal">
+                                            <div class="date_lt">
+                                                <?php echo $pt['date_time']; ?>
+                                            </div>
+                                            <div class="source_lt">
+                                                 <?php echo $pt['fan_number']; ?>
+                                            </div>
+                                            <div class="message_lt">
+                                                 <?php
+                                                  $msg = explode(':',$pt['message']);
+                                                 // if(isset($msg[0]))
+                                                      echo $msg[0];
+                                                   //   else echo '';
+                                                 ?>
+                                            </div>
+                                            <div class="status_lt">
+                                                 <?php echo $pt['status']; ?>
+                                            </div>
+
+                                        </div>
+                                  <?php  endforeach; ?>
+
+                                </div>
+                        </div>
+        </div>
     </div>
 </body>
 </html>	

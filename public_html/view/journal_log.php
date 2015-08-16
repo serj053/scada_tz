@@ -18,7 +18,6 @@
                         <?php 
         //echo'message - '.$v['message'];	
                         $arr = explode(':',$v['message']);
-//var_dump($arr)	;
                         //if(isset($str)){
                         $operation_ms = $arr[1];
                         echo $operation_ms;

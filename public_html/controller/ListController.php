@@ -17,6 +17,12 @@
                         $sth = $dbh->prepare($sq);
                         $sth->execute();
                         $arr = $sth->fetchAll(PDO::FETCH_ASSOC);
+                        
+                         $sq = 'select * from p1_messages ';
+                        $sth = $dbh->prepare($sq);
+                        $sth->execute();
+                        $item = $sth->fetchAll(PDO::FETCH_ASSOC);
+                        
                                 require 'view/list.php';
                 }
 
