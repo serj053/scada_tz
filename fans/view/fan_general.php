@@ -52,7 +52,7 @@
 				<div id="run_table" class="font_content">
 					<span>вкл</span><input type="text" value="22:10"  />
 					<span>выкл</span><input type="text" value="24:55"  />
-					<span id="BTN_T" class="turn_off" onclick="onclick_acivate()"> АКТИВИРОВАТЬ </span>
+					<span id="BTN_T" class="turn_off" > АКТИВИРОВАТЬ </span>
 				</div>
 			
 			</div>

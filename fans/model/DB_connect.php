@@ -7,47 +7,49 @@
     static function getDbh(){
         if(self::$dbh == null) {
             $dbh = "mysql:host=localhost;dbname=whatcanru";
-			$dbh =	new Pdo($dbh, 'whatcanru', 'serj0531serj');
-			$dbh->exec("SET NAMES utf8");
+            $dbh = new Pdo($dbh, 'whatcanru', 'serj0531serj');
+            $dbh->exec("SET NAMES utf8");
             return $dbh;
         }else{
             return self::$dbh;
         }
     }
 /*вставляем любое сообщение в базу данных*/	
-	function insertMsg(){
+    function insertMsg(){
 //echo'In insertMdg()';		
-	/*вставляем данные в две таблицы в зависимсти от назначения
-	данные для журнала в таблицу P1_messages, данные величин таких какаяскорость вентилятора температура уставки и прочих в p1_value*/
-	 $dbh = self::getDbh();
-		if(isset($_GET['fan_num']) && isset($_GET['what']) && isset($_GET['str'])){
-		$fan_num = $_GET['fan_num'];
-		$id_str = $_GET['what'];
-		$ms_str	= $_GET['str'];
+    /*вставляем данные в две таблицы в зависимсти от назначения
+    данные для журнала в таблицу P1_messages, данные величин таких какаяскорость
+     *  вентилятора температура уставки и прочих в p1_value*/
+         $dbh = self::getDbh();
+            if(isset($_GET['fan_num']) && isset($_GET['what']) && isset($_GET['str'])){
+            $fan_num = $_GET['fan_num'];
+            $id_str = $_GET['what'];
+            $ms_str	= $_GET['str'];
         $sq = 'insert into p1_messages(elem_id,fan_number,message, status)
-				values("'.$id_str.'","'.$fan_num.'","'.$ms_str.'","uncheked")';	      
-        $sth = $dbh->prepare($sq);
-       $sth->execute();
+                        values("'.$id_str.'","'.$fan_num.'","'.$ms_str.'","uncheked")';	      
+         $sth = $dbh->prepare($sq);
+         $sth->execute();
 	   }
+           
 	   if(isset($_GET['fan_val'])){//скорость вращения	
-		    $fan_val = $_GET['fan_val'];	
-		   $fan_num = $_GET['fan_num'];			     
-		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
-		   $sth = $dbh->query($row_el);
-		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
-				if($elem != false){
-			$sq_up = 'UPDATE p1_value set VEL_IND ='.$fan_val.' where fan_number ="'.$fan_num.'"';	
-					$sth = $dbh->prepare($sq_up);
-					$sth->execute();	
-				}else{
-		/*берем из GET[] номер установки и добавляем или перезаписываем*/
-			if(isset($_GET['fan_num'])){
-			$fan_num = $_GET['fan_num'];
-			}		
-			   $sq = 'insert into p1_value(fan_number,VEL_IND) values("'.$fan_num.'","'.$fan_val.'")';
-			   $sth = $dbh->prepare($sq);
-			   $sth->execute();
-				}
+                            $fan_val = $_GET['fan_val'];	
+                           $fan_num = $_GET['fan_num'];			     
+                           $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
+                           $sth = $dbh->query($row_el);
+                           $elem = $sth->fetch(PDO::FETCH_ASSOC);
+                                        if($elem != false){
+                                $sq_up = 'UPDATE p1_value set VEL_IND ='.$fan_val.' where fan_number ="'.$fan_num.'"';	
+                                                $sth = $dbh->prepare($sq_up);
+                                                $sth->execute();	
+                                        }else{
+                        /*берем из GET[] номер установки и добавляем или перезаписываем*/
+                                if(isset($_GET['fan_num'])){
+                                $fan_num = $_GET['fan_num'];
+                                }		
+                                   $sq = 'insert into p1_value(fan_number,VEL_IND) values("'.$fan_num.'","'.$fan_val.'")';
+                                   $sth = $dbh->prepare($sq);
+                                   $sth->execute();
+                                        }
 	   }
 	   if(isset($_GET['tmp_val'])){//уставка
 		   $tmp_val = $_GET['tmp_val'];
@@ -55,18 +57,18 @@
 		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
-				if($elem != false){
-					$sq_up = 'UPDATE p1_value set SET_IND = '.$tmp_val.' where fan_number ="'.$fan_num.'"';		
-					$sth = $dbh->prepare($sq_up);
-					$sth->execute();	
-				}else{
-			if(isset($_GET['fan_num'])){
-			$fan_num = $_GET['fan_num'];
-			}		
-			   $sq = 'insert into p1_value(fan_number,SET_IND) values("'.$fan_num.'","'.$tmp_val.'")';
-			   $sth = $dbh->prepare($sq);
-			   $sth->execute();
-				}
+                            if($elem != false){
+                                    $sq_up = 'UPDATE p1_value set SET_IND = '.$tmp_val.' where fan_number ="'.$fan_num.'"';		
+                                    $sth = $dbh->prepare($sq_up);
+                                    $sth->execute();	
+                             }else{
+                                    if(isset($_GET['fan_num'])){
+                                    $fan_num = $_GET['fan_num'];
+                                    }		
+                                       $sq = 'insert into p1_value(fan_number,SET_IND) values("'.$fan_num.'","'.$tmp_val.'")';
+                                       $sth = $dbh->prepare($sq);
+                                       $sth->execute();
+                            }
 	   }	
 	   if(isset($_GET['TE3'])){// в канале
 		   $te3 = $_GET['TE3'];	   
@@ -74,11 +76,11 @@
 		   $row_el = 'SELECT fan_number FROM p1_value where fan_number="'.$fan_num.'"';
 		   $sth = $dbh->query($row_el);
 		   $elem = $sth->fetch(PDO::FETCH_ASSOC);
-				if($elem != false){
-					$sq_up = 'UPDATE p1_value set TE3 = '.$te3.' where fan_number ="'.$fan_num.'"';	
-					$sth = $dbh->prepare($sq_up);
-					$sth->execute();	
-				}else{
+                                    if($elem != false){
+                                            $sq_up = 'UPDATE p1_value set TE3 = '.$te3.' where fan_number ="'.$fan_num.'"';	
+                                            $sth = $dbh->prepare($sq_up);
+                                            $sth->execute();	
+                                    }else{
 			if(isset($_GET['fan_num'])){
 			$fan_num = $_GET['fan_num'];
 			}			

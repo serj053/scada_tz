@@ -12,7 +12,7 @@
 
 /*Значение числового индикатора наружной температуры задаваемое случайным образом
 		var win_tr_out = document.getElementById('T1');
-		var tr_out = Math.floor(Math.random()*60 - 30) ;
+		var tr_out = Math.floor(Math.random()*60 - 30);
 		
 		win_tr_out.value = tr_out;
 */

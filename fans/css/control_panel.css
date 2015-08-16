@@ -652,7 +652,7 @@ body, html {
 	width:68px;
 	height:100px;
 	float:left;
-	background-image:;
+	background-image:url('img/out.png');
 	background-repeat:no-repeat;
 	background-position:center;
 }
