@@ -3,7 +3,7 @@
 *Fan/default - загрузка страницы по умолчанию,
 *Journal/(evetn, -alarm, -logg, -all) - загрузка соотвтетствующей страницы журнала
 */
-//echo 'IN index';die;
+//echo 'IN index<br';//die;
 	function __autoload($class){
                         $directories = array('controller/','model/');
                         foreach($directories as $directory){
@@ -18,10 +18,7 @@
 
 	$obj = isset($_GET['obj'])?$_GET['obj']:'List/load';
 	$obj = explode('/',$obj);
-//
-//echo '$-GET["obj"]  - '.$_GET['OBJ'].'<br>';	
-//echo '$-GET["obj"]  - '.$_GET['OBJ'].'<br>';	
-	
+
 	$act = $obj[1];
 	$obj = $obj[0];
 /*		

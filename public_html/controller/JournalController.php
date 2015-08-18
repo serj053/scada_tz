@@ -1,11 +1,11 @@
 <?php 
 /*записывает состояние установки в журнал*/
 require 'model/DB_connect.php';
-
+//echo'In jornalCobntroller()';	
 class JournalController{
 		
 		public function action($action){
-			
+		
 			$method = $action."Action";
 			if(method_exists($this, $method)){
 				$this->$method();

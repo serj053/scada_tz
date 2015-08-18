@@ -82,9 +82,30 @@ a div div{
     height:25px;
     line-height:1.6;
     float:left;
+    background-color:#4C4849;
+    color:#fff;
     text-align: center;
-    border:1px solid;
+   border-top:1px solid #ccc;
+   border-right:1px solid #ccc;
+   cursor:pointer;
 }
+
+#buttons_list div{
+   margin-left:4px;
+}
+
+ .button_on{/*кнопка вжата*/
+        /*border-top:4px solid #ccc;*/
+        border-bottom:1px solid  #ccc;
+        border-left:1px solid #ccc;
+        margin-top:6px ;
+}
+        .button_off{/*кнопка отжата*/
+        border-bottom:6px solid #aaa;
+        border-left:6px solid #aaa;
+
+        }
+
 /*   ТАБЛИЦА  */
 #table_list{
     width:1000px;

@@ -969,7 +969,7 @@
    //alert('In logging_on_off in_id = '+in_id);	
                    var fan_number = document.getElementById('NAME').innerText;
                    var mass = new Array("EVENT","ALARM","LOG","ALL");
-
+//alert(in_id);
                    var id_st  = document.getElementById(in_id);
                    if(id_st.className == "button_off"){
                            id_st.className = "button_on"; 
@@ -977,8 +977,9 @@
    /*обращаемся к серверу для загрузки данныз в таблице*/
            /*переводим в нижний регистр для PHP метода*/		
                            var status = in_id.toLowerCase();
+        /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/                   
                            var req = 'obj=Journal/'+status+'&fan_num='+fan_number;
-   //alert(req);
+ // alert(req);
                            callServer(req,"scroll_area");
 
    /*возвращаем остальные кнопки в исходное состояние*/			
