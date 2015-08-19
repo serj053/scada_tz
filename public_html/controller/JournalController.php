@@ -93,7 +93,7 @@ class JournalController{
 //echo 'In selecktAction()';
 		$choose = $_GET['id_table'];
 		$obj = new DB_connect;	
-		$obj->updateMsg();//вставляем в базу	
+		$obj->updateChecked();//вставляем в базу	
 		$choose = $choose.'Action';	
 //echo 'choose = '.$choose;		die;		
 		$this->$choose();

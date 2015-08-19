@@ -1,7 +1,14 @@
 /* 
  управление списком вентиляторов
  */
-
+window.onmousedown = function(e){
+    e = e ||window.event;
+    var el = e.target.getAttribute('id');
+    if(el != null && el.slice(0,4) == 'str_'){
+        
+    }
+    
+};
 
 function logging_on_off(in_id){
  //  alert('In logging_on_off in_id = '+in_id);	
@@ -11,12 +18,12 @@ function logging_on_off(in_id){
                    var id_st  = document.getElementById(in_id);
                    if(id_st.className == "button_off"){
                            id_st.className = "button_on"; 
-var fan_number ='П1';
+//var fan_number ='П1';
    /*обращаемся к серверу для загрузки данныз в таблице*/
            /*переводим в нижний регистр для PHP метода*/		
                            var status = in_id.toLowerCase();
         /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/                   
-                           var req = 'obj=List/'+status+'&fan_num='+fan_number;
+                           var req = 'obj=List/'+status;//+'&fan_num='+fan_number;
  // alert(req);
                            callServer(req,"scroll_area");
 

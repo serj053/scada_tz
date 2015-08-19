@@ -12,20 +12,13 @@ class ListController{
     /*загрузить список существующих установок*/
     function loadAction(){
             $dbh = new DB_connect();
-            $dbh = $dbh->getDbh();
-            $sq = 'select * from p1_value ';
-            $sth = $dbh->prepare($sq);
-            $sth->execute();
-            $arr = $sth->fetchAll(PDO::FETCH_ASSOC);
+            $arr =$dbh->getList();
 
-             $sq = 'select * from p1_messages ';
-            $sth = $dbh->prepare($sq);
-            $sth->execute();
-            $items = $sth->fetchAll(PDO::FETCH_ASSOC);
+            $items = $dbh->getListTable();	
             ob_start();
             require'view/list_table.php';
             $table = ob_get_contents();
-            ob_end_flush();
+            ob_end_clean();
 
                     require 'view/list.php';
     }
@@ -34,10 +27,9 @@ class ListController{
 /*получаем из базы данных ВСЕ данные и вставляем в таблицу*/
 //echo 'In allaction()';
             $obj = new DB_connect;	
-            $items = $obj->selectAllMsg();	
-//	var_dump($ms);		
+            $items = $obj->getListTable();			
             ob_start();
-            require 'view/list.php';
+            require 'view/list_table.php';
             ob_end_flush();
     }
 
@@ -48,10 +40,10 @@ class ListController{
 
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $obj = new DB_connect;
-                $items = $obj->selectSomeMsg($arr_id);	
+                $items = $obj->selectSomeList($arr_id);	
 //var_dump($ms);		
                         ob_start();
-                         require'view/list.php';
+                         require'view/list_table.php';
                         //$journal = ob_get_contents();
                 ob_end_flush();
                 }
@@ -64,9 +56,9 @@ class ListController{
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 //$arr_id = 'operation';
                 $obj = new DB_connect;
-                $items = $obj->selectSomeMsg($arr_id,'operation');	
+                $items = $obj->selectSomeList($arr_id,'operation');	
                         ob_start();
-                         require'view/list.php';
+                         require'view/list_table.php';
                 ob_end_flush();
                 }
 
@@ -76,9 +68,9 @@ class ListController{
 получаем из базы данных "ОПЕРАЦИИ" и вставляем в таблицу*/
         $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $obj = new DB_connect;
-                $items = $obj->selectSomeMsg($arr_id,'event');							
+                $items = $obj->selectSomeList($arr_id,'event');							
                         ob_start();
-                         require'view/list.php';
+                         require'view/list_table.php';
                 ob_end_flush();
                 }
 

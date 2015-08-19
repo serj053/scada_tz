@@ -65,7 +65,15 @@ a div div{
 #marg{
     clear:both;
     height:40px;
-
+   
+}
+#signal{
+    width:60px;
+    height:60px;
+    outline:1px solid;
+    float:right;
+    margin-right:40px;
+    margin-top:20px;
 }
 
 /*  ЖУРНАЛ    ****************************/

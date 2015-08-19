@@ -57,7 +57,9 @@
     <?php };?>
     </div>
 
-      <div id="marg">  </div>
+      <div id="marg">
+          <div id="signal"> </div>
+      </div>
 
 
       <div id="logging">

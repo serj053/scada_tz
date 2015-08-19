@@ -184,12 +184,12 @@
 	/*выводим все записи которые были занесены с помощью кнопок :"FAIL_FAN_BTN","FAIL_FREEZ_BTN",
 	"FAIL_VALVE_BTN","RESET"  */
 	function selectSomeMsg($arr, $flag=''){
-		$fan = $_GET['fan_num'];	
-		if($flag =='operation' || $flag == 'event'){
-		$arr = implode('","',$arr);	
-		$sq = 'select * from p1_messages where elem_id not in("'.$arr.'") and fan_number="'.$fan.'"';
-		}else{	
-		$arr = implode('","',$arr);		
+                    $fan = $_GET['fan_num'];	
+                    if($flag =='operation' || $flag == 'event'){
+                    $arr = implode('","',$arr);	
+                    $sq = 'select * from p1_messages where elem_id not in("'.$arr.'") and fan_number="'.$fan.'"';
+                    }else{	
+                    $arr = implode('","',$arr);		
 	    $sq = 'select * from p1_messages where elem_id in("'.$arr.'") and fan_number="'.$fan.'"';
 		}
         $dbh = self::getDbh();
@@ -244,7 +244,7 @@
 	}
 	
 	/*обновление записи из базы*/	
-	function updateMsg(){
+	function updateChecked(){
 		$id = $_GET['id'];
 		$true_false = $_GET['what'];	
 //echo 'id - '.$id.'<br>';
@@ -262,51 +262,39 @@
 		 $dbh = self::getDbh();
 		$sth = $dbh->prepare($sq);
 		$sth->execute();
+                                return($sth->fetchAll(PDO::FETCH_ASSOC));
 		
+	}
+        
+                
+            /*выбор всех данных для общей таблицы*/
+                function getListTable(){
+                    $sq = 'SELECT * FROM p1_messages';
+                     $dbh = self::getDbh();
+                    $sth = $dbh->prepare($sq);
+                    $sth->execute();
+                    return($sth->fetchAll(PDO::FETCH_ASSOC));
+                    
+                }
+                
+                function selectSomeList($arr, $flag=''){
+                    if($flag =='operation' || $flag == 'event'){
+                    $arr = implode('","',$arr);	
+                    $sq = 'select * from p1_messages where elem_id not in("'.$arr.'") ';
+                    }else{	
+                    $arr = implode('","',$arr);		
+	    $sq = 'select * from p1_messages where elem_id in("'.$arr.'") ';
+		}
+                    $dbh = self::getDbh();
+		$sth = $dbh->prepare($sq);
+		$sth->execute();
+//	var_dump($sth);   
+		return($sth->fetchAll(PDO::FETCH_ASSOC));
+		  
 	}
 	
 	
 }
-	//$obj = new DB_connect;	
-	//$ms = $obj->insertMsg();
-	//$ms = $obj->selectMsg();
-	//var_dump($ms);	
-
-
-
-/*
-function insertMsg(){
-		$arr = array('stop'=>'stop','button'=>'button','comm'=>'нажата кнопка stop','cheked'=>'true');
-        $sq = 'insert into all_messages(type,source,message, status)
-				values(:stop,:button,:comm,:cheked)';
-        $dbh = self::getDbh();
-       $sth = $dbh->prepare($sq);
-       $sth->execute($arr);
-	var_dump($sth);   
-     // return($sth->fetchAll(PDO::FETCH_ASSOC));
-    }
-
-
-
- static function getAll(){
-        $sq = 'select * from '.static::$table;
-        $dbh = self::getDbh();
-       $sth = $dbh->prepare($sq);
-       $sth->execute();
-      return($sth->fetchAll(PDO::FETCH_ASSOC));
-    }
-
-    static function getOne($id){
-        $sq = 'select * from '.static::$table.' where id_art = :id';
-        $arr = array(':id' => $id);
-        $dbh = self::getDbh();
-        $sth = $dbh->prepare($sq);
-        $sth->execute($arr);
-        return $sth->fetch();
-    }
-*/
-
-
-		
+	
 	
 
