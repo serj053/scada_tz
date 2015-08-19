@@ -20,8 +20,9 @@ foreach($items as $pt):
                //   else echo '';
              ?>
         </div>
-        <div class="status_lt" id="<?php echo $str_id;  ?>">
-             <?php echo $pt['status']; ?>
+        <div class="status_lt" >
+            <input type="checkbox" <?php echo $pt['status']; ?> 
+                   id="<?php echo $str_id;  ?>"/>             
         </div>
 
     </div>
