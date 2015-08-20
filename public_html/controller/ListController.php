@@ -3,6 +3,7 @@
 class ListController{
 
     public function action($action){
+//echo'IN actionControl() - '.$action; //    die;   
             $method = $action."Action";
             if(method_exists($this, $method)){
                     $this->$method();
@@ -26,8 +27,8 @@ class ListController{
             private function allAction(){
 /*получаем из базы данных ВСЕ данные и вставляем в таблицу*/
 //echo 'In allaction()';
-            $obj = new DB_connect;	
-            $items = $obj->getListTable();			
+            $dbh = new DB_connect;	
+            $items = $dbh->getListTable();			
             ob_start();
             require 'view/list_table.php';
             ob_end_flush();
@@ -39,8 +40,8 @@ class ListController{
 выбираем из базы по набору идентификаторов*/
 
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
-                $obj = new DB_connect;
-                $items = $obj->selectSomeList($arr_id);	
+                $dbh = new DB_connect;
+                $items = $dbh->selectSomeList($arr_id);	
 //var_dump($ms);		
                         ob_start();
                          require'view/list_table.php';
@@ -55,25 +56,41 @@ class ListController{
 получаем из базы данных "ОПЕРАЦИИ" и вставляем в таблицу*/
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 //$arr_id = 'operation';
-                $obj = new DB_connect;
-                $items = $obj->selectSomeList($arr_id,'operation');	
+                $dbh = new DB_connect;
+                $items = $dbh->selectSomeList($arr_id,'operation');	
                         ob_start();
                          require'view/list_table.php';
                 ob_end_flush();
                 }
 
 
-/*6*/		private function eventAction(){
+/*6*/	private function eventAction(){
 /*нажатие вкладки ЖУРНАЛ ОПЕРАЦИЙ
 получаем из базы данных "ОПЕРАЦИИ" и вставляем в таблицу*/
         $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
-                $obj = new DB_connect;
-                $items = $obj->selectSomeList($arr_id,'event');							
+                $dbh = new DB_connect;
+                $items = $dbh->selectSomeList($arr_id,'event');							
                         ob_start();
                          require'view/list_table.php';
                 ob_end_flush();
                 }
-
+                
+                
+                private function checkedAction(){
+                    
+                  // echo'In checkedAction()';
+                  // print_r($_GET); 
+ /*получаем из GET[] имя закладки с которой проводятся текущие действия*/ 
+                    $table_name = $_GET['table_name'];
+                    $dbh = new DB_connect();//
+                    $dbh->updateChecked();//
+/*Формируем имя метода для загрузки данных*/                    
+                    $choose = $table_name.'Action';
+       //  echo '$choose - '.$choose;           
+/*Вызываем сформированный метод*/                    
+                    $this->$choose();                    
+                   
+                }
 
         }
 

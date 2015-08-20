@@ -3,7 +3,8 @@
 *Fan/default - загрузка страницы по умолчанию,
 *Journal/(evetn, -alarm, -logg, -all) - загрузка соотвтетствующей страницы журнала
 */
-//echo 'IN index<br';//die;
+//echo 'IN index<br>';die;
+//var_dump($_GET);
 	function __autoload($class){
                         $directories = array('controller/','model/');
                         foreach($directories as $directory){
@@ -29,8 +30,8 @@ if($obj == 'Journal'){
 	}
 }	
 */
-//echo '$obj = '.$obj.'<br>';
-//echo '$act = '.$act.'<br>';
+  // echo '$obj = '.$obj.'<br>';
+ // echo '$act = '.$act.'<br>';die;
 	
 	$obj = $obj."Controller";
 

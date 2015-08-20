@@ -216,44 +216,44 @@
 	
 /*запись конкретного значениея в таблицу*/
 	function insertValue($val){
-		$sq = 'SELECT "'.$val.'" FROM p1_value'; 
-		$dbh = self::getDbh();
-		$sth = $dbh->prepare($sq);
-		return ($sth->execute());
+                    $sq = 'SELECT "'.$val.'" FROM p1_value'; 
+                    $dbh = self::getDbh();
+                    $sth = $dbh->prepare($sq);
+                    return ($sth->execute());
 	}		
 	
 	
 /*получение кокретного значениея из таблицы значений*/
 	function selectValue(){
-		$fan_num ='П1'; //= $_GET['fan_num'];
-		$val = $_GET['clm'];	
-		$sq = 'SELECT "'.$val.'" FROM p1_value where fan_number="'.$fan_num.'"'; 
-		$dbh = self::getDbh();
-		$sth = $dbh->prepare($sq);
-		return ($sth->execute());
+                    $fan_num ='П1'; //= $_GET['fan_num'];
+                    $val = $_GET['clm'];	
+                    $sq = 'SELECT "'.$val.'" FROM p1_value where fan_number="'.$fan_num.'"'; 
+                    $dbh = self::getDbh();
+                    $sth = $dbh->prepare($sq);
+                    return ($sth->execute());
 	}	
 	
 /*удаление записи из базы*/	
 	function deleteMsg($id){
 //var_dump($date_time);		
-	    $sq = 'delete from p1_messages where id ="'.$id.'"';
-        $dbh = self::getDbh();
-		$sth = $dbh->prepare($sq);
-		$sth->execute();
- 
+                $sq = 'delete from p1_messages where id ="'.$id.'"';
+                $dbh = self::getDbh();
+                $sth = $dbh->prepare($sq);
+                $sth->execute();
+
 	}
 	
 	/*обновление записи из базы*/	
 	function updateChecked(){
-		$id = $_GET['id'];
-		$true_false = $_GET['what'];	
+                    $id = $_GET['id_ch'];
+                    $true_false = $_GET['what'];	
 //echo 'id - '.$id.'<br>';
 //echo 'what - '.$true_false.'<br>';		
 	    $sq = 'update p1_messages  set status = "'.$true_false.'" where id ="'.$id.'"';
 	
-        $dbh = self::getDbh();
-		$sth = $dbh->prepare($sq);
-		$sth->execute();
+                    $dbh = self::getDbh();
+                    $sth = $dbh->prepare($sq);
+                    $sth->execute();
 	}
 	
 	/**Выбор данных для списка устройств*/

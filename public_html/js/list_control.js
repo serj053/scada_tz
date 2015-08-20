@@ -3,9 +3,26 @@
  */
 window.onmousedown = function(e){
     e = e ||window.event;
-    var el = e.target.getAttribute('id');
-    if(el != null && el.slice(0,4) == 'str_'){
-        
+    var el_id = e.target.getAttribute('id');
+ //   alert("ID - "+el_id)
+    if(e.target.parentNode.className == 'status_lt'){
+        /*меняем состояние атрибута checked после нажатия на закладку */
+        if(e.target.checked == false){
+     /*присваиваем пременной состояние атррибута checked*/              
+            e.target.checked = true;
+            is_ch = 'checked';
+        }else{       
+            e.target.checked = false;
+            is_ch = null;
+        }
+    
+    //alert(is_ch+' - '+el_id); 
+    /*определяем название текущей закладки что бы ей же и вернуть результат */
+        var current_table = currentTable();
+        var str = 'obj=List/checked&what='+is_ch+'&id_ch='+el_id+'&table_name='+current_table;
+ //alert('astr - '+str)      ;
+        callServer(str,'scroll_area');
+       
     }
     
 };
@@ -71,10 +88,10 @@ function logging_on_off(in_id){
 
            /*передаем URL журнала предназначенного для загрузки */	
              var url = 'index.php?'+encodeURI(target_name);//alert(decodeURI(url));
-//alert('url - '+url);
+ // alert('url - '+url);
            // Открыть соединение с сервером
              xmlHttp.open("GET", url, true);
-//alert(xmlHttp.readyState);
+   //alert(xmlHttp.readyState);
            // Установить функцию для сервера, которая выполнится после его ответа
              xmlHttp.onreadystatechange = function(){
  // alert('onreadystate = '+xmlHttp.readyState);
@@ -92,6 +109,20 @@ function logging_on_off(in_id){
            // SПередать запрос
                    xmlHttp.send(null);
            }
+           
+           
+  /*определяем АКТИВНУЮ вкладку (которая в данный момент открыиа)
+           И ПЕРЕДАЕМ СЕРВЕРУ ДЛЯ ЗАГРУЗКИ СООТВТЕТСТВУЮЩЕЙ соотвтетствующей 
+           это вкладке СТРАНИЦЫ*/
+           function currentTable(){
+                   var mass = new Array("EVENT","ALARM","LOG","ALL");
+                   for(var i=0; i<mass.length; i++){
+                           var choose_el = document.getElementById(mass[i]);
+                           if(choose_el.className == 'button_on')
+                                   txt = mass[i].toLowerCase();
+                   }
+                   return txt;
+           }	          
 
 
 // }           

@@ -363,7 +363,7 @@
            /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
            -класс/метод- + строка с инф.+ id элемента на который нажали + номер активной вкладки */	
    //alert('el_ch = '+el_ch);	
-           var target_name = 'obj=Journal/checked&what='+el_ch+'&id='+txt+'&id_table='+tab+'&fan_num='+fan_number;
+           var target_name = 'obj=Journal/checked&what='+el_ch+'&id_ch='+txt+'&id_table='+tab+'&fan_num='+fan_number;
    //alert('target_name = '+target_name);	
                            callServer(target_name, div_id);						
                    }	
