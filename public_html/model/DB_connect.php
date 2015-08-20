@@ -276,6 +276,15 @@
                     return($sth->fetchAll(PDO::FETCH_ASSOC));
                     
                 }
+             /*выборка отмеченных записей*/
+                function isChecked(){
+                    $sq = 'SELECT  status FROM p1_messages where status = "checked"';
+                    $dbh = self::getDbh();
+                    $sth = $dbh->prepare($sq);
+                    $sth->execute();
+                    
+                }
+                
                 
                 function selectSomeList($arr, $flag=''){
                     if($flag =='operation' || $flag == 'event'){

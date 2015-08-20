@@ -68,12 +68,13 @@ a div div{
    
 }
 #signal{
-    width:60px;
+    width:50px;
     height:60px;
-    outline:1px solid;
     float:right;
     margin-right:40px;
     margin-top:20px;
+    background-image:url('../img/alarm.png');
+    background-repeat:no-repeat;
 }
 
 /*  ЖУРНАЛ    ****************************/
