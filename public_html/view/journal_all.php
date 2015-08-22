@@ -13,11 +13,11 @@ if(isset($ms)){
                 <div class="source_td"><?php echo $v['fan_number'] ?></div>
                 <div class="message_td"><?php echo $v['message'] ?></div>
                 <div class="status_td">
-                        <input type="checkbox" id="<?php echo $ch_id; ?>" <?php echo $v['status']; ?> />
+                  <!--      <input type="checkbox" id="<?php echo $ch_id; ?>" <?php echo $v['status']; ?> />
                       <?php
                             if($v['status'] == 'checked') echo '"УСТР."';
                             else echo'"АКТ."';
-                      ?>
+                      ?>-->
                 </div>		
                 <div class="hidden"><?php echo $v['id'] ?></div>
         </div>	

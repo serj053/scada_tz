@@ -21,11 +21,11 @@
                         ?>
                 </div>
                 <div class="status_td">
-                        <input type="checkbox" <?php echo $v['status']; ?> />
+                    <!--    <input type="checkbox" <?php echo $v['status']; ?> />
                        <?php
                             if($v['status'] == 'checked') echo '"УСТР."';
                             else echo'"АКТ."';
-                        ?>
+                        ?>-->
                 </div>	
                 <div class="hidden"><?php echo $v['id'] ?></div>
         </div>	

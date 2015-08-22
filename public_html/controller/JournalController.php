@@ -56,7 +56,7 @@ class JournalController{
                         $ms = $obj->selectSomeMsg($arr_id);	
             //var_dump($ms);		
                                 ob_start();
-                                 require'view/journal_all.php';
+                                 require'view/journal_alarm.php';
                                 //$journal = ob_get_contents();
                         ob_end_flush();
                         }
