@@ -14,8 +14,15 @@ class ListController{
     function loadAction(){
             $dbh = new DB_connect();
             $arr =$dbh->getList();
-
-            $items = $dbh->getListTable();	
+            $items = $dbh->getListTable();
+            /*проверяем количество строк отмеченных как "checked"*/
+                    $checked_num = $dbh->isChecked();
+                    if($checked_num == 0){
+                        $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
+                    }
+            
             ob_start();
             require'view/list_table.php';
             $table = ob_get_contents();
@@ -28,7 +35,15 @@ class ListController{
 /*получаем из базы данных ВСЕ данные и вставляем в таблицу*/
 //echo 'In allaction()';
             $dbh = new DB_connect;	
-            $items = $dbh->getListTable();			
+            $items = $dbh->getListTable();
+            /*проверяем количество строк отмеченных как "checked"*/
+                    $checked_num = $dbh->isChecked();
+                    if($checked_num == 0){
+                        $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
+                    }
+            
             ob_start();
             require 'view/list_table.php';
             ob_end_flush();
@@ -41,7 +56,15 @@ class ListController{
 
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $dbh = new DB_connect;
-                $items = $dbh->selectSomeList($arr_id);	
+                $items = $dbh->selectSomeList($arr_id);
+                /*проверяем количество строк отмеченных как "checked"*/
+                    $checked_num = $dbh->isChecked();
+                    if($checked_num == 0){
+                        $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
+                    }
+                
 //var_dump($ms);		
                         ob_start();
                          require'view/list_table.php';
@@ -57,7 +80,15 @@ class ListController{
                 $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 //$arr_id = 'operation';
                 $dbh = new DB_connect;
-                $items = $dbh->selectSomeList($arr_id,'operation');	
+                $items = $dbh->selectSomeList($arr_id,'operation');
+                /*проверяем количество строк отмеченных как "checked"*/
+                    $checked_num = $dbh->isChecked();
+                    if($checked_num == 0){
+                        $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
+                    }
+                
                         ob_start();
                          require'view/list_table.php';
                 ob_end_flush();
@@ -69,7 +100,15 @@ class ListController{
 получаем из базы данных "ОПЕРАЦИИ" и вставляем в таблицу*/
         $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $dbh = new DB_connect;
-                $items = $dbh->selectSomeList($arr_id,'event');							
+                $items = $dbh->selectSomeList($arr_id,'event');
+                /*проверяем количество строк отмеченных как "checked"*/
+                    $checked_num = $dbh->isChecked();
+                    if($checked_num == 0){
+                        $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
+                    }
+                
                         ob_start();
                          require'view/list_table.php';
                 ob_end_flush();
@@ -84,6 +123,9 @@ class ListController{
                     $table_name = $_GET['table_name'];
                     $dbh = new DB_connect();//
                     $dbh->updateChecked();//
+
+     // echo'$checked_num - '.$checked_num;            
+    //  echo'$bell_color - '.$bell_color;           
 /*Формируем имя метода для загрузки данных*/                    
                     $choose = $table_name.'Action';
        //  echo '$choose - '.$choose;           

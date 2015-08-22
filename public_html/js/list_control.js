@@ -1,6 +1,9 @@
 /* 
  управление списком вентиляторов
  */
+
+window.onload = function(){
+
 window.onmousedown = function(e){
     e = e ||window.event;
     var el_id = e.target.getAttribute('id');
@@ -8,7 +11,7 @@ window.onmousedown = function(e){
     if(e.target.parentNode.className == 'status_lt'){
         /*меняем состояние атрибута checked после нажатия на закладку */
         if(e.target.checked == false){
-     /*присваиваем пременной состояние атррибута checked*/              
+     /*присваиваем переменной состояние атррибута checked*/              
             e.target.checked = true;
             is_ch = 'checked';
         }else{       
@@ -22,10 +25,18 @@ window.onmousedown = function(e){
         var str = 'obj=List/checked&what='+is_ch+'&id_ch='+el_id+'&table_name='+current_table;
  //alert('astr - '+str)      ;
         callServer(str,'scroll_area');
+        
+/*переносим значение из олной переменной(которая не доступна при перезагрузке) в другую*/   
+       // var get_color = document.getElementById('signalr');
+      //  var set_color = document.getElementById('bell_color').textContent;
+   alert('set_color - '+set_color);    
+     //   get_color.textContent = set_color;
        
     }
     
 };
+
+}
 
 function logging_on_off(in_id){
  //  alert('In logging_on_off in_id = '+in_id);	
@@ -81,9 +92,6 @@ function logging_on_off(in_id){
 
    function callServer(target_name, div_id) {
 
-
-
-   //alert('in callServer() div_id ='+div_id);
            /* Получить значения из web-формы
 
            /*передаем URL журнала предназначенного для загрузки */	

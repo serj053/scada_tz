@@ -27,3 +27,4 @@ foreach($items as $pt):
 
     </div>
 <?php  endforeach; ?>
+<div id="signal" class="<?php echo isset($bell_color)?$bell_color:'bell_green'; ?>"> </div>

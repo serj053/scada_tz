@@ -58,7 +58,7 @@
     </div>
 
       <div id="marg">
-          <div id="signal"> </div>
+       
       </div>
 
 
@@ -79,8 +79,9 @@
         </div>    
 
             <div id="scroll_area" >
+                <!-- <div id="signal" class="<?php echo isset($bell_color)?$bell_color:'bell_green'; ?>"> </div>-->
                  <?php echo $table ?>
-
+  
             </div>
     </div>
 </div>
