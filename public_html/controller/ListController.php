@@ -34,7 +34,8 @@ class ListController{
             private function allAction(){
 /*получаем из базы данных ВСЕ данные и вставляем в таблицу*/
 //echo 'In allaction()';
-            $dbh = new DB_connect;	
+            $dbh = new DB_connect;
+            /*получаем массив "items"  и базы*/
             $items = $dbh->getListTable();
             /*проверяем количество строк отмеченных как "checked"*/
                     $checked_num = $dbh->isChecked();

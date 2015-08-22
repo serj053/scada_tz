@@ -21,8 +21,7 @@ foreach($items as $pt):
              ?>
         </div>
         <div class="status_lt" >
-            <input type="checkbox" <?php echo $pt['status']; ?> 
-                   id="<?php echo $pt['id'];  ?>"/>             
+               
         </div>
 
     </div>
