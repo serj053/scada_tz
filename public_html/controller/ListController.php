@@ -66,8 +66,16 @@ class ListController{
                         $bell_color = 'bell_red';
                     }
                 
-//var_dump($ms);		
+//var_dump($ms);
+        /*выводим обновляемую часть страницы*/            
+         /*               ob_start();
+        если выводится строка аварийной кнопки то добавить поле чекбокса   
+                        require 'view/for_checked.php';
+                        $if_checked = ob_get_contents();
+                        ob_clean();
+                        */
                         ob_start();
+        /*а теперь выводим саму таблицу*/                
                          require'view/list_table.php';
                         //$journal = ob_get_contents();
                 ob_end_flush();
