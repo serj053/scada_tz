@@ -29,7 +29,7 @@ window.onmousedown = function(e){
 /*переносим значение из олной переменной(которая не доступна при перезагрузке) в другую*/   
        // var get_color = document.getElementById('signalr');
       //  var set_color = document.getElementById('bell_color').textContent;
-   alert('set_color - '+set_color);    
+   //alert('set_color - '+set_color);    
      //   get_color.textContent = set_color;
        
     }

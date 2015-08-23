@@ -303,9 +303,25 @@
 		return($sth->fetchAll(PDO::FETCH_ASSOC));
 		  
 	}
+            function alarmRowsNumber(){
+                 $arr= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
+                  $arr = implode('","',$arr);
+                $sq = 'SELECT elem_id FROM p1_messages where elem_id in ("'.$arr.'")';
+                $dbh = self::getDbh();
+               $sth = $dbh->prepare($sq);
+                    $sth->execute();
+                    $num = $sth->rowCount(); 
+                    return $num;
+                
+            }
 	
 	
 }
+
+
+//$num = new DB_connect;
+//$rows = $num->alarmRows();
+
 	
 	
 

@@ -15,9 +15,15 @@ foreach($items as $pt):
         <div class="message_lt">
              <?php
               $msg = explode(':',$pt['message']);
-             // if(isset($msg[0]))
-                  echo $msg[0];
-               //   else echo '';
+             if(isset($flag) && $flag == 'event'){
+                      echo $msg[0];
+             }else if(isset($flag) && $flag  == 'journal'){
+                      echo $msg[1];
+             }else{
+                       echo $msg[0]; 
+                    // echo $pt['message'];
+             }
+;
              ?>
         </div>
         <div class="status_lt" >

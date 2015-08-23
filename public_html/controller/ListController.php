@@ -13,16 +13,17 @@ class ListController{
     /*загрузить список существующих установок*/
     function loadAction(){
             $dbh = new DB_connect();
-            $arr =$dbh->getList();
-            $items = $dbh->getListTable();
-            /*проверяем количество строк отмеченных как "checked"*/
-                    $checked_num = $dbh->isChecked();
-                    if($checked_num == 0){
-                        $bell_color = 'bell_green';
-                    }else{
-                        $bell_color = 'bell_red';
-                    }
-            
+            $arr =$dbh->getList();//выбор параметров
+            $items = $dbh->getListTable();//выбор сообщений
+              /*определяем количество аварийных срабатываний*/
+            $num=$dbh-> alarmRowsNumber();
+           /*проверяем количество строк отмеченных как "checked"*/
+            $checked_num = $dbh->isChecked();            
+                if($checked_num == $num ){
+                    $bell_color = 'bell_green';
+                }else {
+                    $bell_color = 'bell_red';
+                }   
             ob_start();
             require'view/list_table.php';
             $table = ob_get_contents();
@@ -35,16 +36,18 @@ class ListController{
 /*получаем из базы данных ВСЕ данные и вставляем в таблицу*/
 //echo 'In allaction()';
             $dbh = new DB_connect;
-            /*получаем массив "items"  и базы*/
+            /*получаем список событий массив "items"  и базы*/
             $items = $dbh->getListTable();
+            /*определяем количество аварийных срабатываний*/
+            $num=$dbh-> alarmRowsNumber();
             /*проверяем количество строк отмеченных как "checked"*/
-                    $checked_num = $dbh->isChecked();
-                    if($checked_num == 0){
-                        $bell_color = 'bell_green';
-                    }else{
-                        $bell_color = 'bell_red';
-                    }
-            
+            $checked_num = $dbh->isChecked();             
+                if($checked_num == $num ){
+                    $bell_color = 'bell_green';
+                }else {
+                    $bell_color = 'bell_red';
+                }
+                
             ob_start();
             require 'view/list_table.php';
             ob_end_flush();
@@ -55,26 +58,20 @@ class ListController{
 получаем из базы данных "ПРЕДУПРЕЖДЕНИЯ" и вставляем в таблицу
 выбираем из базы по набору идентификаторов*/
 
-                $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
-                $dbh = new DB_connect;
-                $items = $dbh->selectSomeList($arr_id);
-                /*проверяем количество строк отмеченных как "checked"*/
-                    $checked_num = $dbh->isChecked();
-                    if($checked_num == 0){
-                        $bell_color = 'bell_green';
-                    }else{
-                        $bell_color = 'bell_red';
-                    }
+            $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
+            $dbh = new DB_connect;
+            $items = $dbh->selectSomeList($arr_id);
+            /*определяем количество аварийных срабатываний*/
+            $num=$dbh-> alarmRowsNumber();
+            /*проверяем количество строк отмеченных как "checked"*/
+            $checked_num = $dbh->isChecked();             
+                if($checked_num == $num ){
+                    $bell_color = 'bell_green';
+                }else {
+                    $bell_color = 'bell_red';
+                }
                 
-//var_dump($ms);
-        /*выводим обновляемую часть страницы*/            
-         /*               ob_start();
-        если выводится строка аварийной кнопки то добавить поле чекбокса   
-                        require 'view/for_checked.php';
-                        $if_checked = ob_get_contents();
-                        ob_clean();
-                        */
-                        ob_start();
+                       ob_start();
         /*а теперь выводим саму таблицу*/                
                          require'view/list_table.php';
                         //$journal = ob_get_contents();
@@ -90,11 +87,21 @@ class ListController{
                 //$arr_id = 'operation';
                 $dbh = new DB_connect;
                 $items = $dbh->selectSomeList($arr_id,'operation');
+                /*выделяем сообщения для журнала операций в отдельный массив
+                $journal_arr = array();
+                foreach ($items as $journal){
+                    $cur = $explode(':',$journal);
+                    $journal_arr[] = $curr[0];
+                }
+                */
+                $flag = 'journal';
+                /*определяем количество аварийных срабатываний*/
+                 $num=$dbh-> alarmRowsNumber();
                 /*проверяем количество строк отмеченных как "checked"*/
-                    $checked_num = $dbh->isChecked();
-                    if($checked_num == 0){
+                $checked_num = $dbh->isChecked();                
+                if($checked_num == $num ){
                         $bell_color = 'bell_green';
-                    }else{
+                    }else {
                         $bell_color = 'bell_red';
                     }
                 
@@ -110,12 +117,13 @@ class ListController{
         $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $dbh = new DB_connect;
                 $items = $dbh->selectSomeList($arr_id,'event');
+                $flag = 'event';
                 /*проверяем количество строк отмеченных как "checked"*/
                     $checked_num = $dbh->isChecked();
                     if($checked_num == 0){
-                        $bell_color = 'bell_green';
-                    }else{
                         $bell_color = 'bell_red';
+                    }else{
+                        $bell_color = 'bell_green';
                     }
                 
                         ob_start();
@@ -126,15 +134,11 @@ class ListController{
                 
                 private function checkedAction(){
                     
-                  // echo'In checkedAction()';
-                  // print_r($_GET); 
  /*получаем из GET[] имя закладки с которой проводятся текущие действия*/ 
                     $table_name = $_GET['table_name'];
                     $dbh = new DB_connect();//
                     $dbh->updateChecked();//
 
-     // echo'$checked_num - '.$checked_num;            
-    //  echo'$bell_color - '.$bell_color;           
 /*Формируем имя метода для загрузки данных*/                    
                     $choose = $table_name.'Action';
        //  echo '$choose - '.$choose;           
