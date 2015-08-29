@@ -1,5 +1,15 @@
 
 
+<div id="signal" class="<?php echo isset($bell_color)?$bell_color:'bell_green'; ?>"> </div>
+
+
+ <div id="top_name">
+            <div id="DATA"  class="date_lt">ДАТА</div>
+            <div id="SOURCE"  class="source_lt">ИСТОЧНИК</div>
+            <div id="MESSAGE"  class="message_lt">СООБЩЕНИЕ</div>
+            <div id="STATUS"  class="status_lt">СТАТУС</div>
+        </div>    
+<div id="scroll_area">
 <?php
 $index = 0;
 foreach($items as $pt):
@@ -49,4 +59,5 @@ foreach($items as $pt):
 
     </div>
 <?php  endforeach; ?>
-<div id="signal" class="<?php echo isset($bell_color)?$bell_color:'bell_green'; ?>"> </div>
+
+</div>

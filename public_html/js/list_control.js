@@ -24,18 +24,26 @@ window.onmousedown = function(e){
         var current_table = currentTable();
         var str = 'obj=List/checked&what='+is_ch+'&id_ch='+el_id+'&table_name='+current_table;
  //alert('astr - '+str)      ;
-        callServer(str,'scroll_area');
+        callServer(str,'table_list');
         
-/*переносим значение из олной переменной(которая не доступна при перезагрузке) в другую*/   
-       // var get_color = document.getElementById('signalr');
-      //  var set_color = document.getElementById('bell_color').textContent;
-   //alert('set_color - '+set_color);    
-     //   get_color.textContent = set_color;
-       
+
     }
     
-};
+};//end onmousedown()
 
+/*временное окно где будет выводиться исследовательская информация*/
+    var el = document.createElement('div');
+    el.style.cssText ='position:absolute;'+
+                                'width:1000px;'+
+                               ' height:100px;'+
+                                'border:1px solid;'+
+                               ' top:500px;'+
+                                'left:130px;';
+
+        document.body.appendChild(el);
+        var hi = window.history.length;
+        el.innerHTML = hi;
+                                
 }
 
 function logging_on_off(in_id){
@@ -53,7 +61,7 @@ function logging_on_off(in_id){
         /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/                   
                            var req = 'obj=List/'+status;//+'&fan_num='+fan_number;
  // alert(req);
-                           callServer(req,"scroll_area");
+                           callServer(req,"table_list");
 
    /*возвращаем остальные кнопки в исходное состояние*/			
                            for(var i=0; i < mass.length; i++){

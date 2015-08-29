@@ -71,18 +71,11 @@
         </div>
 
     <div id="table_list">
-        <div id="top_name">
-            <div id="DATA"  class="date_lt">ДАТА</div>
-            <div id="SOURCE"  class="source_lt">ИСТОЧНИК</div>
-            <div id="MESSAGE"  class="message_lt">СООБЩЕНИЕ</div>
-            <div id="STATUS"  class="status_lt">СТАТУС</div>
-        </div>    
-
-            <div id="scroll_area" >
-                <!-- <div id="signal" class="<?php echo isset($bell_color)?$bell_color:'bell_green'; ?>"> </div>-->
+       
+           
                  <?php echo $table ?>
   
-            </div>
+        
     </div>
 </div>
 </div>
