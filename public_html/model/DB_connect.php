@@ -169,7 +169,7 @@
 //var_dump($sth);   
      // return($sth->fetchAll(PDO::FETCH_ASSOC));
     }
-/*выводим все записи из таблицы P1_messages базы данных для определенной установки*/
+/*выводим все записи из таблицы P1_value базы данных для определенной установки*/
 	function selectAllValue(){
 		$fan_num = $_GET['fan_num'];
 	    $sq = 'select * from p1_value where fan_number="'.$fan_num.'"';
@@ -314,6 +314,26 @@
                     return $num;
                 
             }
+            
+        /*удаление всех записей из журнала*/	
+	function deleteAllMsg(){
+	
+                $sq = 'delete from p1_messages ';
+                $dbh = self::getDbh();
+                $sth = $dbh->prepare($sq);
+                $sth->execute();
+
+	}
+        
+        /*удаление всех велечин параметров установки*/	
+	function deleteAllValue(){
+	
+                $sq = 'delete from p1_value ';
+                $dbh = self::getDbh();
+                $sth = $dbh->prepare($sq);
+                $sth->execute();
+
+	}
 	
 	
 }

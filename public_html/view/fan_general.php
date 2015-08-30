@@ -14,6 +14,7 @@
         <script type="text/javascript">
 
         </script>
+        <meta http-equiv="Refresh" content="5" />
 </head>
 <body>
         <div id="wrapper">  

@@ -41,7 +41,7 @@ window.onmousedown = function(e){
                                 'left:130px;';
 
         document.body.appendChild(el);
-        var hi = window.history.length;
+      //  var hi = window.history.length;
         el.innerHTML = hi;
                                 
 }
