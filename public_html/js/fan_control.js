@@ -420,7 +420,7 @@
    /*нажимаем стоп ВУ*/		
            case"stop": 
     /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
-                   /* номер установки (вентилятора) "fan_numer" определн выше*/
+                   /* номер установки (вентилятора) "fan_number" определн выше*/
     /**СТРОКА сообщениея которая заноситься в базу*/	
                    var str = "Установка остановлена : Остановка установки";
     /*определяем активную вкладку, что после абработкт вставить именно в нее	*/	
@@ -480,7 +480,7 @@
    /*SUMMER переключение режима зима-лето*/		
            case"summer": 
   /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
-  /* номер установки (вентилятора) "fan_numer" определн выше*/
+  /* номер установки (вентилятора) "fan_number" определн выше*/
   /**СТРОКА которая заноситься в базу*/	
                    var str = "Режим зима-лето изменен на режим -зима : Изменение режима зима лето";
 /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
@@ -555,7 +555,7 @@
    /*АВАРИЯ ВЕНТИЛЯТОРА*/
            case "FAIL_FAN_BTN":
     /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
-     /* номер установки (вентилятора) "fan_numer" определн выше*/
+     /* номер установки (вентилятора) "fan_number" определн выше*/
            /*если установка не включена то работа кнопок заблокирована*/	
            /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
                    var el_cool = document.getElementById('inc_ind');
@@ -567,23 +567,23 @@
                    var div_id = "scroll_area";
            /*определяем активную вкладку, что после абработкт вставить именно в нее	*/	
            var tab = currentTable();//		
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+           /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
 
                            callServer(target_name, div_id);
-
-
-
+    /*проверяем состояние аварийных кнопок по классу если пред кликом она отжата то
+     * вжать ее и наоборот  */
                    var that = document.getElementById("FAIL_FAN_BTN");
                    if(that.className === "button_on"){//если кнопка вжата
                                    that.className = "button_off";
                            }else if(that.className === "button_off"){//если кнопка отжата то есть выключена		
                                    that.className = "button_on"; 
                            }
+    /*получаем доступ к элементу содержащему текст для его замены*/
                    var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
 
-                   //
+    /*если текущая кнопка нажата то поменять текст внутри элемнтов*/
                    if(that.className === "button_on"){	//alert(that.className);		
                            st_f.innerHTML ="АВАРИЯ ВЕНТИЛЯТОРА";
                            st_f.style.color = "red";
@@ -591,19 +591,19 @@
                            md_1.innerHTML = "АВАРИЯ";
                            md_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
 
-                           /*остановка установки*/			
+        /*функция прогресс бара -  остановка установки*/			
                                    fun_on_off(false,'red',false);
 
    /****сообщаем window.opener что произошла АВАРИЯ     */
 
    /***********************************************************************/					
-                           /*перевод рычажка в положение выключить*/		
-                                   var el = document.getElementById('img_start_stop');
-                                   el.src = 'img/stop1.png';
-                           /*перевод кнопки сброса в состояние поднята*/
-                           document.getElementById("RESET").className = "button_off"; 	
-                           /*отключение кнопки*/
-                                   document.documentElement.onmouseup = function(){that.className = "button_off";}
+    /*перевод рычажка в положение выключить*/		
+                    var el = document.getElementById('img_start_stop');
+                    el.src = 'img/stop1.png';
+    /*перевод кнопки сброса в состояние поднята*/
+                    document.getElementById("RESET").className = "button_off"; 	
+    /*отключение кнопки*/
+                    document.documentElement.onmouseup = function(){that.className = "button_off";};
                    }	
                    ;
                    break;
@@ -613,7 +613,7 @@
            /*если установка не включена то работа кнопок заблокирована*/	
            /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
                    var el_cool = document.getElementById('inc_ind');
-                   if(el_cool.className != "inc_ind_on"){ return;}
+                   if(el_cool.className !== "inc_ind_on"){ return;}
 
                    /*определяем номер установки (вентилятора)*/
                    //d var fan_number = document.getElementById('NAME').innerText;
@@ -621,52 +621,54 @@
                    var str = "АВАРИЯ ФИЛЬТРА. Установка «СТОП»";
            /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее			
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+           /*определяем активную вкладку, что бы после абработкт вставить именно в нее*/	
+           var tab = currentTable();			
+           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными для мссиваGET[]
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
-   //alert(target_name);	
+   //alert(target_name);
+   
                            callServer(target_name, div_id);
+    /*получаем кнопку*/
+            var that = document.getElementById("FAIL_F_BTN");
+     /*если вжата то отжимаем и наоборот*/       
+            if(that.className === "button_on"){//если кнопка вжата
+                            that.className = "button_off";
+                    }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+                            that.className = "button_on"; 
+                    }
+    /*получаем элемент для изменений текста в нем*/                
+            var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
 
-
-
-                   var that = document.getElementById("FAIL_F_BTN");
-                   if(that.className == "button_on"){//если кнопка вжата
-                                   that.className = "button_off";
-                           }else if(that.className == "button_off"){//если кнопка отжата то есть выключена
-                                   that.className = "button_on"; 
-                           }
-                   var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
-
-                   if(that.className == "button_on"){
-                   var st_f = document.getElementById("SState_1");	
-                           st_f.innerHTML ="АВАРИЯ ФИЛЬТРА";
-                           st_f.style.color = "red";
-                           var f_1 = document.getElementById("F1");
-                           f_1.innerHTML = "ЗАСОР";
-                           f_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+            if(that.className === "button_on"){
+            var st_f = document.getElementById("SState_1");	
+                    st_f.innerHTML ="АВАРИЯ ФИЛЬТРА";
+                    st_f.style.color = "red";
+                    var f_1 = document.getElementById("F1");
+                    f_1.innerHTML = "ЗАСОР";
+                    f_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
    /****сообщаем window.opener что произошла АВАРИЯ  -'red'   */
 
-                           /*остановка установки*/			
-                                   fun_on_off(false,'red',false);
-                           /*перевод рычажка в положение выключить*/		
-                                   var el = document.getElementById('img_start_stop');
-                                   el.src = 'img/stop1.png';
-                           /*перевод кнопки сброса в состояние поднята*/
-                           document.getElementById("RESET").className = "button_off"; 		
-                           /*отключение кнопки*/
-                                   document.documentElement.onmouseup = function(){that.className = "button_off";}
+    /*остановка установки*/			
+                        fun_on_off(false,'red',false);
+    /*перевод рычажка в положение выключить*/		
+                        var el = document.getElementById('img_start_stop');
+                        el.src = 'img/stop1.png';
+    /*перевод кнопки сброса в состояние поднята*/
+                document.getElementById("RESET").className = "button_off"; 		
+    /*отключение кнопки*/
+                        document.documentElement.onmouseup = function(){that.className = "button_off";};
                    }
                    ;
                    break;
    /*АВАРИЯ ТЕРМОСТАТА*/
            case "FAIL_FREEZ_BTN":
-                   /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*если установка не включена то работа кнопок заблокирована*/	
-           /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+     /* номер установки (вентилятора) "fan_number" определн выше*/
+    /*если установка не включена то работа кнопок заблокирована*/	
+    /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
                    var el_cool = document.getElementById('inc_ind');
-                   if(el_cool.className != "inc_ind_on"){ return;}
+                   if(el_cool.className !== "inc_ind_on"){ return;};
 
                    /*определяем номер установки (вентилятора)*/
                    //d var fan_number = document.getElementById('NAME').innerText;
@@ -679,135 +681,134 @@
            /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
-   //alert(target_name);	
+	
                            callServer(target_name, div_id);
 
 
-
                    var that = document.getElementById("FAIL_FREEZ_BTN");
-                   if(that.className == "button_on"){//если кнопка вжата
-                                   that.className = "button_off";
-                           }else if(that.className == "button_off"){//если кнопка отжата то есть выключена
-                                   that.className = "button_on"; 
-                           }
+                if(that.className === "button_on"){//если кнопка вжата
+                                that.className = "button_off";
+                        }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+                                that.className = "button_on"; 
+                        }
+     /*получаем доступ к элементам для изменеия текста*/                   
                    var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
-
-                   if(that.className == "button_on"){
+    /*если кнопка вжата то меняем надписи*/
+               if(that.className === "button_on"){
                    var st_f = document.getElementById("SState_1");	
-                           st_f.innerHTML ="АВАРИЯ ЗАМАРОЗКА";
-                           st_f.style.color = "red";
-                           var trm = document.getElementById("THERM_IND");
-                           trm.innerHTML = "ЗАМОРОЗКА";
-                           trm.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+                    st_f.innerHTML ="АВАРИЯ ЗАМАРОЗКА";
+                    st_f.style.color = "red";
+                    var trm = document.getElementById("THERM_IND");
+                    trm.innerHTML = "ЗАМОРОЗКА";
+                    trm.style.cssText ="color:#fff; background-color:red; font-weight:bold";
    /****сообщаем window.opener что произошла АВАРИЯ   'red'  */
 
-                           /*остановка установки*/			
-                                   fun_on_off(false,'red',false);
-                           /*перевод рычажка в положение выключить*/		
-                                   var el = document.getElementById('img_start_stop');
-                                   el.src = 'img/stop1.png';
-                           /*перевод кнопки сброса в состояние поднята*/
-                           document.getElementById("RESET").className = "button_off"; 		
-                           /*отключение кнопки*/
-                                   document.documentElement.onmouseup = function(){that.className = "button_off";}
-                   }		
+                /*остановка установки*/			
+                        fun_on_off(false,'red',false);
+                /*перевод рычажка в положение выключить*/		
+                        var el = document.getElementById('img_start_stop');
+                        el.src = 'img/stop1.png';
+                /*перевод кнопки сброса в состояние поднята*/
+                document.getElementById("RESET").className = "button_off"; 		
+                /*отключение кнопки*/
+                document.documentElement.onmouseup = function(){that.className = "button_off";};
+                }		
                    ;
                    break;
    /*АВАРИЯ ЗАСЛОНКА*/
            case "FAIL_VALVE_BTN":
-                   /*посылаем(добавляем) сообщение  в журнал и базу данных*/
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+     /* номер установки (вентилятора) "fan_numer" определн выше*/
                    /*если установка не включена то работа кнопок заблокирована*/	
            /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
                    var el_cool = document.getElementById('inc_ind');
-                   if(el_cool.className != "inc_ind_on"){ return;}
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+                   if(el_cool.className !=="inc_ind_on"){ return;}
+    /**СТРОКА которая заноситься в базу*/	
                    var str = "АВАРИЯ ЗАСЛОНКА. Установка «СТОП»";
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее			
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
+    /*определяем активную вкладку, что бы после абработкт вставить именно в нее*/	
+           var tab = currentTable();			
+    /*АДРЕС файла обработчика на сревере с прицепленными к нему данными  для массива GET[]
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
    //alert(target_name);	
                            callServer(target_name, div_id);
-
+    /*обращаемся к текущему элементу*/
                    var that = document.getElementById("FAIL_VALVE_BTN");
-                   if(that.className == "button_on"){//если кнопка вжата
-                                               that.className = "button_off";
-                                   }else if(that.className == "button_off"){//если кнопка отжата то есть выключена
-                                               that.className = "button_on"; 
-                                   }
+    /*меняем состояние с помощью клика*/           
+                if(that.className === "button_on"){//если кнопка вжата
+                                 that.className = "button_off";
+                     }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+                                 that.className = "button_on"; 
+                     }
+     /*меняем текст в элементах*/                              
                    var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
 
-                   if(that.className == "button_on"){
-                   var st_f = document.getElementById("SState_1");	
-                                   st_f.innerHTML ="АВАРИЯ ЗАСЛОНКА";
-                                   st_f.style.color = "red";
-                                   var vl_1 = document.getElementById("VALVE_IND");
-                                   vl_1.innerHTML = "АВАРИЯ";
-                                   vl_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
-       /****сообщаем window.opener что произошла АВАРИЯ  'red'   */
+                if(that.className === "button_on"){
+                     var st_f = document.getElementById("SState_1");	
+                     st_f.innerHTML ="АВАРИЯ ЗАСЛОНКА";
+                     st_f.style.color = "red";
+                     var vl_1 = document.getElementById("VALVE_IND");
+                     vl_1.innerHTML = "АВАРИЯ";
+                     vl_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+    /****сообщаем window.opener что произошла АВАРИЯ  'red'   */
 
-                           /*остановка установки*/			
-                                   fun_on_off(false,'red',false);
-                           /*перевод рычажка в положение выключить*/		
-                                   var el = document.getElementById('img_start_stop');
-                                   el.src = 'img/stop1.png';
-                           /*перевод кнопки сброса в состояние поднята*/
-                           document.getElementById("RESET").className = "button_off"; 		
-                           /*отключение кнопки*/
-                                   document.documentElement.onmouseup = function(){that.className = "button_off";}
+    /*остановка установки*/			
+                            fun_on_off(false,'red',false);
+    /*перевод рычажка в положение выключить*/		
+                            var el = document.getElementById('img_start_stop');
+                            el.src = 'img/stop1.png';
+      /*перевод кнопки сброса в состояние поднята*/
+                    document.getElementById("RESET").className = "button_off"; 		
+    /*отключение кнопки*/
+                    document.documentElement.onmouseup = function(){that.className = "button_off";};
                    }	 
 
                    ;
                    break;
    /*СБРОС АВАРИЙНЫХ КНОПОК*/		
            case"RESET": 
-                   /*кнопка сброса сбрасывает установку в состояние "СТОП-ЗИМА"*/
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+   /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+    /* номер установки (вентилятора) "fan_numer" определн выше*/
+    /**СТРОКА которая заноситься в базу*/	
                    var str = "Сброс в состояние - зима";
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее			
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+           var tab = currentTable();		
+    /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
-   //alert(target_name);	
+	
                            callServer(target_name, div_id);
 
-   /****сообщаем window.opener что аварийные кнопки сброшены     */
+   /****сообщаем window.opener что аварийные кнопки сброшены меняем цвет строки текущей установки    */
    var text_cont = document.getElementById("id_cont").textContent;
-                       var object = window.opener.document.getElementById(text_cont);
-                               for (var childItem in object.childNodes) {
-                               if (object.childNodes[childItem].nodeType == 1)
-                               object.childNodes[childItem].style.backgroundColor = '#eee';
-                               }
-                       object.childNodes[5].innerHTML = 'ОТКЛ.';		
+                var object = window.opener.document.getElementById(text_cont);
+            for (var childItem in object.childNodes) {
+             if (object.childNodes[childItem].nodeType === 1)
+            object.childNodes[childItem].style.backgroundColor = '#eee';
+            }
+                object.childNodes[5].innerHTML = 'ОТКЛ.';		
 
-                       object.childNodes[5].innerHTML = 'ОТКЛ.';	
-                       var st_f = document.getElementById("SState_1");	
-                       st_f.innerHTML ="СИСТЕМА В НОРМЕ";
-                       st_f.style.color = "#37CD23";
-                       var md_1 = document.getElementById("MD_1");
-                       md_1.innerHTML = "НОРМА";
-                       md_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
-                       var f_1 = document.getElementById("F1");
-                       f_1.innerHTML = "НОРМА";
-                       f_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
-                       var trm = document.getElementById("THERM_IND");
-                       trm.innerHTML = "НОРМА";
-                       trm.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
-                       var vl_1 = document.getElementById("VALVE_IND");
-                       vl_1.innerHTML = "ЗАКР.";
-                       vl_1.style.cssText ="color:#fff; background-color:#6950B6; font-weight:bold";
-                       document.getElementById("RESET").className = "button_on"; 	
+                object.childNodes[5].innerHTML = 'ОТКЛ.';	
+                var st_f = document.getElementById("SState_1");	
+                st_f.innerHTML ="СИСТЕМА В НОРМЕ";
+                st_f.style.color = "#37CD23";
+                var md_1 = document.getElementById("MD_1");
+                md_1.innerHTML = "НОРМА";
+                md_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var f_1 = document.getElementById("F1");
+                f_1.innerHTML = "НОРМА";
+                f_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var trm = document.getElementById("THERM_IND");
+                trm.innerHTML = "НОРМА";
+                trm.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var vl_1 = document.getElementById("VALVE_IND");
+                vl_1.innerHTML = "ЗАКР.";
+                vl_1.style.cssText ="color:#fff; background-color:#6950B6; font-weight:bold";
+                document.getElementById("RESET").className = "button_on"; 	
                ;
                break;
 
@@ -817,88 +818,99 @@
 
                    break;
            }
-   /*строка прогресса*************************************************************************/
-           function fun_on_off(bln, win_open,is_alarm ){
+/*строка прогресса*************************************************************************/
+/*Функция запускающая строку прогресса на запуск и на остановку устройства при передаяи параметра
+ * bin = false происходит остановка уствновки и при передачи параметра bin = true происходит 
+ * запуск установки , текст строоки зависит от события аварийное оно или нет, в случае если аварийное 
+ * то передается параметр is_alarm, если не аварийное то по умолчанию, параметр win_open 
+ * принимает значение или red или green  передается когда надо передать на родительскую страницу 
+ * (список устройств) сообщение о   запуске или остановке какого либо из устройств цветом строки 
+ * и надписью "ВКЛ" или "ОТКЛ"
+ * */
+        function fun_on_off(bln, win_open,is_alarm ){
 
-           /*ОТКЛЮЧЕНИЕ УСТАНОВКИ*/	
-                       if(!bln){//отключение установки
-                       var box = document.createElement('div');
-                               box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
-                               "top:210px; left: 410px";
-                               box.setAttribute('id','box');
-
+    /*ОТКЛЮЧЕНИЕ УСТАНОВКИ*/	
+                if(!bln){//отключение установки
+        /*создаем контейнер прогресс бара*/            
+                var box = document.createElement('div');
+                        box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
+                        "top:210px; left: 410px";
+                        box.setAttribute('id','box');
+        /*контейнер для прогресс бара*/
                        var str = document.createElement('div');
-           /*Меняем надпись в заисимости от ситуации */		
-                           if(is_alarm){
-                                   str.innerHTML = "ОСТАНОВКА УСТАНОВКИ";
-                                   str.style.cssText = "width:260px; color:#F4F2F5; margin:36px 100px 20px;word-spacing:8px;"+
-                                   " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
-                           }else{
-                                   str.innerHTML = "<div style='text-align:center'>АВАРИЙНАЯ</div> <div style='text-align:center'>ОСТАНОВКА УСТАНОВКИ</div>";
-                                   str.style.cssText = "width:260px; color:#F4F2F5; margin:16px 100px 20px;word-spacing:8px;"+
-                                   " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
-                           }	
-                                   str.setAttribute('id','str');
+         /*Меняем надпись в заисимости от ситуации */		
+                    if(is_alarm){
+                            str.innerHTML = "ОСТАНОВКА УСТАНОВКИ";
+                            str.style.cssText = "width:260px; color:#F4F2F5; margin:36px 100px 20px;word-spacing:8px;"+
+                            " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    }else{
+                            str.innerHTML = "<div style='text-align:center'>АВАРИЙНАЯ</div> <div style='text-align:center'>ОСТАНОВКА УСТАНОВКИ</div>";
+                            str.style.cssText = "width:260px; color:#F4F2F5; margin:16px 100px 20px;word-spacing:8px;"+
+                            " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    }	
+                            //     str.setAttribute('id','str');
+        /*контейннер для текста*/
+                    var bar = document.createElement('div');
+                            bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
+                            "padding-left:6px; background-color:#969495";
+                            //  bar.setAttribute('id','bar');
+                            box.appendChild(str);
+                            box.appendChild(bar);
+        /*добавляем прогресс бар на страницу*/
+                            var bd = document.documentElement;
+                            bd.appendChild(box);
+        /*вставляем саму строку прогресса*/
+                    for(var i = 0; i < 18; i++){
+                             var elem = document.createElement('div');	
+                            elem.style.cssText = "width:16px; height:30px; "+
+                            "float:left; background-color:#F0EEEF; margin:4px 1px";
+                                            bar.appendChild(elem);
+                    }	
 
-                           var bar = document.createElement('div');
-                                   bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
-                                   "padding-left:6px; background-color:#969495";
-                                   bar.setAttribute('id','bar');
-                                   box.appendChild(str);
-                                   box.appendChild(bar);
+        /*запускаем строку прогресса на выключение (исчезающие элементы)*/	
+                            var inter = 150;//длительность интервала между вызовами функции				
+                            var nn =0;
+        /*установка иинтервала работы строки прогресса*/                    
+                            interval = setInterval(function(){
+                                    bar.removeChild(bar.lastChild); nn++ ;
+                                    if(nn>17){clearInterval(interval);
+                                    box.parentNode.removeChild(box);
+                            ////////////////////////////////////////////////////	
 
-                                   var bd = document.documentElement;
-                                   bd.appendChild(box);
-
-                           for(var i = 0; i < 18; i++){
-                                    var elem = document.createElement('div');	
-                                   elem.style.cssText = "width:16px; height:30px; "+
-                                   "float:left; background-color:#F0EEEF; margin:4px 1px";
-                                                   bar.appendChild(elem);
-                           }	
-
-                   /*создаем элементы роста строки*/	
-                                   var inter = 150;//длительность интервала между вызовами функции				
-                                   var nn =0;
-                                   interval = setInterval(function(){
-                                           bar.removeChild(bar.lastChild); nn++ ;
-                                           if(nn>17){clearInterval(interval);
-                                           box.parentNode.removeChild(box);
-                                   ////////////////////////////////////////////////////	
-
-                   /*остановка  вентилятора	*/
+    /*по окончанию строки  остановка  вентилятора	*/
                            fan_speed(null);
-   /****сообщаем window.opener что установка ОТКЛЮЧЕНА и меняем цвет строки***** */
+   /*сообщаем window.opener что установка ОТКЛЮЧЕНА и меняем цвет строки на списке устройств
+    *  на краснй и текст вставлется "ОТКЛ" */
 
-                   if(win_open == 'red'){
-                                       var text_cont = document.getElementById("id_cont").textContent;
-                                       var object = window.opener.document.getElementById(text_cont);
-                                       for (var childItem in object.childNodes) {
-                                       if (object.childNodes[childItem].nodeType == 1)
-                                       object.childNodes[childItem].style.backgroundColor = '#D1667A';
-                                       }
-                           object.childNodes[5].innerHTML = 'ОТКЛ.';		
-                   }			
-
-                   if(win_open == 'gray'){
-                                       var text_cont = document.getElementById("id_cont").textContent;
-                                       var object = window.opener.document.getElementById(text_cont);
-                                                       for (var childItem in object.childNodes) {
-                                                       if (object.childNodes[childItem].nodeType == 1)
-                                                       object.childNodes[childItem].style.backgroundColor = '#eee';
-                                                       }
-                                       object.childNodes[5].innerHTML = 'ОТКЛ.';		
+                if(win_open === 'red'){
+                         var text_cont = document.getElementById("id_cont").textContent;
+                         var object = window.opener.document.getElementById(text_cont);
+                         for (var childItem in object.childNodes) {
+                         if (object.childNodes[childItem].nodeType === 1)
+                         object.childNodes[childItem].style.backgroundColor = '#D1667A';
+                         }
+                        object.childNodes[5].innerHTML = 'ОТКЛ.';		
+                }			
+ /*сообщаем window.opener что установка ВКЛЮЧЕНА и меняем цвет строки на списке устройств
+  *  на зеленый и текст вставляется "ВКЛ" */
+                   if(win_open === 'gray'){
+                        var text_cont = document.getElementById("id_cont").textContent;
+                        var object = window.opener.document.getElementById(text_cont);
+                    for (var childItem in object.childNodes) {
+                        if (object.childNodes[childItem].nodeType === 1)
+                        object.childNodes[childItem].style.backgroundColor = '#eee';
+                        }
+                        object.childNodes[5].innerHTML = 'ОТКЛ.';		
                    }			
    /***********************************************************************/				
 
-
                    /*отключение картинки с потоком воздуха*/	
-                                           var el_cool = document.getElementById('inc_ind');
-                                           el_cool.className  = "inc_ind_off";
-                                           var el_out = document.getElementById('out_ind');
-                                           el_out.style.backgroundImage = "none";	
+                        var el_cool = document.getElementById('inc_ind');
+                        el_cool.className  = "inc_ind_off";
+                        var el_out = document.getElementById('out_ind');
+                        el_out.style.backgroundImage = "none";	
 
-                                        }/*clear inerval*/;	
+                     }/*clear inerval*/;	
                    }/*end off setInertval*/, inter);
                                                return;	
 
@@ -906,54 +918,54 @@
            /*ЗАПУСК УСТАНОВКИ*/	
                    /*создаем элементы строки прогресса******************/
                            //
-                                   var box = document.createElement('div');
-                                   box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
-                                   "top:210px; left: 410px";
-                                   box.setAttribute('id','box');
+                    var box = document.createElement('div');
+                    box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
+                    "top:210px; left: 410px";
+                    box.setAttribute('id','box');
 
-                                   var str = document.createElement('div');
-                                   str.innerHTML = "ЗАПУСК  УСТАНОВКИ";
-                                   str.style.cssText = "width:240px; color:#F4F2F5; margin:36px 120px 20px;word-spacing:8px;"+
-                                   " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
-                                   str.setAttribute('id','str');
+                    var str = document.createElement('div');
+                    str.innerHTML = "ЗАПУСК  УСТАНОВКИ";
+                    str.style.cssText = "width:240px; color:#F4F2F5; margin:36px 120px 20px;word-spacing:8px;"+
+                    " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    str.setAttribute('id','str');
 
-                                   var bar = document.createElement('div');
-                                   bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
-                                   "padding-left:6px; background-color:#969495";
-                                   bar.setAttribute('id','bar');
+                    var bar = document.createElement('div');
+                    bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
+                    "padding-left:6px; background-color:#969495";
+                    bar.setAttribute('id','bar');
 
-                                   box.appendChild(str);
-                                   box.appendChild(bar);
+                    box.appendChild(str);
+                    box.appendChild(bar);
 
-                                   var bd = document.documentElement;
-                                   bd.appendChild(box);
+                    var bd = document.documentElement;
+                    bd.appendChild(box);
 
-                           /*создаем элементы роста строки*/	
-                                   var inter = 150;//длительность интервала между вызовами функции				
-                                   var nn =0;
-                                   interval = setInterval(function(){
-                                     var elem = document.createElement('div');	
-                                   elem.style.cssText = "width:16px; height:30px; "+
-                                   "float:left; background-color:#F0EEEF; margin:4px 1px";
-                                       bar.appendChild(elem); nn++ ;
-                           if(nn>18){
-                                   clearInterval(interval);
-                                   box.parentNode.removeChild(box);
+            /*создаем элементы роста строки*/	
+                    var inter = 150;//длительность интервала между вызовами функции				
+                    var nn =0;
+                    interval = setInterval(function(){
+                      var elem = document.createElement('div');	
+                    elem.style.cssText = "width:16px; height:30px; "+
+                    "float:left; background-color:#F0EEEF; margin:4px 1px";
+                        bar.appendChild(elem); nn++ ;
+                if(nn>18){
+                    clearInterval(interval);
+                    box.parentNode.removeChild(box);
 
-                   /*Берем данные скорости вращения вентилятора из базы данных
+    /*Берем данные скорости вращения вентилятора из базы данных
                    и передаем функции регулирущейскорость вентилятора*/
                    var sp_win = parseInt(document.getElementById('pro').textContent);
                    var sp_win = 20/sp_win;
                            fan_speed(sp_win);
 
-                                   /*включение картинки с потоком воздуха*/
-                                   var el_cool = document.getElementById('inc_ind');
-                                   el_cool.className ='inc_ind_on';
-   /****сообщаем window.opener что установка запущена***************** */
-                               var text_cont = document.getElementById("id_cont").textContent;
-                               var object = window.opener.document.getElementById(text_cont);
+    /*включение картинки с потоком воздуха*/
+                    var el_cool = document.getElementById('inc_ind');
+                    el_cool.className ='inc_ind_on';
+/****сообщаем window.opener что установка запущена***************** */
+                var text_cont = document.getElementById("id_cont").textContent;
+              var object = window.opener.document.getElementById(text_cont);
                    for (var childItem in object.childNodes) {
-                   if (object.childNodes[childItem].nodeType == 1)
+                   if (object.childNodes[childItem].nodeType=== 1)
                    object.childNodes[childItem].style.backgroundColor = '#ADD13D';
                    }	
                    object.childNodes[5].innerHTML = 'ВКЛ.';
@@ -962,36 +974,36 @@
                                el_out.style.backgroundImage = "url('img/out.png')";		
 
                                };	
-                       }, inter)
+                       }, inter);
                }
        }
 
 
                    //alert(el);
-   }//end off onmousedown
+   };//end off onmousedown
 
-   /*Переключатель вкладки журнала событий  **********************************************************************/
+   /*Переключатель вкладки журнала событий */
 
-           function logging_on_off(in_id){
+    function logging_on_off(in_id){
    //alert('In logging_on_off in_id = '+in_id);	
-                   var fan_number = document.getElementById('NAME').innerText;
-                   var mass = new Array("EVENT","ALARM","LOG","ALL");
+            var fan_number = document.getElementById('NAME').innerText;
+            var mass = new Array("EVENT","ALARM","LOG","ALL");
 //alert(in_id);
-                   var id_st  = document.getElementById(in_id);
-                   if(id_st.className == "button_off"){
-                           id_st.className = "button_on"; 
+            var id_st  = document.getElementById(in_id);
+            if(id_st.className === "button_off"){
+                    id_st.className = "button_on"; 
 
    /*обращаемся к серверу для загрузки данныз в таблице*/
            /*переводим в нижний регистр для PHP метода*/		
-                           var status = in_id.toLowerCase();
+            var status = in_id.toLowerCase();
         /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/                   
-                           var req = 'obj=Journal/'+status+'&fan_num='+fan_number;
+            var req = 'obj=Journal/'+status+'&fan_num='+fan_number;
  // alert(req);
                            callServer(req,"scroll_area");
 
    /*возвращаем остальные кнопки в исходное состояние*/			
                            for(var i=0; i < mass.length; i++){
-                                   if(in_id != mass[i]){ /*alert(document.getElementById(mass[i]).className+' - '+in_id);*/
+                                   if(in_id !== mass[i]){ /*alert(document.getElementById(mass[i]).className+' - '+in_id);*/
                                            document.getElementById(mass[i]).className = "button_off";					
                                    }
                            }
@@ -1016,7 +1028,7 @@
      }
    }
 
-   if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+   if (!xmlHttp && typeof XMLHttpRequest !== 'undefined') {
      xmlHttp = new XMLHttpRequest();
    }	
 
@@ -1036,7 +1048,7 @@
            // Установить функцию для сервера, которая выполнится после его ответа
              xmlHttp.onreadystatechange = function(){
    //alert('oneadystate = '+xmlHttp.readyState);
-                             if (xmlHttp.readyState == 4) {
+                             if (xmlHttp.readyState === 4) {
                            var response = xmlHttp.responseText;
                            /*берем элемент со страницы и вставляем во внутрь код/текст.
            НАДО понять какая вкладка открыта и вставить данные соотвтетствующие это вкладке
@@ -1061,23 +1073,23 @@
    
    /*функции запрещающая выделение текста*/ 
    function disableSelection(target){
-       if (typeof target.onselectstart!="undefined") // для IE:
-           target.onselectstart=function(){return false}
-       else if (typeof target.style.MozUserSelect!="undefined") //для Firefox:
-           target.style.MozUserSelect="none"
+       if (typeof target.onselectstart!=="undefined") // для IE:
+           target.onselectstart=function(){return false;};
+       else if (typeof target.style.MozUserSelect!=="undefined") //для Firefox:
+           target.style.MozUserSelect="none";
        else // для всех других (типа Оперы):
-           target.onmousedown=function(){return false}
-       target.style.cursor = "default"
+           target.onmousedown=function(){return false;};
+       target.style.cursor = "default";
    }
 
    /*определяем АКТИВНУЮ вкладку (которая в данный момент открыиа)
-           И ПЕРЕДАЕМ СЕРВЕРУ ДЛЯ ЗАГРУЗКИ СООТВТЕТСТВУЮЩЕЙ соотвтетствующей 
-           это вкладке СТРАНИЦЫ*/
+           И ПЕРЕДАЕМ СЕРВЕРУ ДЛЯ ЗАГРУЗКИ  соотвтетствующей 
+           этой вкладке СТРАНИЦЫ*/
            function currentTable(){
                    var mass = new Array("EVENT","ALARM","LOG","ALL");
                    for(var i=0; i<mass.length; i++){
                            var choose_el = document.getElementById(mass[i]);
-                           if(choose_el.className == 'button_on')
+                           if(choose_el.className === 'button_on')
                                    txt = mass[i].toLowerCase();
                    }
                    return txt;
@@ -1085,12 +1097,12 @@
 
    /*функция запрета выделения*/
    function disableSelection(target){ 
-               if (typeof target.onselectstart!="undefined") 
-                  target.onselectstart=function(){return false} 
-               else if (typeof target.style.MozUserSelect!="undefined")  
-                  target.style.MozUserSelect="none" 
-               else target.onmousedown=function(){return false} 
-                                   target.style.cursor = "default" 
+               if (typeof target.onselectstart!=="undefined") 
+                  target.onselectstart=function(){return false;}; 
+               else if (typeof target.style.MozUserSelect!=="undefined")  
+                  target.style.MozUserSelect="none" ;
+               else target.onmousedown=function(){return false;} ;
+                                   target.style.cursor = "default" ;
 
            if (document.getElementById("noselect"))  
                disableSelection(document.getElementById("noselect")); 
@@ -1124,14 +1136,14 @@
             /*сылка на большой венилятор*/
              var bg_fan = document.getElementById('fan_2');
            var what = browser().toUpperCase();
-                   if (what == 'GECKO'){
+                   if (what === 'GECKO'){
    //alert('In fan_speed() sp -'+sp);			
                            lt_fan.style.cssText = "-ms-animation: spin "+sp+"s infinite linear";	
                            bg_fan.style.cssText = "-ms-animation: spin "+sp+"s infinite linear";
-                   }else if(what == "GOOGLE CHROME"){
+                   }else if(what === "GOOGLE CHROME"){
                            lt_fan.style.cssText = "-webkit-animation: spin "+sp+"s infinite linear";	
                            bg_fan.style.cssText = "-webkit-animation: spin "+sp+"s infinite linear";
-                   }else if(what == "FIREFOX"){
+                   }else if(what === "FIREFOX"){
                            lt_fan.style.cssText = "-moz-animation: spin "+sp+"s infinite linear";
                            bg_fan.style.cssText = "-moz-animation: spin "+sp+"s infinite linear";
                    }else {

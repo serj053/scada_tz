@@ -120,27 +120,27 @@
                                 <div id="TE2_1" class="font_content">
                                         <div id ="v_kan" >в канале </div>
                                         <div id="win_1">
-                                               <form action="#" method="get"> <!---->
+                                            
                                                 <input type="text" id="TE2" value="<?php echo $TE2;?>"/>
-                                                </form><!---->
+                                             
                                         </div>
                                         <div class="label_gr">o</div>
                                 </div>
                                 <div id="TE3_DIV" class="font_content">
                                         <div id ="obr_v">обратной воды </div>
                                         <div id="win_2">
-                                                <form action="" method="">
+                                            
                                                 <input type="text" id="TE3" value="<?php echo $TE3;?>"/>
-                                                </form>
+                                               
                                         </div>
                                         <div class="label_gr">o</div>
                                 </div>
                                 <div id="naruj" class="font_content">
                                         <div id ="nar">наружняя </div>
                                         <div id="win_3">
-                                                <form action="" method="">
+                                            
                                                         <input type="text" id="TE1" value="<?php echo $TE1;?>"/>
-                                                </form>
+                                                
                                         </div>
                                         <div class="label_gr">o</div>
                                 </div>
