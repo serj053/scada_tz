@@ -53,12 +53,13 @@
 /* Вставляем из массива GET[] величины в базу и передаем их обратно в массив,
  * который в дальнейшем будет использоваться для обновления страницы */			
         private function valueAction(){
-
+//echo'In valueAction()';die;
                 $dns = new DB_connect;
                 $dns->insertMsg();
 /*получение канкретного значения из базы данных*/						
-                $vl = $dns->selectValue();						
-        return  $vl;	;
+                $vl = $dns->selectValue();
+        //      require 'view/fan_general.php';
+                return  $vl;	;
         }
 
 

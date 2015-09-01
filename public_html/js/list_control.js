@@ -3,6 +3,9 @@
  */
 
 window.onload = function(){
+  
+ /*перезагрузка страницы каджые 30 секунд*/   
+  //  setTimeout(function(){   location.reload();}, 30000);
 
 window.onmousedown = function(e){
     e = e ||window.event;
@@ -31,7 +34,7 @@ window.onmousedown = function(e){
     
 };//end onmousedown()
 
-/*временное окно где будет выводиться исследовательская информация*/
+/*временное окно где будет выводиться исследовательская информация
     var el = document.createElement('div');
     el.style.cssText ='position:absolute;'+
                                 'width:1000px;'+
@@ -42,8 +45,8 @@ window.onmousedown = function(e){
 
         document.body.appendChild(el);
       //  var hi = window.history.length;
-        el.innerHTML = hi;
-                                
+       // el.innerHTML = hi;
+  */                              
 }
 
 function logging_on_off(in_id){

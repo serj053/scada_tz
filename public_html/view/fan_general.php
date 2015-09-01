@@ -5,16 +5,13 @@
         <title>ВУ -  <?php echo $fan_num;  ?></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--	<script type="text/javascript" src="js/fan_rail.js"></script>
-
-        <script type="text/javascript" src="js/summer_winter.js"></script>
--->	
+      
         <script type="text/javascript" src="js/fan_control.js"></script>
         <link rel="stylesheet" href="css/control_panel.css" type="text/css">
         <script type="text/javascript">
 
         </script>
-        <meta http-equiv="Refresh" content="5" />
+       <!-- <meta http-equiv="Refresh" content="5" />-->
 </head>
 <body>
         <div id="wrapper">  
@@ -123,9 +120,9 @@
                                 <div id="TE2_1" class="font_content">
                                         <div id ="v_kan" >в канале </div>
                                         <div id="win_1">
-                                                <form action="" method="">
+                                               <form action="#" method="get"> <!---->
                                                 <input type="text" id="TE2" value="<?php echo $TE2;?>"/>
-                                                </form>
+                                                </form><!---->
                                         </div>
                                         <div class="label_gr">o</div>
                                 </div>

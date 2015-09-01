@@ -8,7 +8,7 @@
         <script type="text/javascript" src=""></script>
         <link rel="stylesheet" href="css/list.css" type="text/css">
         <script type="text/javascript" src="js/list_control.js"> </script>
-        <meta http-equiv="Refresh" content="30" />
+        <!--<meta http-equiv="Refresh" content="30" />-->
 </head>
 <body>
 <div id="wrap">

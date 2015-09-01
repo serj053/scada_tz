@@ -49,8 +49,12 @@ foreach($items as $pt):
             ?>
        
               <input type="checkbox" <?php echo $pt['status']; ?> 
-                           id="<?php echo $pt['id'];  ?>"/>  
+                           id="<?php echo $pt['id'];  ?>"/>
+                            
               <?php
+                 if($pt['status'] == 'checked') echo '"УСТР."';
+                  else echo'"АКТ."';
+              
              }
         }
               

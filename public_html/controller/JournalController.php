@@ -48,7 +48,8 @@ class JournalController{
         private function allAction(){
 
                 $obj = new DB_connect;	
-                $ms = $obj->selectAllMsg();		
+                $ms = $obj->selectAllMsg();
+//var_dump($ms);                
                 ob_start();
                 require 'view/journal_all.php';
                 ob_end_flush();

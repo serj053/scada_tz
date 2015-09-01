@@ -1,5 +1,8 @@
     window.onload = function(){
-
+        
+        /*перезагрузка страницы каджые 30 секунд*/   
+    //setTimeout(function(){   location.reload();}, 30000);
+    //<?php header('refresh: 5'); ?>
             /*определяем номер установки (вентилятора)*/
                    var fan_number = document.getElementById('NAME').innerText;
 
@@ -18,112 +21,118 @@
    */
    /* РЕГУЛИРОВКА СКОРОСТИ  ВЕНТИЛЯТОРА*/
 
-           /*получеам доступ к элементу "rail" -рейка чтобы ограничить движение
+    /*получеам доступ к элементу "rail" -рейка которая определяет диапазон движение
            ползунка "bal"*/
                    var rail = document.getElementById('rail');
 
-           /*получаем доступ к элементу "bal"*/	
+    /*получаем доступ к элементу "bal" */	
                    var fish = document.getElementById('fish');
-                   //var pro = document.getelementById('pro');
-   /*Получаем значение из окошка(переданное из базы данных) что бы передать 
-   его скрипту*/
+
+    /*Получаем значение из окошка со страницы зафиксированное и переданное из базы данных) 
+         * что бы   установить положение ползунка*/
                    var coor = parseInt(document.getElementById('pro').textContent);
                    fish.style.left = 8+coor+'px';
-
+                   
+        /*внутри функии onmousedown() управляем движением ползунка который
+         регулирует скрость вращениея вентилятора * */
            fish.onmousedown = function(e){
 
                    e = e||window.event;
                    var fish = this;
+    /*получаем координату крайнего левого положениея ползунка*/         
                    var r_f = rail.offsetLeft;
-           /*смещение относительно клика мыши*/		
+    /*смещение левой координаты ползунка относительно клика мыши где e.pageX это
+    * координата клика, а координата левого верхнего угла элемента*/		
                    var x = e.pageX - fish.offsetLeft;
-
+    /*вырываем ползунок из общего потока*/
                    fish.style.position = 'absolute';
-                   //fish.style.left = 30+'px';
+    /*устанавливаем позицию ползунка с учетом смещения клика  при клике по 
+    * ползунку*/       
                    fish.offsetLeft = e.pageX -x +'px';
 
-           /*доступ к окошку отражающему скорость вентилятора
-                   var pro = document.getElementById('pro');*/
-
-                   fish.onmousemove = function(e){  
+                   fish.onmousemove = function(e){
+                       
+    /*организукм перемещение ползунка регулировки скорости*/         
                            move(e);
 
-                   //control();
+    /*расчет показаний скорости вращения в окошке на странице на */			
+                    sz = (fish.offsetLeft - rail.offsetLeft )/1;
+                    prc = parseInt(sz);
+                    if(prc > 100){
+                    prc = 100;
+                    }else if(prc < 0){
+                    prc = 0;}
+                    pro.innerHTML = prc;
+             //отображение скорости в окошке над установкой
+                    var speed_value=document.getElementById("MD_1");
+                    speed_value.innerHTML = prc;
 
-           /*расчет показаний скорости в окошке*/			
-                           sz = (fish.offsetLeft - rail.offsetLeft )/1;
-                           prc = parseInt(sz)
-                           if(prc > 100){
-                           prc = 100;
-                           }else if(prc < 0){
-                           prc = 0;}
-                           pro.innerHTML = prc;
-           //отображение скорости над установкой
-                           var speed_value=document.getElementById("MD_1");
-                           speed_value.innerHTML = prc;
-
-                   }
+                   };
    //contr.innerHTML = 'e.pageX='+e.pageX+'<br>rail.offsetLeft='+rail.offsetLeft+'<br>fish.offsetLeft='+fish.offsetLeft;					
 
-                           document.onmouseup = function(){
+                    document.onmouseup = function(){
 
-                           // очистить обработчики, т.к перенос закончен
-                           document.onmousemove = null;
-                           document.onmouseup = null;
-                           document.ondragstart = null;
-                           document.body.onselectstart = null;
-                           fish = null;
+                    // очистить обработчики, т.к перенос закончен
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    document.ondragstart = null;
+                    document.body.onselectstart = null;
+                    fish = null;
 
-                           /*передаем скорсть вращения вентилятору*/
-                            /*если className == "inc_ind_on" то установка включена */		
-                            var el_cool = document.getElementById('inc_ind');
-                            if(el_cool.className == "inc_ind_on"){
-                                var sp_win = parseInt(document.getElementById('pro').textContent);
-                                var sp_win = 20/sp_win;
+    /*передаем скорсть вращения вентилятору при условии что установка включена*/
+    /*берем значение из окошка, в окошко занчение передается из базы
+    *  при загрузке страницы */		
+                     var el_cool = document.getElementById('inc_ind');
+    /*если установлен у элемента класс  "inc_ind_on" значит установка включена*/     
+                     if(el_cool.className === "inc_ind_on"){
+                         var sp_win = parseInt(document.getElementById('pro').textContent);
+                         var sp_win = 20/sp_win;
 
-                           /*передаем значения на анимацию вращения*/
-                                           fan_speed(sp_win);
-                                   }	
+    /*передаем значения скорости в функцию анимацию вращения*/
+                                    fan_speed(sp_win);
+                            }	
 
 
-           /*заноситься в две таблицы базы данных значение в одну скрость в другую сообщения
-            других процесов*/
-                   /*определяем номер установки (вентилятора)*/
-           //d	var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+    /*С помощью объекта XMLHTTPrequest  заносяться в две таблицы базы данных
+    *  значение в одну значеиня параметров установки скорость и т.д. в другую 
+    *  сообщения  о   процесах*/
+
+    /**СТРОКА которая заноситься в базу*/	
                    var str = "Скорость вентилятора изменена до "+prc+' %.'+
                    ':Изменение скорости вентилятора';
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что бы после обработкт вставить именно в нее		
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+    /*определяем текущую активную вкладку, что бы после обработки и перезагрузки вставить
+    обратно именно в нее	*/
+           var tab = currentTable();	
+    /*ИДЕНТИФИКАТОР элемента страницы в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
+    /*Формируем строку для передачи XNKHTTPrequest объекту*/               
+    /*Имя класса/ метод обработчика на сервере с прицепленными к нему данными, 
+    * которые будут переданны в массив GET[] и использоваться базами даных.
+    -класс/метод- + id элемента на который нажали + строка с инф. для журнала событий
+    + номер установки*/	
 
                    var target_name = 'obj=Journal/add&what=fish&str='+str+'&fan_num='+fan_number+'&id_table='+tab+'&fan_val='+prc; 
              //alert(target_name);		
-           /*делаем запиись в журнал*/	
+    /*Функция для передачи данных серверу*/	
                            callServer(target_name, div_id);
 
-           /*заносим значение скорости вентилятора*/
+                   };		
+        /******************************************************************************/
+/*функция движения ползунка*/
+            function move(e){
 
-                           //callServer(target_name, div_id);		
+                    fish.style.left = e.pageX-x+'px' ;
+    /*остановка ползунка при выходе за границы рейки*/	
+                    if(fish.offsetLeft  < r_f)	{fish.style.left = 8+'px';	};
+                    if(fish.offsetLeft > rail.offsetWidth - 6)	{ fish.style.left = 113+'px'; 	};
+            };
+                       // отменить перенос и выделение текста при клике на тексте
+                       document.ondragstart = function() { return false ;};
+                       document.body.onselectstart = function() { return false ;};
 
-                   }		
-   /******************************************************************************/													
-                        function move(e){
-
-                                fish.style.left = e.pageX-x+'px' ;
-                        /*остановка ползунка при выходе за границы рейки*/	
-                                if(fish.offsetLeft  < r_f)	{fish.style.left = 8+'px';	}
-                                if(fish.offsetLeft > rail.offsetWidth - 6)	{ fish.style.left = 113+'px'; 	}
-                        }
-                                   // отменить перенос и выделение текста при клике на тексте
-                                   document.ondragstart = function() { return false }
-                                   document.body.onselectstart = function() { return false }
-
-                                   return false;
-            }
+                       return false;
+            };
    /////////////////////////////////////////////////////////////////////////////////////////////
 
    /*РЕГУЛИРОВКА ТЕМПЕРАТУРЫ*/
@@ -132,28 +141,19 @@
            /*получаем елемент рейку по которой ползет ползун*/
            var reika = document.getElementById('reika');
 
-           /*получаем значение температуры установленное по умолчанию*/
-           //polzun.style.left = 20+'px';
-           //var val_tempr = ( polzun.offsetLeft - reika.offsetLeft)/0.93;
-           //var tmp = parseInt(val_tempr);
-           /*получаем доступ к окошку вывода температуры уставки и куда из базы данных
-           загружается значение и передаем координате ползуна*/
-                   var wind = document.getElementById('SET_IND');
-                   var in_wind = wind.textContent;
-                   var tmp = parseInt(in_wind);
-                   polzun.style.left = tmp+'px';
-   //alert(wind);		
-                   //wind.innerHTML = tmp;
-           /*получаем доступ к окошку вывода температуры в канале и передаем туда значение*/
-                   //var wnd = document.getElementById('TE2');
-                   //wnd.value = tmp;
-
-           /*обрабатываем клик по ползуну*/
+    /*получаем доступ к окошку вывода температуры уставки   куда из базы данных
+    загружается значение и передаем координате ползуна*/
+            var wind = document.getElementById('SET_IND');
+            var in_wind = wind.textContent;
+            var tmp = parseInt(in_wind);
+            polzun.style.left = tmp+'px';
+  
+    /*обрабатываем клик по ползуну , внутри функции клика организуем функцию пе*/
    polzun.onmousedown = function(e){
                    e = e || window.event;
                    var polzun = this;
 
-           /*определяем разницу междк точкой клика и левым верхним углом елемента*/	
+    /*определяем разницу междк точкой клика и левым верхним углом елемента*/	
                    var x = e.pageX - polzun.offsetLeft;
 
                    //polzun.style.position ='absolute';
@@ -162,7 +162,7 @@
 
                            move(e);
 
-           /*расчитываем температуру для вывода в окошко */
+    /*расчитываем температуру для вывода в окошко */
                    val_tempr = ( polzun.offsetLeft - reika.offsetLeft)/0.93;
                    if(val_tempr < 0) val_tempr = 0;
                    if(val_tempr > 50) val_tempr = 50;
@@ -170,7 +170,7 @@
                    wind.innerHTML = tmp;
 
 
-           /*расчитываем температуру в канале с учетом -+ 1 градус
+    /*расчитываем температуру в канале с учетом -+ 1 градус
                    var tmp_rand = Math.floor(Math.random()*2+(tmp - 1))
                    var win_1 = document.getElementById('input_TE2_1');
                            win_1.value = tmp_rand;
@@ -179,37 +179,40 @@
                            tr_ch.innerHTML = tmp_rand;
 
                    */// теперь берктся из базы
-                   }
+                   };
 
-                   document.onmouseup = function(){
-                           //
-                           // очистить обработчики, т.к перенос закончен
-                        document.onmousemove = null;
-                        document.onmouseup = null;
-                        document.ondragstart = null;
-                        document.body.onselectstart = null;
-                        polzun = null;
-           /*заноситься в базу данных значение уставки******************************/
-   /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+            document.onmouseup = function(){
+                  
+    // очистить обработчики, т.к перенос закончен
+                 document.onmousemove = null;
+                 document.onmouseup = null;
+                 document.ondragstart = null;
+                 document.body.onselectstart = null;
+                 polzun = null;
+                 
+    /*Формируем строку для передачи XNKHTTPrequest объекту*/               
+    /*Имя класс/ метод обработчика на сервере с прицепленными к нему данными, 
+    * которые будут переданны в массив GET[] и использоваться базами даных.
+    -класс/метод- + id элемента на который нажали + строка с инф. для журнала событий
+    + номер установки*/
+    /**СТРОКА которая заноситься в базу*/	
                    var str = "Уставка зменена до "+tmp+"<strong><sup>0</sup></strong> С:"+
                    "Изменение уставки"
                    ;
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
            var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее		
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
-
+                   
+    /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what=polzun&str='+str+'&fan_num='+fan_number+'&id_table='+tab+'&tmp_val='+tmp; 
-
+    /*Функция для передачи данных серверу*/
                            callServer(target_name, div_id);
 
-                   }
+                   };
 
+    /*функция перемещения ползунка*/       
                    function move(e){
 
                            polzun.style.left = e.pageX - x+'px';
@@ -220,55 +223,57 @@
                            if(polzun.offsetLeft > 47){
                                    polzun.style.left = 47+'px';
                            }
-                           //contr.innerHTML = 'poilzun.offsetLeft ='+polzun.offsetLeft+'  reika.offsetLeft = '+reika.offsetLeft;			
-                   }
+    //contr.innerHTML = 'poilzun.offsetLeft ='+polzun.offsetLeft+'  reika.offsetLeft = '+reika.offsetLeft;			
+                   };
 
-                   document.ondragstart = function() { return false }
-                                   document.body.onselectstart = function() { return false }
+                   document.ondragstart = function() { return false; };
+                                   document.body.onselectstart = function() { return false ;};
                    return false;
-           }
+           };
 
    /*ТЕМПЕРАТУРА В КАНАЛЕ обработка изменений в окнах*/
-           var te2 = document.getElementById('TE2');	
-                   te2.onchange = function(){				
+   /*Заносим значение из поля(окошко) температуры в базу данных и при загрузке страницы 
+    * берем значение из базы переносим в поле температуры*/
+   
+    /*Получаем ссылку на поле(окошко) температуры*/
+           var te2 = document.getElementById('TE2');
+    //alert('target_vallue - '+target_value);         
+    /*Функция отслеживающая изменение в окошке*/
+                   te2.onchange = function(){                    
+    /*Получаем значение из поля(окошка)*/              
                            var val_t2 = this.value;
-                   /*то на странице куда будет возвращено значенпи после фиксации в базе*/	
+    /*Получаем идентификатор поля для обратной загрузки*/	
                            var div_id = 'TE2';
-   /*класс которому передается значение и передаваемая величина и номер установки*/	
+   /*Готовим строку для передачи XNLHTTPrequest  объекту.
+    * класс/метод которому передается значение + передаваемая величина + номер установки*/	
                            var target_value = 'obj=Fan/value&clm=TE2&TE2='+val_t2+'&fan_num='+fan_number;	
-   //alert(target_value);
 
-                           callServer(target_value, div_id);
+                           callServer(target_value, div_id);//со  строки 1020
 
-                   }
+                   };
 
    /*ТЕМПЕРАТУРА ОБРАТНОЙ ВОДЫ обработка изменений в окнах*/
            var te3 = document.getElementById('TE3');	
                    te3.onchange = function(){				
-                           var val_t3 = this.value;
-                   /*то на странице куда будет возвращено значенпи после фиксации в базе*/	
-                           var div_id = 'TE3';
-                   /*класс которому передается значение и передаваемая величина*/	
+                           var val_t3 = this.value;	
+                           var div_id = 'TE3';	
                            var target_value = 'obj=Fan/value&clm=TE3&TE3='+val_t3+'&fan_num='+fan_number;	
-   //alert(te3.value);
 
                            callServer(target_value, div_id);
 
-                   }
+                   };
 
    /*ТЕМПЕРАТУРА НАРУЖНЯЯ обработка изменений в окнах*/
            var te2 = document.getElementById('TE1');	
                    te2.onchange = function(){				
-                           var val_t1 = this.value;
-                   /*то на странице куда будет возвращено значенпи после фиксации в базе*/	
-                           var div_id = 'TE1';
-                   /*класс которому передается значение и передаваемая величина*/	
+                           var val_t1 = this.value;	
+                           var div_id = 'TE1';	
                            var target_value = 'obj=Fan/value&clm=TE1&TE1='+val_t1+'&fan_num='+fan_number;		
-   alert(target_value);
+  // alert(target_value);
 
                            callServer(target_value, div_id);
 
-                   }
+                   };
 
    /*ЧИСЛОВОЙ ИНДИКАТОР ТЕМПЕРАТУРЫ ВХОДЯЩЕГО ПОТОКА обработка изменений в окнах*/
            var te2 = document.getElementById('INC_NUM');	
@@ -282,7 +287,7 @@
 
                            callServer(target_value, div_id);
 
-                   }
+                   };
 
    /*ЧИСЛОВОЙ ИНДИКАТОР ТЕМПЕРАТУРЫ ОБРАТНОЙ ВОДЫ обработка изменений в окнах*/
            var te2 = document.getElementById('WATERBACK_IND');	
@@ -296,20 +301,18 @@
 
                            callServer(target_value, div_id);
 
-                   }		
+                   };		
 
-
-
-
-   } //End of window.onload()
+   }; //End of window.onload()
 
 
 
    window.document.onmousedown = function(e){
 
-           /*определяем номер установки (вентилятора)*/
+           /*узнаем номер установки (вентилятора)*/
                    var fan_number = document.getElementById('NAME').innerText;
-   //alert('fan_number - '+fan_number);	
+   //alert('fan_number - '+fan_number);
+   /*функция запрещающая выделение  строка примерно 1084*/
            disableSelection(document.body);
 
 
@@ -317,18 +320,21 @@
            //window.document.onscroll = function(){window.document.body.onselectstart= false;};
 
    /*УДАЛЕНИЕ СТРОКИ. ловим все события "НАЖАТИИЕ КНОПКИ" и определяем "id" элемента*/	
+        /*получаем атррибут элемента по которому кликнули*/
            var el = e.target.getAttribute('id');
    /*выделяем те нажатия которые имеют отношения к журналу событий, то есть имеющие
    префикс "id_" для того что бы выбрать элемент из таблицы */
-           if(el != null  && el.slice(0,3)=='id_'){
-                   /*определяем элемент*/
+           if(el !== null  && el.slice(0,3)==='id_'){
+    /*определяем элемент который связан с событием является пятым дочерним у родителя*/
                    var del_element = document.getElementById(el).parentNode;
-           /*определяем id элемента связанного с  событием*/	
+    /*определяем id элемента связанного с  событием*/	
                    var txt = del_element.parentNode.children[4].textContent;
    //alert(txt);
-           /*определяем  элемент куда будут переданы обновленные toLowerCase()	*/
+   /*формируем строку для передачи объекту XMLHTTPrequest*/
+    /*определяем  закладку куда будут переданы обновленные значения после перезагрузки
+    * тоесть текущую закладку*/
                    var div_id = currentTable();
-           /*получаем значение элемента(время)  и передает его в GET по которому будем искать его в базе*/	
+    /*получаем значение элемента(время)  и передает его в GET по которому будем искать его в базе*/	
                    var val_date = del_element.textContent.slice(1);	
            var div_id = "scroll_area";//элемент страницы куда будет вставляться код 
            var tab = currentTable();//определяем активную вкладку, что бы после абработкт вставить именно в нее	
@@ -337,13 +343,14 @@
                            callServer(target_name, div_id)	;
            }
    /*СТАВИМ ИЛИ УБИРАЕМ галку в checkBOX*/
+   /*выбираем элемент с классом характерным для элемента предназначенного для галки*/
            if(e.target.parentNode.className ==='status_td'){
    //alert('e.target.parentNode.className -'+e.target.parentNode.className);		
                    var sss = e.target.parentNode.parentNode.children[4].textContent;
                    var el_ch;
            e.target.onmouseup = function(){
    //alert('In checked');
-                   if(e.target.checked == false){
+                   if(e.target.checked === false){
                            e.target.checked = true;
                            var el_ch = 'checked';
                    }else{
@@ -351,107 +358,110 @@
                            var el_ch = null;
                    }
 
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
+     /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
 
-           /*определяем id элемента связанного с  событием*/
+    /*определяем id элемента который записан как текст в срытом элементе
+    *  и  связанного с  событием для нахождения его в базе*/
            var del_element = e.target.parentNode;
                    var txt = del_element.parentNode.children[4].textContent;	
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
            var tab = currentTable();//определяем активную вкладку, что бы после абработкт вставить именно в нее
            var div_id = "scroll_area";//элемент страницы куда будет вставляться код 
 
-           /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
+    /*АДРЕС файла обработчика на сервере с прицепленными к нему данными для массива GET[]
            -класс/метод- + строка с инф.+ id элемента на который нажали + номер активной вкладки */	
    //alert('el_ch = '+el_ch);	
            var target_name = 'obj=Journal/checked&what='+el_ch+'&id_ch='+txt+'&id_table='+tab+'&fan_num='+fan_number;
    //alert('target_name = '+target_name);	
                            callServer(target_name, div_id);						
-                   }	
+                   };	
            }
+       
+       
+/*Выбоор элементов по идентификаторам и бработка кликов*/
 
            switch(el){	
-   /*START*/	
+   /*нажимает старт ВУ*/	
            case"start": 
-   /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-       /*определяем номер установки (вентилятора)*/
-       //d var fan_number = document.getElementById('NAME').innerText;
-               /**СТРОКА которая заноситься в базу*/	
+   /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+    /*определяем номер установки (вентилятора)*/
+    //d var fan_number = document.getElementById('NAME').innerText;
+    /**СТРОКА которая заноситься в базу*/	
                        var str = "Установка запущена:Запуск установки";
-               /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                        var div_id = "scroll_area";
-               /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-               var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее	
-               /*АДРЕС файла обработчика на сервере с прицепленными к нему данными 
-               -класс/метод- + id элемента на который нажали + строка с инф. + номер установки 
-               + номер активной вкладки */	
+    /*определяем активную вкладку, что бы после абработкт вставить именно в нее*/	
+               var tab = currentTable();	
+    /*АДРЕС файла обработчика на сервере с прицепленными к нему данными для масива GET[]
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки 
+    + номер активной вкладки */	
                    var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
 
-                           callServer(target_name, div_id);
+                    callServer(target_name, div_id);
 
-           /*перевод рычажка в положение включить*/	
-                               var el = document.getElementById('img_start_stop');
-                               el.src = 'img/pusk1.png';
-                               var el_cool = document.getElementById('inc_ind');
-                   //Запуск прогресс бара	
-                   /*если установка уже включена то не запускать прогрессБар*/	
-                               if(el_cool.className == "inc_ind_off"){
-                                                       fun_on_off(true);
-                               }else{
-                                       return;
-                               }			
-           /*индикация состояния насоса*/		
-                               var state_pump = document.getElementById("PUMP_IND");
-                               state_pump.innerHTML = "ВКЛ."
-                               state_pump.style.backgroundColor = "#5D7809";
+/*перевод рычажка в положение включить*/	
+                        var el = document.getElementById('img_start_stop');
+                        el.src = 'img/pusk1.png';
+                        var el_cool = document.getElementById('inc_ind');
+    //Запуск прогресс бара	
+    /*если установка уже включена то не запускать прогрессБар*/	
+                        if(el_cool.className === "inc_ind_off"){
+    /*функция создания прогресс бара*/
+                                                fun_on_off(true);
+                        }else{
+                                return;
+                        }			
+    /*индикация состояния насоса*/		
+                        var state_pump = document.getElementById("PUMP_IND");
+                        state_pump.innerHTML = "ВКЛ.";
+                        state_pump.style.backgroundColor = "#5D7809";
 
-                   break;
-   /*STOP*/		
+            break;
+   /*нажимаем стоп ВУ*/		
            case"stop": 
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+                   /* номер установки (вентилятора) "fan_numer" определн выше*/
+    /**СТРОКА сообщениея которая заноситься в базу*/	
                    var str = "Установка остановлена : Остановка установки";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее		
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*определяем активную вкладку, что после абработкт вставить именно в нее	*/	
+           var tab = currentTable();	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+    /*АДРЕС файла обработчика на сревере с прицепленными к нему данными для массива GET[]
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
    //alert('fan_number - '+fan_number);		
                            callServer(target_name, div_id);
 
-                   /*превод рычажка в положение выключить*/		
+    /*превод рычажка в положение выключить*/		
                                    var el = document.getElementById('img_start_stop');
                                    el.src = 'img/stop1.png';
-                   /*если className == "inc_ind_on" то установка включена */		
+    /*если className == "inc_ind_on" то установка включена */		
                                    var el_cool = document.getElementById('inc_ind');
-                                   if(el_cool.className == "inc_ind_on"){
+                                   if(el_cool.className === "inc_ind_on"){
                                                            fun_on_off(false,'gray',true);
                                    }else{
                                            return;
                                    }		
 
-                   /*индикация состояния насоса*/		
+    /*индикация состояния насоса*/		
                            var state_pump = document.getElementById("PUMP_IND");
-                           state_pump.innerHTML = "ВЫКЛ."
+                           state_pump.innerHTML = "ВЫКЛ.";
                            state_pump.style.backgroundColor = "#4C4849";
 
                    break;
    /*"BTN_T" активации установки по таймеру*/		
            case"BTN_T": 
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+    /* номер установки (вентилятора) "fan_numer" определн выше*/
+    /**СТРОКА которая заноситься в базу*/	
                    var str = "Установка актвирована по таймеру : Активация установки по таймер";
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
            var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее		
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
+    /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; ; 
 
                            callServer(target_name, div_id);
@@ -469,97 +479,94 @@
                    break;
    /*SUMMER переключение режима зима-лето*/		
            case"summer": 
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
-           /**СТРОКА которая заноситься в базу*/	
+  /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+  /* номер установки (вентилятора) "fan_numer" определн выше*/
+  /**СТРОКА которая заноситься в базу*/	
                    var str = "Режим зима-лето изменен на режим -зима : Изменение режима зима лето";
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+/*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее		
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+    /*определяем активную вкладку, что после абработкт вставить именно в нее*/	
+           var tab = currentTable();		
+           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными для массива GET[]
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab;  
 
                            callServer(target_name, div_id);
+    /*присваиваем элементам соотвтетвующие моменту изображения*/
+                var el = document.getElementById('img_summer_winter');
+                     el.src = 'img/pusk1.png';
+                     var el1 = document.getElementById('lm_img');
+                     el1.src = 'img/flag_summer.png';
+                     var warm = document.getElementById('warm_ind');
+                     warm.style.backgroundImage = "url('img/warm_ind_1.png')";
+                     var cool = document.getElementById('cool_ind');
+                     cool.style.backgroundImage = "url('img/ind_out.png')";
+                     var cold_flow = document.getElementById('coldflow_ind');
+                     cold_flow.style.visibility = "hidden";
+                     var hot_flow = document.getElementById('hotflow_ind');
+                     hot_flow.style.visibility = "visible";
 
-                   var el = document.getElementById('img_summer_winter');
-                        el.src = 'img/pusk1.png';
-                        var el1 = document.getElementById('lm_img');
-                        el1.src = 'img/flag_summer.png';
-                        var warm = document.getElementById('warm_ind');
-                        warm.style.backgroundImage = "url('img/warm_ind_1.png')";
-                        var cool = document.getElementById('cool_ind');
-                        cool.style.backgroundImage = "url('img/ind_out.png')";
-                        var cold_flow = document.getElementById('coldflow_ind');
-                        cold_flow.style.visibility = "hidden";
-                        var hot_flow = document.getElementById('hotflow_ind');
-                        hot_flow.style.visibility = "visible";
-
-                        var vl_ind = document.getElementById("VALVE_IND");
-                                vl_ind.innerHTML = "ОТКР.";
-                                vl_ind.style.backgroundColor ="#5D7809";
-                        var vl_ind = document.getElementById("PUMP_IND");
-                                vl_ind.innerHTML = "ВЫКЛ.";
-                                vl_ind.style.backgroundColor ="#4C4849";	
+                     var vl_ind = document.getElementById("VALVE_IND");
+                     vl_ind.innerHTML = "ОТКР.";
+                     vl_ind.style.backgroundColor ="#5D7809";
+                     var vl_ind = document.getElementById("PUMP_IND");
+                     vl_ind.innerHTML = "ВЫКЛ.";
+                     vl_ind.style.backgroundColor ="#4C4849";	
 
                    ;
                    break;
    /*WINTER переключение режима зима-лето*/			
            case"winter": 
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+     /* номер установки (вентилятора) "fan_numer" определн выше*/
            /**СТРОКА которая заноситься в базу*/	
                    var str = "Режим зима-лето изменен на режим зима : Изменение режима зима-лето";
-           /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
+    /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
+    /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
            var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее		
-           /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
-           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
+    /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
 
                            callServer(target_name, div_id);
 
-                   var el = document.getElementById('img_summer_winter');
-                                   el.src = 'img/stop1.png';
-                                   var el1 = document.getElementById('lm_img');
-                                   el1.src = 'img/flag_winter.png';
-                                   var warm = document.getElementById('warm_ind');
-                                   warm.style.backgroundImage = "url('img/ind_out.png')";
-                                   var cool = document.getElementById('cool_ind');
-                                   cool.style.backgroundImage = "url('img/cool_ind_1.png')";
-                                   var cold_flow = document.getElementById('coldflow_ind');
-                                   cold_flow.style.visibility = "visible";
-                                   var hot_flow = document.getElementById('hotflow_ind');
-                                   hot_flow.style.visibility = "hidden";
+            var el = document.getElementById('img_summer_winter');
+                     el.src = 'img/stop1.png';
+                     var el1 = document.getElementById('lm_img');
+                     el1.src = 'img/flag_winter.png';
+                     var warm = document.getElementById('warm_ind');
+                     warm.style.backgroundImage = "url('img/ind_out.png')";
+                     var cool = document.getElementById('cool_ind');
+                     cool.style.backgroundImage = "url('img/cool_ind_1.png')";
+                     var cold_flow = document.getElementById('coldflow_ind');
+                     cold_flow.style.visibility = "visible";
+                     var hot_flow = document.getElementById('hotflow_ind');
+                     hot_flow.style.visibility = "hidden";
 
-                                   var vl_ind = document.getElementById("VALVE_IND");
-                                           vl_ind.innerHTML = "ЗАКР.";
-                                           vl_ind.style.backgroundColor ="#6950B6";
-                                   var vl_ind = document.getElementById("PUMP_IND");
-                                           vl_ind.innerHTML = "ВКЛ.";
-                                           vl_ind.style.backgroundColor ="#5D7809";	
+                     var vl_ind = document.getElementById("VALVE_IND");
+                      vl_ind.innerHTML = "ЗАКР.";
+                      vl_ind.style.backgroundColor ="#6950B6";
+                     var vl_ind = document.getElementById("PUMP_IND");
+                      vl_ind.innerHTML = "ВКЛ.";
+                      vl_ind.style.backgroundColor ="#5D7809";	
                    ;
                    break;
    /*АВАРИЯ ВЕНТИЛЯТОРА*/
            case "FAIL_FAN_BTN":
-           /*посылаем(добавляем) сообщение  в журнал и базу данных*/
+    /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
+     /* номер установки (вентилятора) "fan_numer" определн выше*/
            /*если установка не включена то работа кнопок заблокирована*/	
            /*проверяем включена ли установка если всключени то отключаем если нет то выход*/
                    var el_cool = document.getElementById('inc_ind');
                    if(el_cool.className != "inc_ind_on"){ return;}	
 
-                   /*определяем номер установки (вентилятора)*/
-                   //d var fan_number = document.getElementById('NAME').innerText;
            /**СТРОКА которая заноситься в базу*/	
                    var str = "АВАРИЯ ВЕНТИЛЯТОРА. Установка «СТОП»";
            /*ИДЕНТИФИКАТОР элемента в который будут вставляться полученные с сервера данные*/	
                    var div_id = "scroll_area";
-           /*ТЕКУЩАЯ АКТИВНАЯ ВКЛАДКА*/	
-           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее			
+           /*определяем активную вкладку, что после абработкт вставить именно в нее	*/	
+           var tab = currentTable();//		
            /*АДРЕС файла обработчика на сревере с прицепленными к нему данными 
            -класс/метод- + id элемента на который нажали + строка с инф. + номер установки*/	
                    var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
@@ -569,15 +576,15 @@
 
 
                    var that = document.getElementById("FAIL_FAN_BTN");
-                   if(that.className == "button_on"){//если кнопка вжата
+                   if(that.className === "button_on"){//если кнопка вжата
                                    that.className = "button_off";
-                           }else if(that.className == "button_off"){//если кнопка отжата то есть выключена		
+                           }else if(that.className === "button_off"){//если кнопка отжата то есть выключена		
                                    that.className = "button_on"; 
                            }
                    var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
 
                    //
-                   if(that.className == "button_on"){	//alert(that.className);		
+                   if(that.className === "button_on"){	//alert(that.className);		
                            st_f.innerHTML ="АВАРИЯ ВЕНТИЛЯТОРА";
                            st_f.style.color = "red";
                            var md_1 = document.getElementById("MD_1");
@@ -1022,7 +1029,7 @@
 
            /*передаем URL журнала предназначенного для загрузки */	
              var url = 'index.php?'+encodeURI(target_name);//alert(decodeURI(url));
-   //alert('url - '+url);
+  //alert('url - '+url);
            // Открыть соединение с сервером
              xmlHttp.open("GET", url, true);
 
@@ -1051,6 +1058,7 @@
            }
    /*массив идентификаторов аварийных кнопок*/
    var table_names = Array('FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
+   
    /*функции запрещающая выделение текста*/ 
    function disableSelection(target){
        if (typeof target.onselectstart!="undefined") // для IE:
