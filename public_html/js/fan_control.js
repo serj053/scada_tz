@@ -1,7 +1,7 @@
     window.onload = function(){
         
         /*перезагрузка страницы каджые 30 секунд*/   
-    //setTimeout(function(){   location.reload();}, 30000);
+    setTimeout(function(){   location.reload();}, 30000);
     //<?php header('refresh: 5'); ?>
             /*определяем номер установки (вентилятора)*/
                    var fan_number = document.getElementById('NAME').innerText;
@@ -357,6 +357,7 @@
                    e.target.checked = false;
                            var el_ch = null;
                    }
+                   
 
      /*Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных*/
 

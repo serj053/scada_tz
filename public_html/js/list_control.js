@@ -5,7 +5,7 @@
 window.onload = function(){
   
  /*перезагрузка страницы каджые 30 секунд*/   
-  //  setTimeout(function(){   location.reload();}, 30000);
+   setTimeout(function(){   location.reload();}, 30000);
 
 window.onmousedown = function(e){
     e = e ||window.event;
@@ -21,13 +21,16 @@ window.onmousedown = function(e){
             e.target.checked = false;
             is_ch = null;
         }
+     
     
-    //alert(is_ch+' - '+el_id); 
+   //alert(is_ch+' - '+el_id); 
     /*определяем название текущей закладки что бы ей же и вернуть результат */
         var current_table = currentTable();
         var str = 'obj=List/checked&what='+is_ch+'&id_ch='+el_id+'&table_name='+current_table;
  //alert('astr - '+str)      ;
         callServer(str,'table_list');
+        
+        
         
 
     }
@@ -46,7 +49,9 @@ window.onmousedown = function(e){
         document.body.appendChild(el);
       //  var hi = window.history.length;
        // el.innerHTML = hi;
-  */                              
+  */ 
+ 
+ 
 }
 
 function logging_on_off(in_id){
