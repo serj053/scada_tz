@@ -33,7 +33,7 @@ foreach($items as $pt):
                        echo $msg[0]; 
                     // echo $pt['message'];
              }
-;
+
              ?>
         </div>
         <div class="status_lt" >

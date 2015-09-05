@@ -5,7 +5,7 @@
 window.onload = function(){
   
  /*перезагрузка страницы каджые 30 секунд*/   
-   setTimeout(function(){   location.reload();}, 30000);
+  // setTimeout(function(){   location.reload();}, 30000);
 
 window.onmousedown = function(e){
     e = e ||window.event;
@@ -52,15 +52,15 @@ window.onmousedown = function(e){
   */ 
  
  
-}
+};
 
 function logging_on_off(in_id){
  //  alert('In logging_on_off in_id = '+in_id);	
-                   var fan_number = document.getElementById('NAME').innerText;
+                 //  var fan_number = document.getElementById('NAME').innerText;
                    var mass = new Array("EVENT","ALARM","LOG","ALL");
 //alert(in_id);
                    var id_st  = document.getElementById(in_id);
-                   if(id_st.className == "button_off"){
+                   if(id_st.className === "button_off"){
                            id_st.className = "button_on"; 
 //var fan_number ='П1';
    /*обращаемся к серверу для загрузки данныз в таблице*/
@@ -73,7 +73,7 @@ function logging_on_off(in_id){
 
    /*возвращаем остальные кнопки в исходное состояние*/			
                            for(var i=0; i < mass.length; i++){
-                                   if(in_id != mass[i]){ /*alert(document.getElementById(mass[i]).className+' - '+in_id);*/
+                                   if(in_id !== mass[i]){ /*alert(document.getElementById(mass[i]).className+' - '+in_id);*/
                                            document.getElementById(mass[i]).className = "button_off";					
                                    }
                            }
@@ -98,7 +98,7 @@ function logging_on_off(in_id){
      }
    }
 
-   if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+   if (!xmlHttp && typeof XMLHttpRequest !== 'undefined') {
      xmlHttp = new XMLHttpRequest();
    }	
 
@@ -119,7 +119,7 @@ function logging_on_off(in_id){
            // Установить функцию для сервера, которая выполнится после его ответа
              xmlHttp.onreadystatechange = function(){
  // alert('onreadystate = '+xmlHttp.readyState);
-                             if (xmlHttp.readyState == 4) {
+                             if (xmlHttp.readyState === 4) {
                            var response = xmlHttp.responseText;
                            /*берем элемент со страницы и вставляем во внутрь код/текст.
            НАДО понять какая вкладка открыта и вставить данные соотвтетствующие это вкладке
@@ -142,7 +142,7 @@ function logging_on_off(in_id){
                    var mass = new Array("EVENT","ALARM","LOG","ALL");
                    for(var i=0; i<mass.length; i++){
                            var choose_el = document.getElementById(mass[i]);
-                           if(choose_el.className == 'button_on')
+                           if(choose_el.className ==='button_on')
                                    txt = mass[i].toLowerCase();
                    }
                    return txt;

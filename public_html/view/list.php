@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="wrap">
-    <div id="NAME">List</div>
+    <a id="" href="">doc</a>
     <div id="cap">
             <div id="">УСТАНОВКА</div>
             <div id="">№ ПОМЕЩЕНИЯ</div>

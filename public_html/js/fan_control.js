@@ -1,7 +1,12 @@
-    window.onload = function(){
+
+/**
+ * Javascript
+ * */
+
+window.onload = function(){
         
         /*перезагрузка страницы каджые 30 секунд*/   
-    setTimeout(function(){   location.reload();}, 30000);
+                //  setTimeout(function(){   location.reload();}, 30000);
     //<?php header('refresh: 5'); ?>
             /*определяем номер установки (вентилятора)*/
                    var fan_number = document.getElementById('NAME').innerText;
