@@ -139,16 +139,20 @@ class ListController{
         /*масив идентификаторов аварийных событий, будут выбраны все записи кроме  них*/ 
         $arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN','FAIL_VALVE_BTN','RESET');
                 $dbh = new DB_connect;
-          /*выбиракм записи аме кроме записей принадлежащим аварийным кнопкам
+          /*выбиракм записи все кроме записей принадлежащим аварийным кнопкам
         но прирнадлежащим кнопке "EVENT" */                
                 $items = $dbh->selectSomeList($arr_id,'event');
                 $flag = 'event';
-                /*проверяем количество строк отмеченных как "checked"*/
-                    $checked_num = $dbh->isChecked();
-                    if($checked_num == 0){
-                        $bell_color = 'bell_red';
-                    }else{
+                  /*определяем количество аварийных срабатываний*/
+                 $num=$dbh-> alarmRowsNumber();
+                    $checked_num = $dbh->isChecked();//выборка элементов отмеченных как checked
+          /*Сравниваем количество аварийных срабатываний с количеством
+            *отмеченных чекбоксом строк, если они совпадают то зажечь зеленый колоколчик
+            * в противном случае горит красный (передаем соотвтетсвующий класс элементу HTML */              
+                    if($checked_num ==$num){
                         $bell_color = 'bell_green';
+                    }else{
+                        $bell_color = 'bell_red';
                     }
                 
                         ob_start();

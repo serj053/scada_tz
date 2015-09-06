@@ -23,7 +23,7 @@
                 <div class="status_td">
                     <!--    <input type="checkbox" <?php echo $v['status']; ?> />
                        <?php
-                            if($v['status'] == 'checked') echo '"УСТР."';
+                            if($v['status'] === 'checked') echo '"УСТР."';
                             else echo'"АКТ."';
                         ?>-->
                 </div>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head> </title> </title>
+<meta charset="UTF8" />
+</head><body>
+<pre>
+
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+        &lt;title&gt;Список ВУ&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;	
+        &lt;script type="text/javascript" src=""&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" href="css/list.css" type="text/css"&gt;
+        &lt;script type="text/javascript" src="js/list_control.js"&gt; &lt;/script&gt;
+        &lt;!--&lt;meta http-equiv="Refresh" content="30" /&gt;--&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="wrap"&gt;
+    &lt;a id="" href="doc/doc.html"&gt;doc&lt;/a&gt;
+    &lt;div id="cap"&gt;
+            &lt;div id=""&gt;УСТАНОВКА&lt;/div&gt;
+            &lt;div id=""&gt;№ ПОМЕЩЕНИЯ&lt;/div&gt;
+            &lt;div id=""&gt;СОСТОЯНИЕ&lt;/div&gt;
+            &lt;div id="tmp_cap"&gt;ТЕМПЕРАТУРА &lt;sup&gt;o&lt;/sup&gt; С&lt;/div&gt;
+            &lt;div id="spd_cap"&gt;СКОРОСТЬ
+                    &lt;sup  id="sup_cap"&gt;об&lt;/sup&gt;
+                    &lt;sub id="sub_cap"&gt;мин&lt;/sub&gt;
+            &lt;/div&gt;
+            &lt;div id=""&gt;ОБСЛУЖ. ПОМ.&lt;/div&gt;
+            &lt;div id=""&gt;РАСПОЛОЖЕНИЕ&lt;/div&gt;			
+    &lt;/div&gt;
+    &lt;div id="str_ms"&gt;
+
+                     ОБЩЕОБМЕННАЯ ВЕНТИЛЯЦИЯ
+
+    &lt;/div&gt;
+
+    &lt;div id="list"&gt;
+    &lt;?php 
+    $count_content =0;
+    foreach($arr as $val){
+    $count_content++;
+    $id_content ='id_content'.$count_content ;
+    ?&gt;
+    &lt;a href="index.php?obj=Fan/default&fan_num=&lt;?php echo $val['fan_number']; ?&gt;&id_content=&lt;?php echo $id_content;?&gt; "target="_blank"&gt;
+    &lt;div class="content" id="&lt;?php echo $id_content;?&gt;"&gt;
+            &lt;div id=""&gt;
+                    &lt;?php echo $val['fan_number']; ?&gt; 
+            &lt;/div&gt;
+            &lt;div id=""&gt; &lt;/div&gt;
+            &lt;div id="state"&gt;ОТКЛ. &lt;/div&gt;
+            &lt;div id=""&gt;
+            &lt;?php echo $val['SET_IND']; ?&gt; 
+            &lt;/div&gt;
+            &lt;div id=""&gt;
+            &lt;?php echo $val['VEL_IND']; ?&gt; 
+            &lt;/div&gt;
+            &lt;div id=""&gt;ТОРГ. ЗАЛ 1 ЗТ. &lt;/div&gt;
+            &lt;div id=""&gt;ВЕНТКАМЕРА 1 &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/a&gt;		
+    &lt;?php };?&gt;
+    &lt;/div&gt;
+
+      &lt;div id="marg"&gt;
+       
+      &lt;/div&gt;
+
+
+      &lt;div id="logging"&gt;
+        &lt;div id="buttons_list"&gt;	&lt;!--линия указателей аварийности--&gt;
+                &lt;div id="EVENT"  class="button_off" onmousedown = "logging_on_off('EVENT')"&gt; СОБЫТИЯ&lt;/div&gt;
+                &lt;div id ="ALARM" class="button_off" onmousedown = "logging_on_off('ALARM')"&gt;ПРЕДУПРЕЖДЕНИЯ &lt;/div&gt;
+                &lt;div id="LOG" class="button_off" onmousedown = "logging_on_off('LOG')"&gt;ЖУРНАЛ ОПЕРАЦИЙ&lt;/div&gt;
+                &lt;div id ="ALL" class="button_on" onmousedown = "logging_on_off('ALL')"&gt;ВСЕ &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;div id="table_list"&gt;
+       
+           
+                 &lt;?php echo $table ?&gt;
+  
+        
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;	
+
+</pre>
+</body>
+</html>

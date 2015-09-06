@@ -1,19 +1,36 @@
 /* 
  управление списком вентиляторов
  */
+/*перезагрузка страницы каджые 30 секунд
+ *  var status = in_id.toLowerCase();
+          var req = 'obj=List/'+status;
+         callServer(req,"table_list");
+ * */   
 
+    setInterval(function(){ 
+          var mass = new Array("EVENT","ALARM","LOG","ALL");
+          
+          for(var i=0; i < mass.length; i++){
+              var el = document.getElementById(mass[i]);
+              if(el.className === 'button_on'){
+                  in_id = mass[i];
+              }
+          }
+          
+          var status = in_id.toLowerCase();
+          var req = 'obj=List/'+status;
+         callServer(req,"table_list");
+    },30000);
+    
 window.onload = function(){
   
- /*перезагрузка страницы каджые 30 секунд*/   
-  // setTimeout(function(){   location.reload();}, 30000);
-
 window.onmousedown = function(e){
     e = e ||window.event;
     var el_id = e.target.getAttribute('id');
  //   alert("ID - "+el_id)
-    if(e.target.parentNode.className == 'status_lt'){
+    if(e.target.parentNode.className === 'status_lt'){
         /*меняем состояние атрибута checked после нажатия на закладку */
-        if(e.target.checked == false){
+        if(e.target.checked === false){
      /*присваиваем переменной состояние атррибута checked*/              
             e.target.checked = true;
             is_ch = 'checked';
@@ -58,7 +75,6 @@ function logging_on_off(in_id){
  //  alert('In logging_on_off in_id = '+in_id);	
                  //  var fan_number = document.getElementById('NAME').innerText;
                    var mass = new Array("EVENT","ALARM","LOG","ALL");
-//alert(in_id);
                    var id_st  = document.getElementById(in_id);
                    if(id_st.className === "button_off"){
                            id_st.className = "button_on"; 
