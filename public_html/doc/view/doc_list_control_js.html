@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head> </title> </title>
-<meta charset="UTF8" />
-<meta charset="UTF8" />
+<head> <title> </title>
+<meta charset="UTF-8" />
+
 <style>
 pre{
 	line-height:1;
@@ -51,7 +51,20 @@ window.onload = function(){
 </pre>  
  <div>Перезагрузка страницы каждые 30 секунд</div>
  <pre>
-   setTimeout(function(){   location.reload();}, 30000);
+    setInterval(function(){ 
+          var mass = new Array("EVENT","ALARM","LOG","ALL");
+          
+          for(var i=0; i < mass.length; i++){
+              var el = document.getElementById(mass[i]);
+              if(el.className === 'button_on'){
+                  in_id = mass[i];
+              }
+          }
+          
+          var status = in_id.toLowerCase();
+          var req = 'obj=List/'+status;
+         callServer(req,"table_list");
+    },30000);
 </pre>
 <div>Блок кода позволяющий ставить или снимать отметки cheked на элементах checkBox </div>
 <pre>
