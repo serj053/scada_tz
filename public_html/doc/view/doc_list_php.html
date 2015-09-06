@@ -1,0 +1,95 @@
+<!DOCTYPE hyml>
+<html>
+<head><title></title>
+<meta charset="utf8"/>
+</head>
+<body>
+
+<pre>
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+        &lt;title&gt;Список ВУ&lt;/title&gt;
+        &lt;meta charset="UTF-8">
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">	
+        &lt;script type="text/javascript" src=""></script&gt;
+        &lt;link rel="stylesheet" href="css/list.css" type="text/css">
+        &lt;script type="text/javascript" src="js/list_control.js"> &lt;/script&gt;
+        <!--<meta http-equiv="Refresh" content="30" />-->
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="wrap">
+    &lt;a id="" href="">doc&lt;/a&gt;
+    &lt;div id="cap">
+            &lt;div id="">УСТАНОВКА&lt;/div&gt;
+            &lt;div id="">№ ПОМЕЩЕНИЯ&lt;/div&gt;
+            &lt;div id="">СОСТОЯНИЕ&lt;/div&gt;
+            &lt;div id="tmp_cap">ТЕМПЕРАТУРА &lt;sup&gt;o&lt;/sup&gt; С&lt;/div&gt;
+            &lt;div id="spd_cap">СКОРОСТЬ
+                    &lt;sup  id="sup_cap">об&lt;/sup&gt;
+                    &lt;sub id="sub_cap">мин&lt;/sub&gt;
+            &lt;/div&gt;
+            &lt;div id="">ОБСЛУЖ. ПОМ.</div&gt;
+            &lt;div id="">РАСПОЛОЖЕНИЕ&lt;/div&gt;			
+    &lt;/div&gt;
+    &lt;div id="str_ms">
+
+                     ОБЩЕОБМЕННАЯ ВЕНТИЛЯЦИЯ
+
+    &lt;/div&gt;
+
+    &lt;div id="list">
+    <?php 
+    $count_content =0;
+    foreach($arr as $val){
+    $count_content++;
+    $id_content ='id_content'.$count_content ;
+    ?>
+    &lt;a href="index.php?obj=Fan/default&fan_num=<?php echo $val['fan_number']; ?>&id_content=<?php echo $id_content;?> "target="_blank">
+    &lt;div class="content" id="<?php echo $id_content;?>">
+            &lt;div id="">
+                    <?php echo $val['fan_number']; ?> 
+            &lt;/div&gt;
+            &lt;div id=""> &lt;/div&gt;
+            &lt;div id="state">ОТКЛ. &lt;/div&gt;
+            &lt;div id="">
+            <?php echo $val['SET_IND']; ?> 
+            &lt;/div&gt;
+            &lt;div id="">
+            <?php echo $val['VEL_IND']; ?> 
+            &lt;/div&gt;
+            &lt;div id="">ТОРГ. ЗАЛ 1 ЗТ. &lt;/div&gt;
+            &lt;div id="">ВЕНТКАМЕРА 1 &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/a&gt;		
+    <?php };?>
+    &lt;/div&gt;
+
+      &lt;div id="marg">
+       
+      &lt;/div&gt;
+
+
+      &lt;div id="logging">
+        &lt;div id="buttons_list">	<!--линия указателей аварийности-->
+                &lt;div id="EVENT"  class="button_off" onmousedown = "logging_on_off('EVENT')"> СОБЫТИЯ&lt;/div&gt;
+                &lt;div id ="ALARM" class="button_off" onmousedown = "logging_on_off('ALARM')">ПРЕДУПРЕЖДЕНИЯ &lt;/div&gt;
+                &lt;div id="LOG" class="button_off" onmousedown = "logging_on_off('LOG')">ЖУРНАЛ ОПЕРАЦИЙ&lt;/div&gt;
+                &lt;div id ="ALL" class="button_on" onmousedown = "logging_on_off('ALL')">ВСЕ &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;div id="table_list">
+       
+           
+                 &lt;?php echo $table ?&gt;
+  
+        
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;	
+</pre>
+</body>
+</html>

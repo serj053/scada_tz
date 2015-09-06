@@ -1,0 +1,1431 @@
+
+<!DOCTYPE html>
+<html>
+<head> </title> </title>
+<meta charset="UTF8" />
+<style>
+pre{
+	line-height:1;
+	margin:10px;
+	padding:0px;
+	}
+	
+div{
+	width:700px;
+	margin:10px;}	
+
+p,li,div{
+	font-style:italic;
+	font-size:110%;
+	}
+pre,p,ul,div{
+	margin-left:40px;}	
+p{
+	width:600px;}
+li{
+	width:600px;
+	margin-left:20px;}	
+.fun{
+	color:blue;
+	font-size:120%;
+	font-weight:bold;}	
+</style>
+</head>
+<body>
+<p>
+Блок написанный на JAVASCRIPT B предназначенный для обеспечениея интерактивности страницы вентиляторной установки (ВУ).
+</p>
+<ul>
+Интерактивность включает в себя и отражает:
+<li>Состояние установки (нормальная работа или аварийная ситуация ВУ). </li>
+<li>Изменение скорости вращения я вентилятора. </li>
+<li>Режим работы зимний или летний. </li>
+<li>Запуск таймера включения ВУ. </li>
+<li>Изменение температуры уставки. </li>
+<li>Отражение температуры в канале. </li>
+<li>Отражение температуры обратной воды. </li>
+<li>Отражение наружной температуры. </li>
+<li>Отражение в отдельных окнах состояния заслонки, фильтра, термостата, скорости вентилятора, темературы входного потока, температуры выходного потока, состояние насоса и датчиков давления, температуры обратной воды, состояние обратных клапанов, температура в канале.
+ </li>
+<li>Отражение информации о состоянии ВУ в журналах. </li>
+<div>Все изменения заносятся в базу данных и при загрузке страницы отражаются в соответвующих элементах. </div>
+</ul>
+<br>
+<div style="text-align:center">Пояснения к коду файла  fan_control.js   </div>
+<br>
+<pre>window.onload = <span class='fun'>function</span>(){
+ </pre>
+        <div>Перезагрузка страницы каджые 30 секунд.</div> 
+<pre>	setTimeout(<span class='fun'>function</span>(){   location.reload();}, 30000);
+</pre>	
+            <div>Определяем номер установки (вентилятора) для дальнейшего использования в коде</div>
+<pre>	var fan_number = document.getElementById('NAME').innerText;
+			</pre>
+   <div>Прячем при загрузке страницы элементы показывающие  поток охлаждающей жидкости( булут опказаны позже).</div><span>[50]</span>
+   <pre>
+           var cold_flow = document.getElementById('coldflow_ind');
+	cold_flow.style.visibility = "hidden";//охлаждающая жижкость
+	</pre>
+   <div>Значение числового индикатора наружной температуры задаваемое случайным образом(отключено).</div>
+   <pre>
+           var win_tr_out = document.getElementById('T1');
+           var tr_out = Math.floor(Math.random()*60 - 30);
+           win_tr_out.value = tr_out;
+  </pre>
+   <p> БЛОК КОДА РЕГУЛИРОВКИ СКОРОСТИ  ВЕНТИЛЯТОРА</p>
+
+    <div>Получеам доступ к элементу "rail" -рейка которая определяет диапазон движение
+           ползунка - "bal".</div>
+	<pre>	   
+                   var rail = document.getElementById('rail');
+	</pre>
+    <div>Получаем доступ к элементу "bal" который собственно и будет перемещаться по рейке .</div>
+	<pre>	
+                   var fish = document.getElementById('fish');
+	</pre>
+    <div>Получаем значение из окошка со страницы (зафиксированное и переданное из базы данных)  что бы   установить положение ползунка.</div>
+	 <pre>
+                   var coor = parseInt(document.getElementById('pro').textContent);
+                   fish.style.left = 8+coor+'px';
+	</pre>
+       <div>Внутри функии onmousedown() управляем движением ползунка который
+         регулирует скрость вращениея вентилятора .</div>
+<pre>fish.onmousedown = <span class='fun'>function</span>(e){
+
+                   e = e||window.event;
+                   var fish = this;
+	</pre>			   
+    <div>Получаем координату крайнего левого положениея ползунка.</div>
+	<pre>
+                   var r_f = rail.offsetLeft;
+	</pre>			   
+    <div>Смещение по оси х координаты левого верхнего угла ползунка относительно клика мыши где e.pageX это  координата клика, а координата левого верхнего угла элемента - fish.offsetLeft.</div>	
+	<pre>	
+                   var x = e.pageX - fish.offsetLeft;
+	</pre>			   
+    <div>Вырываем на свободу ползунок из общего потока.</div>
+	<pre>
+                   fish.style.position = 'absolute';
+   </pre>
+    <div>Устанавливаем позицию ползунка с учетом смещения координаты клика по
+     ползунку.</div>
+<span>100</span><pre>
+                   fish.offsetLeft = e.pageX -x +'px';
+ </pre>                  
+    <div>Организуем перемещение мышкой ползунка регулирующего скорость вращения вентилятора.</div>
+    <pre> fish.onmousemove = <span class='fun'>function</span>(e){
+    
+				move(e);	</pre>
+    <div>Расчет показаний скорости вращения в окошке на странице (согласование смещение ползунка с цифровым результатом).</div>
+	<pre>
+                    sz = (fish.offsetLeft - rail.offsetLeft )/1;
+                    prc = parseInt(sz);
+                    if(prc > 100){
+                    prc = 100;
+                    }else if(prc < 0){
+                    prc = 0;}
+                    pro.innerHTML = prc;
+             //отображение скорости в окошке над установкой
+                    var speed_value=document.getElementById("MD_1");
+                    speed_value.innerHTML = prc;
+
+                   };
+	</pre>
+	<div>При отпускании кнопки мышыи особождаем все связанные с ней обработчики от своих обязанностей. </div>
+	<pre>
+                    document.onmouseup = <span class='fun'>function</span>(){
+
+                    // очистить обработчики, т.к перенос закончен
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    document.ondragstart = null;
+                    document.body.onselectstart = null;
+                    fish = null;
+	</pre>
+    <div>Из окошка	передаем значение скорсти вращения вентилятору при условии что установка включена.</div>
+
+    <div>Берем значение из окошка, в окошко занчение передается из базы
+     при загрузке страницы. </div>
+	<pre>	 
+                     var el_cool = document.getElementById('inc_ind');
+	</pre>				 
+    <div>Если  у элемента 'inc_ind' установлен класс  "inc_ind_on" значит установка включена.</div>
+	<pre>
+                     if(el_cool.className === "inc_ind_on"){
+                         var sp_win = parseInt(document.getElementById('pro').textContent);
+                         var sp_win = 20/sp_win;
+	</pre>
+    <div>Передаем значения скорости в функцию анимацию вращения (функция определна ниже).</div><pre>                      fan_speed(sp_win); </pre><span>150</span><pre>                    }
+	</pre>
+    <div>С помощью объекта XMLHTTPrequest  заносяться в две таблицы базы данных
+      значение в одну значеиня параметров установки скорость и т.д. в другую 
+      сообщения  о   процесах.</div>
+
+    <div>Строка которая заноситься в базу.</div>
+	<pre>	
+		   var str = "Скорость вентилятора изменена до "+prc+' %.'+
+		   ':Изменение скорости вентилятора';
+	</pre>			   
+   <div>текущая активная вкладка.</div>
+    <div>функция которая определяет активную вкладку, что бы после обработки и перезагрузки вставить обратно именно в нее (определна ниже по коду).	</div>
+	<pre>
+		 var tab = currentTable();
+	</pre>		
+    <div>идентификатор элемента страницы в который будут вставляться полученные с сервера данные (область прокрутки журнала ).</div>
+	<pre>
+                   var div_id = "scroll_area";
+   </pre>
+    <div>формируем строку для передачи XMLHTTPrequest объекту</div>
+    <div>начинается с имен класса и метода (обработчика на сервере с прицепленными к нему данными, которые будут переданны в массив GET[] и использоваться базами даных)
+    -класс/метод- + id элемента страницы на который нажали и чьи данные заносятся в базу + строка с инф. для журнала событий
+    + номер установки (ВУ).</div>	
+	<pre>  		var target_name = 'obj=Journal/add&what=fish&str='+str+'&fan_num=
+			'+fan_number+'&id_table='+tab+'&fan_val='+prc; 
+     </pre>		
+    <div>Функция для передачи данных серверу.</div>
+	<pre>
+                           callServer(target_name, div_id);
+	
+                   };
+	</pre>			   
+	<div>Функция движения ползунка.</div>
+	<pre>
+            <span class='fun'>function</span> move(e){
+
+                    fish.style.left = e.pageX-x+'px' ;
+	</pre>				
+    <div>Остановка ползунка при выходе за границы рейки.</div>
+<pre>		   if(fish.offsetLeft  < r_f)	{fish.style.left = 8+'px';	};
+		   if(fish.offsetLeft > rail.offsetWidth - 6)	{ fish.style.left = 113+'px'; 	};
+		};
+		   // отменить перенос и выделение текста при клике на тексте
+		   document.ondragstart = <span class='fun'>function</span>() { return false ;};
+ </pre><span>200</span><pre>  	       document.body.onselectstart = <span class='fun'>function</span>() { return false ;};
+
+                       return false;
+            };
+   /////////////////////////////////////////////////////////////////////////////////////////////
+	</pre>
+   <div>РЕГУЛИРОВКА ТЕМПЕРАТУРЫ</div>
+           <div>Получаем елемент ползун который перемещается по рейке.</div>
+	<pre>	   
+           var polzun = document.getElementById('polzun');
+	</pre>	   
+           <div>Получаем елемент рейку по которой ползет ползун.</div>
+	<pre>	   
+           var reika = document.getElementById('reika');
+	</pre>
+    <div>Получаем доступ к окошку вывода температуры уставки   куда из базы данных
+    загружается значение и передаем координате ползуна.</div>
+	<pre>
+            var wind = document.getElementById('SET_IND');
+            var in_wind = wind.textContent;
+            var tmp = parseInt(in_wind);
+            polzun.style.left = tmp+'px';
+	</pre>
+    <div>Обрабатываем клик по ползуну , внутри функции клика организуем функцию перемещения ползуна по оси Х.</div>
+	<pre>
+   polzun.onmousedown = <span class='fun'>function</span>(e){
+                   e = e || window.event;
+                   var polzun = this;
+	</pre>
+   <div>Определяем разницу междк точкой клика и левым верхним углом елемента.</div>
+   <pre>
+                   var x = e.pageX - polzun.offsetLeft;
+
+                   //polzun.style.position ='absolute';
+
+                   polzun.onmousemove = <span class='fun'>function</span>(e){
+
+                           move(e);
+	</pre>
+    <div>Расчитываем температуру для вывода в окошко. </div>
+	<pre>
+                   val_tempr = ( polzun.offsetLeft - reika.offsetLeft)/0.93;
+                   if(val_tempr < 0) val_tempr = 0;
+                   if(val_tempr > 50) val_tempr = 50;
+                   tmp = parseInt(val_tempr);
+                   wind.innerHTML = tmp;
+
+	</pre>
+    <div>Расчитываем температуру в канале с учетом -+ 1 градус.</div>
+	<pre>
+ </pre><span>250</span><pre> var tmp_rand = Math.floor(Math.random()*2+(tmp - 1))
+                   var win_1 = document.getElementById('input_TE2_1');
+		   win_1.value = tmp_rand;
+
+                   var tr_ch = document.getElementById("TE2_2");
+		   tr_ch.innerHTML = tmp_rand;
+
+                   */// теперь берется из базы
+                   };
+
+            document.onmouseup = <span class='fun'>function</span>(){
+                  
+    // очистить обработчики, т.к перенос закончен
+                 document.onmousemove = null;
+                 document.onmouseup = null;
+                 document.ondragstart = null;
+                 document.body.onselectstart = null;
+                 polzun = null;
+     </pre>            
+    <div>Формируем строку для передачи XNKHTTPrequest объекту.</div>
+    <div>Имя класс/ метод обработчика на сервере с прицепленными к нему данными, 
+    * которые будут переданны в массив GET[] и использоваться базами даных.
+    -класс/метод- + id элемента на который нажали + строка с инф. для журнала событий
+    + номер установки.
+	</div>
+    <div>Строка которая заноситься в базу.</div>
+	<pre>
+                   var str = "Уставка зменена до "+tmp+"<strong><sup>0</sup></strong> С:"+
+                   "Изменение уставки"
+                   ;
+	</pre>
+    <div>Текущая активная вкладка.</div>	
+	<div>Определяем активную вкладку, что после абработкт вставить именно в нее.	</div>
+	<pre>
+           var tab = currentTable();
+	</pre>
+    <div>Иижентиыикатор элемента в который будут вставляться полученные с сервера данные</div>
+	<pre>
+                   var div_id = "scroll_area";
+     </pre>              
+    <div>Имя файла обработчика на сервере с прицепленными к нему данными 
+    -класс/метод + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+          var target_name = 'obj=Journal/add&what=polzun&str='+str+'&fan_num=
+		  '+fan_number+'&id_table='+tab+'&tmp_val='+tmp; 
+   </pre>
+    <div>Функция для передачи данных серверу.</div>
+	<pre>
+                           callServer(target_name, div_id);
+
+                   };
+</pre><span>300</span><pre> 	</pre>
+    <div>Функция перемещения ползунка</div>
+	<pre>
+                   <span class='fun'>function</span> move(e){
+
+                           polzun.style.left = e.pageX - x+'px';
+
+                   if(polzun.offsetLeft < -1){
+                                   polzun.style.left = -1+'px';
+                           }
+                           if(polzun.offsetLeft > 47){
+                                   polzun.style.left = 47+'px';
+                           }		
+                   };
+
+                   document.ondragstart = <span class='fun'>function</span>() { return false; };
+                                   document.body.onselectstart = <span class='fun'>function</span>() { return false ;};
+                   return false;
+           };
+	</pre>
+   <div>ТЕМПЕРАТУРА В КАНАЛЕ обработка изменений в окнах ввода</div>
+   <div>Заносим значение из поля(окошко) температуры в базу данных и при загрузке страницы ,берем значение из базы переносим в поле температуры</div>
+   
+    <div>Получаем ссылку на поле(окошко) температуры</div>
+	<pre>
+           var te2 = document.getElementById('TE2');
+    </pre>   
+    <div>Функция отслеживающая изменение в окошке.</div>
+	<pre>
+			   te2.onchange = <span class='fun'>function</span>(){ 
+	</pre>
+    <div>Получаем значение из поля(окошка).</div>
+	<pre>
+                           var val_t2 = this.value;
+	</pre>
+    <div>Получаем идентификатор поля для переноса значения в базу.</div>
+	<pre>
+			   var div_id = 'TE2';
+	</pre>
+   <div>Готовим строку для передачи XNLHTTPrequest  объекту.
+    * класс/метод которому передается значение + передаваемая величина + номер установки.</div>
+	<pre>
+			   var target_value = 'obj=Fan/value&clm=TE2&TE2='+val_t2+'&fan_num='+fan_number;	
+
+			   callServer(target_value, div_id);//со  строки 1020
+			   };
+	</pre>
+   <div>ТЕМПЕРАТУРА ОБРАТНОЙ ВОДЫ обработка изменений в окнах.</div>
+	<pre>
+</pre><span>350</span><pre>var te3 = document.getElementById('TE3');	
+                   te3.onchange = <span class='fun'>function</span>(){				
+                           var val_t3 = this.value;	
+                           var div_id = 'TE3';	
+                           var target_value = 'obj=Fan/value&clm=TE3&TE3='+val_t3+'&fan_num='+fan_number;	
+
+                           callServer(target_value, div_id);
+
+                   };
+	</pre>
+   <div>ТЕМПЕРАТУРА НАРУЖНЯЯ обработка изменений в окнах.</div>
+   <pre>
+           var te2 = document.getElementById('TE1');	
+                   te2.onchange = <span class='fun'>function</span>(){				
+                           var val_t1 = this.value;	
+                           var div_id = 'TE1';	
+                           var target_value = 'obj=Fan/value&clm=TE1&TE1='+val_t1+'&fan_num='+fan_number;
+						   
+                           callServer(target_value, div_id);
+	
+                   };
+	</pre>
+   <div>ЧИСЛОВОЙ ИНДИКАТОР ТЕМПЕРАТУРЫ ВХОДЯЩЕГО ПОТОКА обработка изменений в окнах.</div>
+   <pre>
+           var te2 = document.getElementById('INC_NUM');	
+                   te2.onchange = <span class='fun'>function</span>(){				
+                           var val_inc_num = this.value;
+	</pre>
+       <div> место на странице куда будет возвращено значенпи после фиксации в базе.</div>
+	<pre>   
+                           var div_id = 'INC_NUM';
+                           var target_value = 'obj=Fan/value&clm=INC_NUM&INC_NUM='+val_inc_num+'&fan_num='+fan_number;		
+
+                           callServer(target_value, div_id);
+
+                   };
+	</pre>
+   <div>ЧИСЛОВОЙ ИНДИКАТОР ТЕМПЕРАТУРЫ ОБРАТНОЙ ВОДЫ обработка изменений в окнах</div>
+   <pre>
+           var te2 = document.getElementById('WATERBACK_IND');	
+                   te2.onchange = <span class='fun'>function</span>(){				
+                   var val_wat = this.value;
+        <div>местото на странице куда будет возвращено значенпи после фиксации в базе.</div>
+                   var div_id = 'WATERBACK_IND';
+                   /*класс которому передается значение и передаваемая величина*/	
+             var target_value = 'obj=Fan/value&clm=WATERBACK_IND&WATERBACK_IND=
+			 '+val_wat+'&fan_num='+fan_number;		
+
+                           callServer(target_value, div_id);
+
+                   };		
+</pre><span>400</span><pre> 
+   }; //End of window.onload()
+</pre>
+<div style="text-align:center;">ОБРАБОТКА КЛИКОВ ПО ЭЛЕМЕНТАМ УПРАВЛЕНИЯ .</div>
+<pre>
+   window.document.onmousedown = <span class='fun'>function</span>(e){
+	</pre>
+           <div>Узнаем номер установки (вентилятора).</div>
+	<pre>
+                   var fan_number = document.getElementById('NAME').innerText;
+   </pre>
+   <div>Функция запрещающая выделение  строка примерно 1084.</div>
+   <pre>
+           disableSelection(document.body);
+
+	</pre>
+  
+   <div>УДАЛЕНИЕ СТРОКИ. Ловим все события "НАЖАТИИЕ КНОПКИ" и определяем "id" элемента.</div>
+        <div>Получаем атррибут элемента по которому кликнули.</div>
+	<pre>
+           var el = e.target.getAttribute('id');
+	</pre>
+   <div>Выделяем те нажатия которые имеют отношения к журналу событий, то есть имеющие
+   префикс "id_" в идентификаторе для того что бы выбрать элемент из таблицы. </div>
+   <pre>
+           if(el !== null  && el.slice(0,3)==='id_'){
+	</pre>
+    <div>Определяем элемент который связан с событием .</div>
+	<pre>
+                   var del_element = document.getElementById(el).parentNode;
+	</pre>
+    <div>Определяем id элемента связанного с  событием (является пятым дочерним у родителя).</div>
+	<pre>
+                   var txt = del_element.parentNode.children[4].textContent;
+	</pre>
+   <div>Формируем строку для передачи объекту XMLHTTPrequest.</div>
+    <div>Определяем  закладку куда будут переданы обновленные значения после перезагрузки
+     тоесть текущую закладку.</div>
+	 <pre>
+                   var div_id = currentTable();
+	</pre>
+    <div>Получаем значение элемента(время)  и передает его в GET по которому будем искать его в базе.</div>
+	<pre>
+                   var val_date = del_element.textContent.slice(1);	
+           var div_id = "scroll_area";//элемент страницы куда будет вставляться код 
+           var tab = currentTable();//определяем активную вкладку, что бы после абработки вставить именно в нее	
+                   var target_name = 'obj=Journal/del&id='+txt+'&id_table='+tab+'&fan_num='+fan_number;
+			
+                           callServer(target_name, div_id)	;
+           }
+</pre><span>450</span><pre> 	</pre>		
+   <div>СТАВИМ ИЛИ УБИРАЕМ галку в checkBOX.</div>
+   <div>Выбираем элемент с классом характерным для элемента предназначенного для галки.</div>
+   <pre>
+           if(e.target.parentNode.className ==='status_td'){	
+                   var sss = e.target.parentNode.parentNode.children[4].textContent;
+                   var el_ch;
+           e.target.onmouseup = <span class='fun'>function</span>(){
+                   if(e.target.checked === false){
+                           e.target.checked = true;
+                           var el_ch = 'checked';
+                   }else{
+                   e.target.checked = false;
+                           var el_ch = null;
+                   }
+                   
+	</pre>
+     <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+
+    <div>Определяем id элемента который записан как текст в срытом элементе
+     и  связанного с  событием для нахождения его в базе.</div>
+	 <pre>
+           var del_element = e.target.parentNode;
+                   var txt = del_element.parentNode.children[4].textContent;
+	</pre>
+    <div>Текущая активная вкладка.</div>
+	<pre>	
+           var tab = currentTable();//определяем активную вкладку, что бы после абработкт вставить именно в нее
+           var div_id = "scroll_area";//элемент страницы куда будет вставляться код 
+	</pre>
+    <div>Формируем строку для метода GET[] - которая начинается с имени файла обработчика на сервере с прицепленными к нему данными для массива GET[]
+           -класс/метод- + строка с инф.+ id элемента на который нажали + номер активной вкладки. </div>	
+	<pre>
+           var target_name = 'obj=Journal/checked&what='+el_ch+'&id_ch=
+		   '+txt+'&id_table='+tab+'&fan_num='+fan_number;
+		   
+                           callServer(target_name, div_id);						
+                   };	
+           }
+     </pre>       
+	<div>Выбоор элементов управления по идентификаторам и бработка кликов.</div>
+	<pre>
+
+           switch(el){
+	</pre>	   
+   <div>ПРИ НАЖАТИИИ "СТАРТ" ВУ</div>
+   <pre>
+           case"start": 
+   </pre>
+   <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных</div>
+    
+ <span>500</span>    <div>Строка которая заноситься в базу.</div>
+	<pre>
+                       var str = "Установка запущена:Запуск установки";
+	</pre>
+    <div>Идентификатор элемента(журнал) в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                       var div_id = "scroll_area";
+	</pre>
+    <div>Определяем активную вкладку, что бы после абработкт вставить именно в нее.</div>
+	<pre>
+               var tab = currentTable();	
+	</pre>
+    <div>Имя файла обработчика на сервере с прицепленными к нему данными для масива GET[]
+    -класс/метод + id элемента на который нажали + строка с инф. + номер установки 
+    + номер активной вкладки. </div>
+	<pre>
+		 var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str=
+		 '+str+'&fan_num='+fan_number+'&id_table='+tab; 
+
+				callServer(target_name, div_id);
+	</pre>
+	<div>Перевод рычажка в положение включить.</div>
+	<pre>
+			var el = document.getElementById('img_start_stop');
+			el.src = 'img/pusk1.png';
+			var el_cool = document.getElementById('inc_ind');
+	</pre>			
+    <div>Запуск прогресс бара.	</div>
+    <div>Если установка уже включена то не запускать прогрессБар, при включении установки элементу el_cool присваивается класс = "inc_ind_on".</div>
+	<pre>
+				if(el_cool.className === "inc_ind_off"){
+	</pre>
+    <div>Функция создания прогресс бара.</div>
+	<pre>
+					fan_on_off(true);
+				}else{
+					return;
+					}
+	</pre>
+    <div>Индикация состояния насоса.</div>
+	<pre>
+			var state_pump = document.getElementById("PUMP_IND");
+			state_pump.innerHTML = "ВКЛ.";
+			state_pump.style.backgroundColor = "#5D7809";
+            break;
+	</pre>		
+   <div>ПРИ НАЖАТИТ "СТОП" ВУ.</div>
+   <pre>     case"stop":</pre> 
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+                   <div> номер установки (вентилятора) "fan_number" определн выше</div>
+    <div>Строка сообщениея, которая заноситься в базу.</div>
+<span>550</span>	<pre>	 var str = "Установка остановлена : Остановка установки";
+	</pre>
+    <div>Определяем активную вкладку, что бы после абработки вставить именно в нее	</div>
+	<pre>
+           var tab = currentTable();	
+	</pre>
+    <div>Идентификатор элемента в который будут вставляться полученные с сервера данные</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Формируем строку для метода GET[] , которая начинается с имени файла обработчика на сревере с прицепленными к нему данными для массива GET[]
+           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>		
+		   var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str=
+		   '+str+'&fan_num='+fan_number+'&id_table='+tab; 
+
+                           callServer(target_name, div_id);
+	</pre>
+    <div>Перевод рычажка в положение выключить</div>
+	<pre>
+		   var el = document.getElementById('img_start_stop');
+		   el.src = 'img/stop1.png';
+	</pre>
+    <div>Если className == "inc_ind_on" то установка включена. </div>
+	<pre>
+		   var el_cool = document.getElementById('inc_ind');
+		   if(el_cool.className === "inc_ind_on"){
+		   //функция запускающая прогресс бар и включающая ВУ
+			   fan_on_off(false,'gray',true);
+		   }else{
+				   return;
+		   }		
+	</pre>
+    <div>Индикация состояния насоса.</div>
+	<pre>
+		   var state_pump = document.getElementById("PUMP_IND");
+		   state_pump.innerHTML = "ВЫКЛ.";
+		   state_pump.style.backgroundColor = "#4C4849";
+                   break;
+	</pre>			   
+  <div>"BTN_T" АКТИВАЦИЯ УСТАНОВКИ ПО ТАЙМЕРУ</div>
+	<pre>
+           case"BTN_T": 
+	</pre>
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+    <div> Номер установки (вентилятора) "fan_numer" определн выше.</div>
+    <div>Строка которая заноситься в базу</div>
+	<pre>
+                   var str = "Установка актвирована по таймеру : Активация установки по таймер";
+	</pre>
+<span>600</span><div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Текущаф активная вкладка.</div>
+	<pre>
+           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее
+	</pre>	   
+    <div>Имя файла обработчика на сервере с прицепленными к нему данными 
+    - класс/метод + id элемента на который нажали + строка с инф. + номер установки.</div>
+<pre>
+		   var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str=
+		   '+str+'&fan_num='+fan_number+'&id_table='+tab; ; 
+
+				   callServer(target_name, div_id);
+
+		   var ell = document.getElementById("BTN_T");
+		   if(ell.className == "active"){//нсли кнопка вжата
+				   ell.className = "turn_off";// то ее отжать
+				   ell.innerHTML ="АКТИВИРОВАТЬ";//занести текст в окно
+		   }else if(ell.className == "turn_off"){//кнопка отжата то есть выключена
+				   ell.className = "active"; 
+				   ell.innerHTML ="ОТКЛЮЧИТЬ";//занести текст в окно
+		   };
+
+		   ;
+		   break;
+	</pre>
+   <div>SUMMER ПЕРЕКЛЮЧЕНИЕ РЕЖИМА "ЗИМА-ЛЕТО"</div>
+   <pre>
+           case"summer": 
+	</pre>
+  <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+  <div> Номер установки (вентилятора) "fan_number" определн выше</div>
+  <div>Строка которая заноситься в базу.</div>
+	<pre>
+                   var str = "Режим зима-лето изменен на режим -зима : Изменение режима зима лето";
+	</pre>
+	<div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Определяем активную вкладку, что бы после абработкт вставить именно в нее</div>
+	<pre>
+           var tab = currentTable();
+	</pre>
+      <div>Имя файла обработчика на сервере с прицепленными к нему данными для массива GET[]
+           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+                   var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str=
+				   '+str+'&fan_num='+fan_number+'&id_table='+tab;  
+
+  </pre><span>650</span><pre> callServer(target_name, div_id);
+	</pre>
+    <div>Присваиваем элементам соотвтетвующие моменту изображения.</div>
+	<pre>
+                var el = document.getElementById('img_summer_winter');
+                     el.src = 'img/pusk1.png';
+                     var el1 = document.getElementById('lm_img');
+                     el1.src = 'img/flag_summer.png';
+                     var warm = document.getElementById('warm_ind');
+                     warm.style.backgroundImage = "url('img/warm_ind_1.png')";
+                     var cool = document.getElementById('cool_ind');
+                     cool.style.backgroundImage = "url('img/ind_out.png')";
+                     var cold_flow = document.getElementById('coldflow_ind');
+                     cold_flow.style.visibility = "hidden";
+                     var hot_flow = document.getElementById('hotflow_ind');
+                     hot_flow.style.visibility = "visible";
+
+                     var vl_ind = document.getElementById("VALVE_IND");
+                     vl_ind.innerHTML = "ОТКР.";
+                     vl_ind.style.backgroundColor ="#5D7809";
+                     var vl_ind = document.getElementById("PUMP_IND");
+                     vl_ind.innerHTML = "ВЫКЛ.";
+                     vl_ind.style.backgroundColor ="#4C4849";	
+                   ;
+                   break;
+	</pre>			   
+   <div>WINTER ПЕРЕКЛЮЧЕНИЕ РЕЖИМА "ЗИМА-ЛЕТО"</div>
+   <pre>
+           case"winter": 
+	</pre>
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+     <div> Номер установки (вентилятора) "fan_numer" определн выше.</div>
+           <div>Строка которая заноситься в базу.</div>
+	<pre>
+        var str = "Режим зима-лето изменен на режим зима : Изменение режима зима-лето";
+	</pre>
+    <div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Определяем активную вкладуц в журнале.</div>
+	<pre>
+           var tab = currentTable();//определяем активную вкладку, что после абработкт вставить именно в нее
+	</pre>
+    <div>Имя файла обработчика на сревере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+                   var target_name = 'obj=Journal/add&what='+el.toLowerCase()+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
+
+                           callServer(target_name, div_id);
+</pre><span>700</span><div>Меняем изображения элементов в соотвтетсвии с текущим моментом. </div>
+<pre>
+            var el = document.getElementById('img_summer_winter');
+                     el.src = 'img/stop1.png';
+                     var el1 = document.getElementById('lm_img');
+                     el1.src = 'img/flag_winter.png';
+                     var warm = document.getElementById('warm_ind');
+                     warm.style.backgroundImage = "url('img/ind_out.png')";
+                     var cool = document.getElementById('cool_ind');
+                     cool.style.backgroundImage = "url('img/cool_ind_1.png')";
+                     var cold_flow = document.getElementById('coldflow_ind');
+                     cold_flow.style.visibility = "visible";
+                     var hot_flow = document.getElementById('hotflow_ind');
+                     hot_flow.style.visibility = "hidden";
+
+                     var vl_ind = document.getElementById("VALVE_IND");
+                      vl_ind.innerHTML = "ЗАКР.";
+                      vl_ind.style.backgroundColor ="#6950B6";
+                     var vl_ind = document.getElementById("PUMP_IND");
+                      vl_ind.innerHTML = "ВКЛ.";
+                      vl_ind.style.backgroundColor ="#5D7809";	
+                   ;
+                   break;
+	</pre>
+   <div>АВАРИЯ ВЕНТИЛЯТОРА</div>
+   <pre>
+           case "FAIL_FAN_BTN":
+	</pre>
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+     <div>Номер установки (вентилятора) "fan_number" определн выше.</div>
+           <div>Если установка не включена то работа кнопок заблокирована.</div>
+           <div>Проверяем включена ли установка если всключени то отключаем если нет то выход.</div>
+	<pre>
+                   var el_cool = document.getElementById('inc_ind');
+                   if(el_cool.className != "inc_ind_on"){ return;}	
+	</pre>
+          <div>Строка которая заноситься в базу.</div>
+	<pre>
+                   var str = "АВАРИЯ ВЕНТИЛЯТОРА. Установка «СТОП»";
+	</pre>
+           <div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+          <div>Определяем активную вкладку, что после абработкт вставить именно в нее.</div>
+	<pre>
+           var tab = currentTable();//		
+	</pre>
+          <div>Имя файла обработчика на сервере с прицепленными к нему данными 
+           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+</pre><span>750</span><pre>	var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
+
+                           callServer(target_name, div_id);
+	</pre>					   
+    <div>Проверяем состояние аварийных кнопок по классу если пред кликом она отжата то
+      вжать ее и наоборот. </div>
+	 <pre>
+                   var that = document.getElementById("FAIL_FAN_BTN");
+                   if(that.className === "button_on"){//если кнопка вжата
+                                   that.className = "button_off";
+                           }else if(that.className === "button_off"){//если кнопка отжата то есть выключена		
+                                   that.className = "button_on"; 
+                           }
+	</pre>
+    <div>Получаем доступ к элементу содержащему текст для его замены</div>
+	<pre>
+                   var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
+	</pre>
+    <div>Если текущая кнопка нажата то поменять текст внутри элемнтов.</div>
+	<pre>
+		   if(that.className === "button_on"){	//alert(that.className);		
+				   st_f.innerHTML ="АВАРИЯ ВЕНТИЛЯТОРА";
+				   st_f.style.color = "red";
+				   var md_1 = document.getElementById("MD_1");
+				   md_1.innerHTML = "АВАРИЯ";
+				   md_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+	</pre>
+        <div>Функция прогресс бара -  остановка установки.</div>
+		<pre>
+                                   fan_on_off(false,'red',false);
+		</pre>
+  <div>внутри функции fan_on_off() сообщаем window.opener что произошла АВАРИЯ </div>
+ 				
+    <div>Перевод рычажка в положение выключить.</div>
+	<pre>
+			var el = document.getElementById('img_start_stop');
+			el.src = 'img/stop1.png';
+	</pre>		
+    <div>Перевод кнопки сброса в состояние поднята.</div>
+	<pre>
+				document.getElementById("RESET").className = "button_off"; 	
+	</pre>
+    <div>Отключение кнопки.</div>
+	<pre>
+				document.documentElement.onmouseup = <span class='fun'>function</span>(){that.className = "button_off";};
+			   }	
+			   ;
+			   break;
+	</pre>		   
+   <div>АВАРИЯ ФИЛЬТРА</div>
+<span>800</span>   <pre>
+           case "FAIL_F_BTN":
+	</pre>	   
+           <div>Посылаем(добавляем) сообщение  в журнал и базу данных.</div>
+           <div>Если установка не включена то работа кнопок заблокирована.</div>
+           <div>Проверяем включена ли установка если всключени то отключаем если нет то выход</div>
+			   var el_cool = document.getElementById('inc_ind');
+			   if(el_cool.className !== "inc_ind_on"){ return;}
+
+            <div>Номер установки (вентилятора) определен ранее</div>
+                  
+           <div>Строка которая заноситься в базу.</div>
+		   <pre>
+                   var str = "АВАРИЯ ФИЛЬТРА. Установка «СТОП»";
+		   </pre>
+           <div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+			<pre>		   
+                   var div_id = "scroll_area";
+		   </pre>
+           <div>Определяем активную вкладку, что бы после абработкт вставить именно в нее.</div>
+			<pre>		   
+           var tab = currentTable();			
+		   </pre>
+           <div>Имя файла обработчика на сервере с прицепленными к нему данными для мссиваGET[]  -класс/метод + id элемента на который нажали + строка с инф. + номер установки.</div>
+			<pre>
+                   var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
+   
+                           callServer(target_name, div_id)
+			</pre>			   
+			<div>Получаем кнопку.</div>
+			<pre>
+            var that = document.getElementById("FAIL_F_BTN");
+			</pre>
+     <div>Если вжата то отжимаем и наоборот.</div>
+		<pre>
+            if(that.className === "button_on"){//если кнопка вжата
+                            that.className = "button_off";
+                    }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+                            that.className = "button_on"; 
+                    }
+		</pre>
+    <div>Получаем элемент для изменений текста в нем.</div>
+	<pre></pre><span>850</span><pre>
+		var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
+
+		if(that.className === "button_on"){
+		var st_f = document.getElementById("SState_1");	
+				st_f.innerHTML ="АВАРИЯ ФИЛЬТРА";
+				st_f.style.color = "red";
+	var f_1 = document.getElementById("F1");
+				f_1.innerHTML = "ЗАСОР";
+				f_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+	 </pre>
+   <div>Сообщаем window.opener через функцию fun_on_of()  что произошла АВАРИЯ  -'red'.  </div>
+
+    <div>Остановка установки.</div>
+	<pre>
+                        fan_on_off(false,'red',false);
+	</pre>
+    <div>Перевод рычажка в положение выключить.</div>
+	<pre>
+                        var el = document.getElementById('img_start_stop');
+                        el.src = 'img/stop1.png';
+	</pre>
+    <div>Перевод кнопки сброса в состояние поднята.</div>
+	<pre>
+                document.getElementById("RESET").className = "button_off"; 		
+	</pre>
+    <div>Отключение кнопки.</div>
+	<pre>
+	document.documentElement.onmouseup = <span class='fun'>function</span>(){that.className = "button_off";};
+		   }
+		   ;
+		   break;
+	</pre>			
+   <div>АВАРИЯ ТЕРМОСТАТА</div>
+   <pre>
+           case "FAIL_FREEZ_BTN":
+   </pre>
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+     <div> Номер установки (вентилятора) "fan_number" определн выше</div>
+    <div>Если установка не включена то работа кнопок заблокирована</div>
+    <div>Проверяем включена ли установка если всключени то отключаем если нет то выход</div>
+	<pre>
+                   var el_cool = document.getElementById('inc_ind');
+                   if(el_cool.className !== "inc_ind_on"){ return;};
+	</pre>
+                  
+           <div>Строка которая заноситься в базу.</div>
+		   <pre>
+                   var str = "АВАРИЯ ЗАМОРОЗКА. Установка «СТОП»";
+		   </pre>
+<span>900</span>		   
+           <div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+			<pre>
+                   var div_id = "scroll_area";
+		   </pre>
+           <div>Текущая активная вкладка</div>
+		   <pre>
+           var tab = currentTable();		
+		   </pre>
+           <div>Имя файла обработчика на сервере с прицепленными к нему данными 
+           -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+			<pre>
+		   var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num=
+		   '+fan_number+'&id_table='+tab; 
+	
+                           callServer(target_name, div_id);
+
+
+                   var that = document.getElementById("FAIL_FREEZ_BTN");
+                if(that.className === "button_on"){//если кнопка вжата
+                                that.className = "button_off";
+                        }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+                                that.className = "button_on"; 
+                        }
+		</pre>					
+     <div>Получаем доступ к элементам для изменеия текста.</div>
+	 <pre>
+                   var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
+	</pre>
+    <div>Если кнопка вжата то меняем надписи.</div>
+	<pre>
+	   if(that.className === "button_on"){
+		   var st_f = document.getElementById("SState_1");	
+			st_f.innerHTML ="АВАРИЯ ЗАМАРОЗКА";
+			st_f.style.color = "red";
+			var trm = document.getElementById("THERM_IND");
+			trm.innerHTML = "ЗАМОРОЗКА";
+			trm.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+	</pre>			
+   <div>Сообщаем window.opener через фугкцию fan_on_off() что произошла АВАРИЯ   'red'.  </div>
+
+                <div>Остановка установки</div>
+				<pre>
+                        fan_on_off(false,'red',false);
+				</pre>		
+                <div>Перевод рычажка в положение выключить</div>
+				<pre>
+                        var el = document.getElementById('img_start_stop');
+                        el.src = 'img/stop1.png';
+</pre><span>950</span><pre>				</pre>		
+                <div>Перевод кнопки сброса в состояние поднята</div>
+				<pre>
+                document.getElementById("RESET").className = "button_off"; 
+				</pre>
+                <div>Оотключение кнопки</div>
+				<pre>
+                document.documentElement.onmouseup = <span class='fun'>function</span>(){that.className = "button_off";};
+                }		
+                   ;
+                   break;
+				</pre>   
+   <div>АВАРИЯ ЗАСЛОНКА</div>
+   <pre>
+           case "FAIL_VALVE_BTN":
+	</pre>	   
+    <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+    <div>Номер установки (вентилятора) "fan_numer" определен выше.</div>
+                   <div>Если установка не включена то работа кнопок заблокирована</div>
+           <div>Проверяем включена ли установка если всключени то отключаем если нет то выход</div>
+		   <pre>
+                   var el_cool = document.getElementById('inc_ind');
+                   if(el_cool.className !=="inc_ind_on"){ return;}
+					</pre>
+    <div>Строка которая заноситься в базу.</div>
+	<pre>
+                   var str = "АВАРИЯ ЗАСЛОНКА. Установка «СТОП»";
+   </pre>
+    <div>Идентитфикатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Определяем активную вкладку, что бы после абработкт вставить именно в нее.</div>
+	<pre>
+           var tab = currentTable();			
+   </pre>
+    <div>Имя файла обработчика на сревере с прицепленными к нему данными  для массива GET[]  -класс/метод + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+                   var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
+				   
+                           callServer(target_name, div_id);
+	</pre>					   
+    <div>Обращаемся к текущему элементу.</div>
+	<pre>
+                   var that = document.getElementById("FAIL_VALVE_BTN");
+	</pre>
+    <div>Меняем состояние с помощью клика.</div>
+	<pre>
+			if(that.className === "button_on"){//если кнопка вжата
+</pre><span>1000</span><pre>that.className = "button_off";
+				 }else if(that.className === "button_off"){//если кнопка отжата то есть выключена
+							 that.className = "button_on"; 
+				 }
+	 </pre>
+     <div>Меняем текст в элементах.</div>
+	 <pre>
+		   var st_f = document.getElementById("SState_1");//надпись "СИСТЕМА В НОРМЕ" или другая
+
+		if(that.className === "button_on"){
+			 var st_f = document.getElementById("SState_1");	
+			 st_f.innerHTML ="АВАРИЯ ЗАСЛОНКА";
+			 st_f.style.color = "red";
+			 var vl_1 = document.getElementById("VALVE_IND");
+			 vl_1.innerHTML = "АВАРИЯ";
+			 vl_1.style.cssText ="color:#fff; background-color:red; font-weight:bold";
+	 </pre>
+    <div>Сообщаем window.opener что произошла АВАРИЯ  'red'. </div>
+
+    <div>Остановка установки.</div>
+	<pre>
+					fan_on_off(false,'red',false);
+	</pre>
+    <div>Перевод рычажка в положение выключить.</div>
+	<pre>
+					var el = document.getElementById('img_start_stop');
+					el.src = 'img/stop1.png';
+</pre>
+      <div>Перевод кнопки сброса в состояние поднята.</div>
+	  <pre>
+			document.getElementById("RESET").className = "button_off"; 	
+		</pre>
+    <div>Отключение кнопки</div>
+	<pre>
+		document.documentElement.onmouseup = <span class='fun'>function</span>(){that.className = "button_off";};
+	   }	 
+
+	   ;
+	   break;
+	 </pre>  
+   <div>СБРОС АВАРИЙНЫХ КНОПОК</div>
+   <pre>
+           case"RESET": 
+   </pre>
+   <div>Организуем строку для передачи XMLHTTPrequest объекту для передачи базе данных.</div>
+    <div>Номер установки (вентилятора) "fan_numer" определн выше*/.
+    Строка которая заноситься в базу</div>
+	<pre>
+                   var str = "Сброс в состояние - зима";
+	</pre>
+<span>1050</span> <div>Идентификатор элемента в который будут вставляться полученные с сервера данные.</div>
+	<pre>
+                   var div_id = "scroll_area";
+	</pre>
+    <div>Текущая активная вкладка.</div>
+	<pre>
+           var tab = currentTable();		
+	 </pre>  
+    <div>Имя файла обработчика на сревере с прицепленными к нему данными 
+    -класс/метод- + id элемента на который нажали + строка с инф. + номер установки.</div>
+	<pre>
+                   var target_name = 'obj=Journal/add&what='+el+'&str='+str+'&fan_num='+fan_number+'&id_table='+tab; 
+	
+                           callServer(target_name, div_id);
+	</pre>
+    <div>Сообщаем window.opener что аварийные кнопки сброшены меняем цвет строки текущей установки .</div>
+	<pre>
+   var text_cont = document.getElementById("id_cont").textContent;
+                var object = window.opener.document.getElementById(text_cont);
+            for (var childItem in object.childNodes) {
+             if (object.childNodes[childItem].nodeType === 1)
+            object.childNodes[childItem].style.backgroundColor = '#eee';
+            }
+                object.childNodes[5].innerHTML = 'ОТКЛ.';		
+
+                object.childNodes[5].innerHTML = 'ОТКЛ.';	
+                var st_f = document.getElementById("SState_1");	
+                st_f.innerHTML ="СИСТЕМА В НОРМЕ";
+                st_f.style.color = "#37CD23";
+                var md_1 = document.getElementById("MD_1");
+                md_1.innerHTML = "НОРМА";
+                md_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var f_1 = document.getElementById("F1");
+                f_1.innerHTML = "НОРМА";
+                f_1.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var trm = document.getElementById("THERM_IND");
+                trm.innerHTML = "НОРМА";
+                trm.style.cssText ="color:#fff; background-color:#5D7809; font-weight:bold";
+                var vl_1 = document.getElementById("VALVE_IND");
+                vl_1.innerHTML = "ЗАКР.";
+                vl_1.style.cssText ="color:#fff; background-color:#6950B6; font-weight:bold";
+                document.getElementById("RESET").className = "button_on"; 	
+               ;
+               break;
+
+	</pre>
+  
+           }
+	<div>Функция запускающая строку прогресса на запуск и на остановку устройства при передаяи параметра  bin = false происходит остановка уствновки и при передачи параметра bin = true происходит  запуск установки , текст строоки зависит от события аварийное оно или нет, в случае если аварийное то передается параметр is_alarm, если не аварийное то по умолчанию, параметр win_open  принимает значение или red или green  передается когда надо передать на родительскую страницу (список устройств) сообщение о   запуске или остановке какого либо из устройств цветом строки  и надписью "ВКЛ" или "ОТКЛ".
+	</div>
+	<span>1100</span>
+	<pre>
+        <span class='fun'>function</span> fan_on_off(bln, win_open,is_alarm ){
+	</pre>
+	
+    <div>ОТКЛЮЧЕНИЕ УСТАНОВКИ</div>
+	<pre>
+                if(!bln){//отключение установки
+	</pre>			
+        <div>создаем контейнер прогресс бара</div>            
+    <pre>            var box = document.createElement('div');
+                        box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
+                        "top:210px; left: 410px";
+                        box.setAttribute('id','box');
+        /*контейнер для прогресс бара*/
+                       var str = document.createElement('div');
+         /*Меняем надпись в заисимости от ситуации */		
+                    if(is_alarm){
+                            str.innerHTML = "ОСТАНОВКА УСТАНОВКИ";
+                            str.style.cssText = "width:260px; color:#F4F2F5; margin:36px 100px 20px;word-spacing:8px;"+
+                            " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    }else{
+                            str.innerHTML = "<div style='text-align:center'>АВАРИЙНАЯ</div> <div style='text-align:center'>ОСТАНОВКА УСТАНОВКИ</div>";
+                            str.style.cssText = "width:260px; color:#F4F2F5; margin:16px 100px 20px;word-spacing:8px;"+
+                            " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    }	
+                            //     str.setAttribute('id','str');
+		</pre>
+        <div>Контейннер для текста</div>
+        <pre>            var bar = document.createElement('div');
+                            bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
+                            "padding-left:6px; background-color:#969495";
+                            //  bar.setAttribute('id','bar');
+                            box.appendChild(str);
+                            box.appendChild(bar);
+        /*добавляем прогресс бар на страницу*/
+                            var bd = document.documentElement;
+                            bd.appendChild(box);
+        /*вставляем саму строку прогресса*/
+                    for(var i = 0; i < 18; i++){
+                             var elem = document.createElement('div');	
+                            elem.style.cssText = "width:16px; height:30px; "+
+                            "float:left; background-color:#F0EEEF; margin:4px 1px";
+                                            bar.appendChild(elem);
+                    }	
+		</pre>
+        <div>запускаем строку прогресса на выключение (исчезающие элементы)</div>
+		<pre>
+                            var inter = 150;//длительность интервала между вызовами функции				
+                            var nn =0;
+        /*установка иинтервала работы строки прогресса*/                    
+                            interval = setInterval(<span class='fun'>function</span>(){
+                                    bar.removeChild(bar.lastChild); nn++ ;
+</pre><span>1150</span><pre>                                    if(nn>17){clearInterval(interval);
+                                    box.parentNode.removeChild(box);
+                            ////////////////////////////////////////////////////	
+
+    /*по окончанию строки  остановка  вентилятора	*/
+                           fan_speed(null);
+   /*сообщаем window.opener что установка ОТКЛЮЧЕНА и меняем цвет строки на списке устройств
+    *  на краснй и текст вставлется "ОТКЛ" */
+
+                if(win_open === 'red'){
+                         var text_cont = document.getElementById("id_cont").textContent;
+                         var object = window.opener.document.getElementById(text_cont);
+                         for (var childItem in object.childNodes) {
+                         if (object.childNodes[childItem].nodeType === 1)
+                         object.childNodes[childItem].style.backgroundColor = '#D1667A';
+                         }
+                        object.childNodes[5].innerHTML = 'ОТКЛ.';		
+                }			
+ /*сообщаем window.opener что установка ВКЛЮЧЕНА и меняем цвет строки на списке устройств
+  *  на зеленый и текст вставляется "ВКЛ" */
+                   if(win_open === 'gray'){
+                        var text_cont = document.getElementById("id_cont").textContent;
+                        var object = window.opener.document.getElementById(text_cont);
+                    for (var childItem in object.childNodes) {
+                        if (object.childNodes[childItem].nodeType === 1)
+                        object.childNodes[childItem].style.backgroundColor = '#eee';
+                        }
+                        object.childNodes[5].innerHTML = 'ОТКЛ.';		
+                   }			
+   /***********************************************************************/				
+
+                   /*отключение картинки с потоком воздуха*/	
+                        var el_cool = document.getElementById('inc_ind');
+                        el_cool.className  = "inc_ind_off";
+                        var el_out = document.getElementById('out_ind');
+                        el_out.style.backgroundImage = "none";	
+
+                     }/*clear inerval*/;	
+                   }/*end off setInertval*/, inter);
+                                               return;	
+
+           }else{
+	   </pre>
+           <div>ЗАПУСК УСТАНОВКИ</div>
+        <pre> /*создаем элементы строки прогресса******************/
+                           //
+                    var box = document.createElement('div');
+                    box.style.cssText ="width:440px; height:160px; background-color:black; position:fixed;"+
+                    "top:210px; left: 410px";
+                    box.setAttribute('id','box');
+
+</pre><span>1200</span><pre>var str = document.createElement('div');
+                    str.innerHTML = "ЗАПУСК  УСТАНОВКИ";
+                    str.style.cssText = "width:240px; color:#F4F2F5; margin:36px 120px 20px;word-spacing:8px;"+
+                    " font-weight:bold; font-family:Arial, sans-serif; font-size:18px";
+                    str.setAttribute('id','str');
+
+                    var bar = document.createElement('div');
+                    bar.style.cssText = "width:350px; height:38px; margin:25px auto;"+
+                    "padding-left:6px; background-color:#969495";
+                    bar.setAttribute('id','bar');
+
+                    box.appendChild(str);
+                    box.appendChild(bar);
+
+                    var bd = document.documentElement;
+                    bd.appendChild(box);
+	</pre>
+            <div>создаем элементы роста строки</div>
+    <pre>             var inter = 150;//длительность интервала между вызовами функции				
+                    var nn =0;
+                    interval = setInterval(<span class='fun'>function</span>(){
+                      var elem = document.createElement('div');	
+                    elem.style.cssText = "width:16px; height:30px; "+
+                    "float:left; background-color:#F0EEEF; margin:4px 1px";
+                        bar.appendChild(elem); nn++ ;
+                if(nn>18){
+                    clearInterval(interval);
+                    box.parentNode.removeChild(box);
+
+    /*Берем данные скорости вращения вентилятора из базы данных
+                   и передаем функции регулирущейскорость вентилятора*/
+                   var sp_win = parseInt(document.getElementById('pro').textContent);
+                   var sp_win = 20/sp_win;
+                           fan_speed(sp_win);
+
+    /*включение картинки с потоком воздуха*/
+                    var el_cool = document.getElementById('inc_ind');
+                    el_cool.className ='inc_ind_on';
+	</pre>				
+	<div>Сообщаем window.opener что установка запущена</div>
+	<pre>
+                var text_cont = document.getElementById("id_cont").textContent;
+              var object = window.opener.document.getElementById(text_cont);
+                   for (var childItem in object.childNodes) {
+                   if (object.childNodes[childItem].nodeType=== 1)
+                   object.childNodes[childItem].style.backgroundColor = '#ADD13D';
+                   }	
+                   object.childNodes[5].innerHTML = 'ВКЛ.';
+   /***********************************************************************/	
+                               var el_out = document.getElementById('out_ind');
+                               el_out.style.backgroundImage = "url('img/out.png')";		
+
+</pre><span>1250</span><pre>};	
+                       }, inter);
+               }
+       }
+
+
+                   //alert(el);
+   };//end off onmousedown
+</pre>
+   <div>ПЕРЕКЛЮЧАТЕЛЬ ВКЛАДКИ ЖУРНАЛА СОБЫТИЙ </div>
+   <div>Внешний вид вкладки зависит от класса присвоенного элементу.Для ткрытой вкладки присваивается класс - "button_on", для закрытой вкладке присваивается класс "button_off"</div>
+   <pre>
+    <span class='fun'>function</span> logging_on_off(in_id){
+            var fan_number = document.getElementById('NAME').innerText;
+            var mass = new Array("EVENT","ALARM","LOG","ALL");
+            var id_st  = document.getElementById(in_id);
+            if(id_st.className === "button_off"){
+                    id_st.className = "button_on"; 
+
+   /*обращаемся к серверу для загрузки данныз в таблице*/
+           /*переводим в нижний регистр для PHP метода*/		
+            var status = in_id.toLowerCase();
+        /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/                   
+            var req = 'obj=Journal/'+status+'&fan_num='+fan_number;
+                           callServer(req,"scroll_area");
+
+   /*возвращаем остальные кнопки в исходное состояние*/			
+	   for(var i=0; i < mass.length; i++){
+		if(in_id !== mass[i]){ 
+		   document.getElementById(mass[i]).className = "button_off";					
+		   }
+		   }
+		}else{
+		   id_st.className = "button_off";
+		   }
+			document.body.onselectstart = null;
+		   return false;	 
+           }
+</pre>
+   <div>Создание нового объекта XMLHttpRequest для общения с Web-сервером </div>
+   <pre>
+   var xmlHttp = false;
+
+   try {
+     xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+   } catch (e) {
+     try {
+       xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+     } catch (e2) {
+       xmlHttp = false;
+</pre><span>1300</span><pre>     }
+   }
+
+   if (!xmlHttp && typeof XMLHttpRequest !== 'undefined') {
+     xmlHttp = new XMLHttpRequest();
+   }	
+	</pre>
+   <div>соеденение с сервером  в параметрах передаем команду для контроллера и id дива
+   куда будут вставленны полученные данные</div>
+   <pre>
+   <span class='fun'>function</span> callServer(target_name, div_id) {
+   //alert('in callServer() div_id ='+div_id);
+           /* Получить значения из web-формы
+
+           /*передаем URL журнала предназначенного для загрузки */	
+             var url = 'index.php?'+encodeURI(target_name);//alert(decodeURI(url));
+  //alert('url - '+url);
+           // Открыть соединение с сервером
+             xmlHttp.open("GET", url, true);
+
+           // Установить функцию для сервера, которая выполнится после его ответа
+             xmlHttp.onreadystatechange = <span class='fun'>function</span>(){
+   //alert('oneadystate = '+xmlHttp.readyState);
+                             if (xmlHttp.readyState === 4) {
+                           var response = xmlHttp.responseText;
+                           /*берем элемент со страницы и вставляем во внутрь код/текст.
+           НАДО понять какая вкладка открыта и вставить данные соотвтетствующие это вкладке
+                   для этого проверяем какой текущий класс элемента "button_on" или "button_off"
+                   и в зависимости от этого загружается соотвтетсвующая страница сервера 	*/
+
+                                   document.getElementById(div_id).innerHTML = response;
+
+                   }		  
+           };
+
+             // SПередать запрос
+                   xmlHttp.send(null);
+   } 
+	</pre>
+   <div>функции запрещающая выделение текста</div><pre><span class='fun'>function</span> disableSelection(target){
+       if (typeof target.onselectstart!=="undefined") // для IE:
+           target.onselectstart=<span class='fun'>function</span>(){return false;};
+       else if (typeof target.style.MozUserSelect!=="undefined") //для Firefox:
+           target.style.MozUserSelect="none";
+       else // для всех других (типа Оперы):
+           target.onmousedown=<span class='fun'>function</span>(){return false;};
+       target.style.cursor = "default";
+   }
+	</pre>
+   <div>Определяем АКТИВНУЮ вкладку (которая в данный момент открыиа)и передаем серверу для загрузки  соотвтетствующей этой вкладке СТРАНИЦЫ</div>
+	<pre>
+           <span class='fun'>function</span> currentTable(){
+			   var mass = new Array("EVENT","ALARM","LOG","ALL");
+			   for(var i=0; i&lt;mass.length; i++){
+			   var choose_el = document.getElementById(mass[i]);
+			   if(choose_el.className === 'button_on')
+					   txt = mass[i].toLowerCase();
+				}
+			return txt;
+			}	
+	</pre>
+   <div>функция запрета выделения</div>
+   <pre>
+   <span class='fun'>function</span> disableSelection(target){ 
+               if (typeof target.onselectstart!=="undefined") 
+                  target.onselectstart=<span class='fun'>function</span>(){return false;}; 
+               else if (typeof target.style.MozUserSelect!=="undefined")  
+                  target.style.MozUserSelect="none" ;
+               else target.onmousedown=<span class='fun'>function</span>(){return false;} ;
+                                   target.style.cursor = "default" ;
+
+           if (document.getElementById("noselect"))  
+               disableSelection(document.getElementById("noselect")); 
+           } 
+	</pre>
+   <div>Функция определения типа браузера</div>
+   <pre>
+   <span class='fun'>function</span> browser(){
+       var ua = navigator.userAgent;
+
+       if (ua.search(/MSIE/) > 0) return 'IE';
+       if (ua.search(/Firefox/) > 0) return 'Firefox';
+       if (ua.search(/Opera/) > 0) return 'Opera';
+       if (ua.search(/Chrome/) > 0) return 'Google Chrome';
+       if (ua.search(/Safari/) > 0) return 'Safari';
+       if (ua.search(/Konqueror/) > 0) return 'Konqueror';
+       if (ua.search(/Iceweasel/) > 0) return 'Debian Iceweasel';
+       if (ua.search(/SeaMonkey/) > 0) return 'SeaMonkey';
+
+       // Браузеров очень много, все вписывать смысле нет, Gecko почти везде встречается
+       if (ua.search(/Gecko/) > 0) return 'Gecko';
+
+       // а может это вообще поисковый робот
+       return 'Search Bot';
+</pre><span>1400</span><pre>   }
+	</pre>
+   <div>ФУНКЦИЯ изменяющая скорость вращениея вентилятора</div>
+   <pre>
+           <span class='fun'>function</span> fan_speed(sp){
+//	 
+		/*сылка на малый вентилятор*/
+		var lt_fan = document.getElementById('fan_1');
+		/*сылка на большой венилятор*/
+		 var bg_fan = document.getElementById('fan_2');
+	   var what = browser().toUpperCase();
+	   if (what === 'GECKO'){			
+			   lt_fan.style.cssText = "-ms-animation: spin "+sp+"s infinite linear";	
+			   bg_fan.style.cssText = "-ms-animation: spin "+sp+"s infinite linear";
+	   }else if(what === "GOOGLE CHROME"){
+			   lt_fan.style.cssText = "-webkit-animation: spin "+sp+"s infinite linear";	
+			   bg_fan.style.cssText = "-webkit-animation: spin "+sp+"s infinite linear";
+	   }else if(what === "FIREFOX"){
+			   lt_fan.style.cssText = "-moz-animation: spin "+sp+"s infinite linear";
+			   bg_fan.style.cssText = "-moz-animation: spin "+sp+"s infinite linear";
+	   }else {
+			   lt_fan.style.cssText = "animation: spin "+sp+"s infinite linear";
+			   bg_fan.style.cssText = "animation: spin "+sp+"s infinite linear";
+	   }
+
+   }
+
+   
+</pre>
+</body>
+</html>
+
+

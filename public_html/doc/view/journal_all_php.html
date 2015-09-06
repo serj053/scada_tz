@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head> </title> </title>
+<meta charset="UTF8" />
+</head><body>
+<pre>
+<!---->
+        &lt;?php
+if(isset($ms)){
+	$id = 0;
+	foreach($ms as $v): 
+	$id++;
+	$el_id = 'id_'.$id;
+	$ch_id = 'ch_'.$id;
+
+	?&gt;
+	&lt;div class="control"&gt;
+	&lt;div class="date_td"&lt;&gt;span class="delete_" id="<?php echo $el_id;?>" title="удаление строки">X</span&gt;&lt;?php echo $v['date_time'] ?&gt;&lt;/div>
+	&lt;div class="source_td"&gt;&lt;?php echo $v['fan_number'] ?&gt;&lt;/div>
+	&lt;div class="message_td"&gt;&lt;?php echo $v['message'] ?&gt;&lt;/div>
+  &lt;div class="status_td" &gt;
+  &lt;?php
+  /*вставляем поле с чек боксом для аварийных кнопок  для этого проверяем что
+выводмиое поле принадлежит одной из аварийных кнопок то есть проверяем "id" равен
+одному  из рассматриваемого массива*/
+	$arr_id= array('FAIL_FAN_BTN','FAIL_F_BTN','FAIL_FREEZ_BTN',
+	'FAIL_VALVE_BTN','RESET');
+
+  foreach($arr_id as $current){
+	 if($v['elem_id'] == $current){
+		  
+	?&gt;
+
+	  &lt;input type="checkbox" &lt;?php echo $v['status']; ?&gt; 
+				   id="<?php echo $v['id'];  ?>"/>  
+	  &lt;?php
+		  if($v['status'] == 'checked') echo '"УСТР."';
+		  else echo'"АКТ."';
+	 }
+	}
+                                    
+          ?&gt;  
+&lt;?php /*создаем скрытый элемент для хранения
+ значениея идентификактора строки для того 
+что бы при клике по строке получить это значение и 
+обратитья по нему в базу данных   */           ?&gt;   
+        &lt;/div>	
+	&lt;div class="hidden"&gt;&lt;?php echo $v['id'] ?&gt;&lt;/div&gt;
+        &lt;/div&gt;	
+        &lt;?php endforeach ;
+
+        }	?&gt;
+<!--	-->
+</pre>
+</body>
+</html>

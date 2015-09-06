@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head> </title> </title>
+<meta charset="UTF8" />
+</head><body>
+<pre>
+
+&lt!DOCTYPE html&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;ВУ -  &lt;?php echo $fan_num;  ?></title&gt;
+	&lt;meta charset="UTF-8"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+
+	&lt;script type="text/javascript" src="js/fan_control.js"&gt;&lt;/script&gt;
+	&lt;link rel="stylesheet" href="css/control_panel.css" type="text/css"&gt;
+	&lt;script type="text/javascript"&gt;
+
+	&lt;/script&gt;
+	<!-- &lt;meta http-equiv="Refresh" content="5" />-->
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="wrapper"&gt;  
+&lt;div id="id_cont"&gt&lt?php echo $id_content;?&gt&lt/div&gt;
+<!-- ******************** ПАНЕЛЬ УПРАВЛЕНИЯ УСТАНОВКОЙ  ************************-->
+&lt;div id="control_panel" class="font"&gt;
+
+	&lt;div id="system"&gt;
+		&lt;div  class="font_title" id="NAME">&lt?php echo $fan_num;?> &lt;/div&gt;
+		&lt;div class="font_title" id="SState_1"&gt; СИСТЕМА В НОРМЕ&lt;/div&gt;				
+	&lt;/div&gt; 
+	&lt;div class="function" id="manual_startup"&gt;
+	&lt;div id="manual_startup_label" class="label_control_panel"&gt;
+	РУЧНОЙ ЗАПУСК
+	&lt;/div&gt;
+	  &lt;div id="control"&gt;
+
+		&lt;div id="start_stop" &gt;
+
+			&lt;div id="start" class="font_content" &gt; пуск &lt;/div&gt;       
+				&lt;img src="img/stop1.png" alt="" id="img_start_stop"&gt;	
+			&lt;div id="stop" class="font_content" &gt; стоп &lt;/div&gt; 
+
+			&lt;div id="fan_1"&gt;
+
+			&lt;/div&gt;
+
+	&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class="function" id="run_timetable"&gt;
+	&lt;div class="label_control_panel"&gt;
+			ЗАПУСК ПО РАСПИСАНИЮ
+	&lt;/div&gt;
+	&lt;div id="run_table" class="font_content"&gt;
+			&lt;span&gt;вкл&lt;/span&gt;&lt;input type="text" value="22:10"  /&gt;
+			&lt;span&gt;выкл&lt;/span&gt;&lt;input type="text" value="24:55"  /&gt;
+			&lt;span id="BTN_T" class="turn_off" &gt; АКТИВИРОВАТЬ &lt;/span&gt;
+	&lt;/div&gt;
+
+	&lt;/div&gt;
+	&lt;div  class="function"&gt;
+	&lt;div id="manual_startup_label" class="label_control_panel"&gt;
+	РЕЖИМ РАБОТЫ
+	&lt;/div&gt;
+	&lt;div id="control"&gt;
+
+			&lt;div id="work_mode" &gt;						    
+				&lt;div id="summer" class="font_content"
+				onclick="click_winter()"> лето &lt;/div&gt;       
+					&lt;img src="img/stop1.png" alt="" id="img_summer_winter"&gt;	
+				&lt;div id="winter" class="font_content" 
+				onclick="click_summer()"> зима &lt;/div&gt; 
+
+			&lt;/div&gt;
+
+			&lt;div id="lamp_img"&gt;
+				&lt;img id="lm_img" src="img/flag_winter.png" alt="индикатор"/>
+			&lt;/div&gt;
+			&lt;/div&gt;
+	&lt;/div&gt;	
+	&lt;div class="function" id="working_mode"&gt;
+	&lt;div id="manual_startup_label" class="label_control_panel"&gt;
+	СКОРОСТЬ ВЕНТИЛЯТОРА
+	&lt;/div&gt;
+	&lt;div id="box"><!---->
+
+		&lt;div id="fan_speed" &gt;
+			&lt;div id="left_p"&gt;&lt;/div&gt;
+			&lt;div id="fish"&gt;&lt;/div&gt;
+			&lt;div id="rail"&gt;&lt;/div&gt;
+			&lt;div id="right_p"&gt;&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div id="pro"&gt;
+				&lt;?php  echo $VEL_IND; ?&gt;
+		&lt;/div&gt;
+		&lt;div id="_pro"&gt;%&lt;/div&gt;
+	&lt;/div><!---->
+
+	&lt;/div&gt;
+
+	&lt;div class="function" &gt;
+	&lt;div class="label_control_panel"&gt;
+	ТЕМПЕРАТУРНЫЕ ЗНАЧЕНИЯ
+	&lt;/div&gt;
+	&lt;div id="ustavka" class="font_content"&gt;
+			уставка				
+	&lt;/div&gt;
+	&lt;div id="reguliator"&gt;
+			&lt;div id="left_s"&gt;&lt;/div&gt;
+			&lt;div id ="polzun"&gt; &lt;/div&gt;
+			&lt;div id="reika"&gt;&lt;/div&gt;	
+			&lt;div id="right_s"&gt;&lt;/div&gt;
+	&lt;/div&gt;	
+
+	&lt;div id="SET_IND"&gt;
+			&lt;?php echo $SET_IND;?>
+	&lt;/div&gt;
+	&lt;div id="label_tempr"&gt;o&lt;/div&gt;
+
+
+	&lt;/div&gt;
+
+	&lt;div class="function"  id="tempr_list" &gt;
+	&lt;div id="TE2_1" class="font_content"&gt;
+		&lt;div id ="v_kan" &gt;в канале &lt;/div&gt;
+		&lt;div id="win_1"&gt;
+			
+			&lt;input type="text" id="TE2" value="&lt;?php echo $TE2;?>"/>
+			 
+		&lt;/div&gt;
+		&lt;div class="label_gr"&gt;o&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="TE3_DIV" class="font_content"&gt;
+		&lt;div id ="obr_v"&gt;обратной воды &lt;/div&gt;
+		&lt;div id="win_2"&gt;
+			
+			&lt;input type="text" id="TE3" value="&lt;?php echo $TE3;?>"/>
+			   
+		&lt;/div&gt;
+		&lt;div class="label_gr"&gt;o&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="naruj" class="font_content"&gt;
+		&lt;div id ="nar"&gt;наружняя &lt;/div&gt;
+		&lt;div id="win_3"&gt;
+			
+			&lt;input type="text" id="TE1" value="&lt;?php echo $TE1;?>"/>
+				
+		&lt;/div&gt;
+		&lt;div class="label_gr"&gt;o&lt;/div&gt;
+	&lt;/div&gt;
+
+
+	&lt;/div&gt;
+
+
+&lt;/div&gt;	
+<!-- ******************** МОДЕЛЬ УСТАНОВКИ  ************************-->	
+<!-- ******************** НАДПИСИ НАД УСТАНОВКОЙ ************************-->	
+&lt;div id="menu"&gt;
+	&lt;div id="vl_ind" &gt;
+	&lt;div class="menu_label"&gt;ЗАСЛОНКА &lt;/div&gt;
+	&lt;div id="VALVE_IND"&gt;ЗАКР. &lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="F_1" &gt;
+	&lt;div class="menu_label"&gt;ФИЛЬТР &lt;/div&gt;
+	&lt;div id="F1"&gt;НОРМА &lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="F_2" &gt;
+	&lt;div class="menu_label"&gt;ФИЛЬТР &lt;/div&gt;
+	&lt;div id="F2"&gt;НОРМА &lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="th_ind"&gt; 
+	&lt;div class="menu_label"&gt;ТЕРМОСТАТ &lt;/div&gt;
+	&lt;div id="THERM_IND"&gt;НОРМА &lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id= "md_"&gt;
+	&lt;div class="menu_label"&gt;ВЕНТИЛЯТОР &lt;/div&gt;					
+	&lt;div id="MD_1"&gt;
+		   &lt;?php  echo $VEL_IND; ?&gt;
+	&lt;/div&gt;
+	&lt;/div&gt;			
+&lt;/div&gt;
+<!-- ******************** МОДЕЛЬ УСТАНОВКИ  ************************-->				
+&lt;div id="fan_mashin"&gt;
+	&lt;div class="inc_ind_off"  id="inc_ind" &gt; &lt;/div&gt;
+		&lt;div id="mashin_color"&gt;
+		&lt;div id="empty_1"&gt; &lt;/div&gt;
+		&lt;div id="empty_2"&gt; &lt;/div&gt;
+		&lt;div id="empty_3"&gt; &lt;/div&gt;
+		&lt;div id="empty_4"&gt; &lt;/div&gt;
+		&lt;div id="empty_5"&gt; &lt;/div&gt;
+		&lt;div id="warm"&gt;
+				&lt;div id="warm_ind"&gt;&lt;/div&gt;
+				&lt;div id="warm_sys_ind"&gt;&lt;/div&gt;
+				&lt;div id="hotflow_ind"&gt; &lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div id="empty_6"&gt;	&lt;/div&gt;
+		&lt;div id = "cool"&gt;
+				&lt;div  id="cool_ind"&gt; &lt;/div&gt;
+				&lt;div id="cool_sys_ind"&gt;&lt;/div&gt;
+				&lt;div id="coldflow_ind"&gt; &lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div id="fan_2"&gt; &lt;/div&gt;
+		&lt;/div&gt;
+	&lt;div id="out_ind"&gt; &lt;/div&gt;
+&lt;/div&gt;
+<!-- ******************** НАДПИСИ ПОД УСТАНОВКОЙ ************************-->	
+&lt;div id="menu_under"><!--первая линия указателей-->
+&lt;div id="level_1"&gt;
+&lt;div id="left_top"&gt; 
+		&lt;div class="mash_label"&gt;ТЕМПЕРАТУРА ВХОДА ПОТОКА&lt;/div&gt;
+		&lt;div id="INC_NUM_div"&gt;
+				&lt;form action="" method="">
+						&lt;input type="text" id="INC_NUM" value="&lt;?php echo $INC_NUM;?>"/>
+				&lt;/form&gt;
+		&lt;/div&gt;
+&lt;/div&gt; 
+&lt;div id="right_top"&gt;
+		&lt;div class="mash_label"&gt;ТЕМПЕРАТУРА В КАНАЛЕ&lt;/div&gt;
+		&lt;div id="TE2_2"&gt; 
+				&lt;form action="" method="">
+						&lt;input type="text" id="input_TE2_2" value="&lt;?php echo $TE2;?>"/>
+				&lt;/form&gt;
+		&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="level_2"><!--вторая линия указателей-->
+&lt;div id="middle_1"&gt;
+		&lt;div class="mash_label"&gt;СОСТОЯНИЕ НАСОСА &lt;/div&gt;
+		&lt;div id="PUMP_IND" &gt;ВКЛ. &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="middle_2"&gt;
+		&lt;div class="mash_label"&gt;ДАТЧИК ДАВЛЕНИЯ &lt;/div&gt;
+		&lt;div id="PS1"&gt;НОРМА&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="middle_3"&gt; 
+		&lt;div class="mash_label"&gt;ДАТЧИК ДАВЛЕНИЯ &lt;/div&gt;
+		&lt;div id="PS2"&gt;НОРМА &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="level_3"><!--третья линия указателей-->
+&lt;div id="mid_1"&gt;
+		&lt;div class="mash_label"&gt;ТЕМПЕРАТУРА ОБР. ВОДЫ &lt;/div&gt;
+		&lt;div id="WATERBACK_IND_div"&gt; 
+				&lt;form action="" method="">
+						&lt;input type="text" id="WATERBACK_IND" value="&lt;?php echo $WATERBACK_IND;?>"/>
+				&lt;/form&gt;
+		&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mid_2"&gt;
+		&lt;div class="mash_label"&gt;3-Х ХОДОВОЙ КЛАПАН &lt;/div&gt;
+		&lt;div id="Hott"&gt;ОТКР &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="mid_3"&gt; 
+		&lt;div class="mash_label"&gt;3-Х ХОДОВОЙ КЛАПАН &lt;/div&gt;
+		&lt;div id="Cold"&gt;ОТКР &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="buttons"&gt;	<!--линия указателей аварийности-->
+	&lt;div id="FAIL_FAN_BTN"  class="button_off" &gt; АВАРИЯ ВЕНТИЛЯТОРА&lt;/div&gt;
+	&lt;div id ="FAIL_F_BTN"  class="button_off" &gt;АВАРИЯ ФИЛЬТРА &lt;/div&gt;
+	&lt;div id="FAIL_FREEZ_BTN"  class="button_off" &gt;АВАРИЯ ЗАМАРОЗКА&lt;/div&gt;
+	&lt;div id ="FAIL_VALVE_BTN"  class="button_off" &gt;АВАРИЯ ЗАСЛОНКИ &lt;/div&gt;
+	&lt;div id="RESET"     class="button_on" &gt;СБРОС&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+<!-- ******************** ЖУРНАЛ УСТАНОВКИ  ************************-->	
+&lt;div id="logging"&gt;
+	&lt;div id="buttons_log"&gt;	<!--линия указателей аварийности-->
+		&lt;div id="EVENT"  class="button_off" onmousedown = "logging_on_off('EVENT')"> СОБЫТИЯ&lt;/div&gt;
+		&lt;div id ="ALARM" class="button_off" onmousedown = "logging_on_off('ALARM')">ПРЕДУПРЕЖДЕНИЯ &lt;/div&gt;
+		&lt;div id="LOG" class="button_off" onmousedown = "logging_on_off('LOG')">ЖУРНАЛ ОПЕРАЦИЙ&lt;/div&gt;
+		&lt;div id ="ALL" class="button_on" onmousedown = "logging_on_off('ALL')">ВСЕ &lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id="clear_1"&gt;&lt;/div&gt;
+	&lt;div id="table_log"&gt;
+		&lt;div id="DATA"&gt;ДАТА&lt;/div&gt;
+		&lt;div id="SOURCE"&gt;ИСТОЧНИК&lt;/div&gt;
+		&lt;div id="MESSAGE"&gt;СООБЩЕНИЕ&lt;/div&gt;
+		&lt;div id="STATUS"&gt;СТАТУС&lt;/div&gt;
+		&lt;div id="scroll_area" &gt;
+		&lt;?php  echo $journal; ?&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</body>
+</html>

@@ -1,7 +1,6 @@
 <?php 
 /**
- *  ответственный за работу с базой данных
- *  Просто проверка
+ * Класс  ответственный за работу с базой данных
  */	
 
 
@@ -15,10 +14,10 @@
     
 /**
  *
- *Статический метод для создания соеденения с базой 
+ *@var Статический метод для создания соеденения с базой 
+ * 
  *  */    
     
- 
     static function getDbh(){
         if(self::$dbh == null) {
             $dbh = "mysql:host=localhost;dbname=whatcanru";
@@ -29,7 +28,8 @@
             return self::$dbh;
         }
     }
-/*вставляем любое сообщение в базу данных*/	
+/**
+ * Функция вставляет любые данные и сообщение в базу данных*/	
     function insertMsg(){
 //echo'In insertMdg()';		
     /*вставляем данные в две таблицы в зависимсти от назначения
@@ -184,7 +184,8 @@
 //var_dump($sth);   
      // return($sth->fetchAll(PDO::FETCH_ASSOC));
     }
-/*выводим все записи из таблицы P1_value базы данных для определенной установки*/
+/**
+ * Выводим все записи из таблицы P1_value базы данных для определенной ВУ*/
 	function selectAllValue(){
 		$fan_num = $_GET['fan_num'];
 	    $sq = 'select * from p1_value where fan_number="'.$fan_num.'"';
@@ -196,8 +197,9 @@
 	}
 	
 
-	/*выводим все записи которые были занесены с помощью кнопок :"FAIL_FAN_BTN","FAIL_FREEZ_BTN",
-	"FAIL_VALVE_BTN","RESET"  */
+/**
+ * Выводим все записи которые были занесены с помощью кнопок :"FAIL_FAN_BTN","FAIL_FREEZ_BTN",
+*	"FAIL_VALVE_BTN","RESET"  */
 	function selectSomeMsg($arr, $flag=''){
                     $fan = $_GET['fan_num'];	
                     if($flag =='operation' || $flag == 'event'){
@@ -215,7 +217,8 @@
 		  
 	}
 	
-	/*выводим данные из таблицы p1_value*/
+/**
+ * Выводим все данные из таблицы p1_value (текущие параметры ВУ)*/
 	function selectAllMsg(){
 //echo 'IN selectAllMessage() ';
 		$fan = $_GET['fan_num'];	
@@ -229,7 +232,8 @@
 	}
 	
 	
-/*запись конкретного значениея в таблицу*/
+/**
+ * запись конкретного значениея в таблицу*/
 	function insertValue($val){
                     $sq = 'SELECT "'.$val.'" FROM p1_value'; 
                     $dbh = self::getDbh();
@@ -238,7 +242,8 @@
 	}		
 	
 	
-/*получение кокретного значениея из таблицы значений*/
+/**
+ * получение кокретного значениея из таблицы значений*/
 	function selectValue(){
                     $fan_num ='П1'; //= $_GET['fan_num'];
                     $val = $_GET['clm'];	
@@ -248,7 +253,8 @@
                     return ($sth->execute());
 	}	
 	
-/*удаление записи из базы*/	
+/**
+ * удаление записи из базы*/	
 	function deleteMsg($id){
 //var_dump($date_time);		
                 $sq = 'delete from p1_messages where id ="'.$id.'"';
@@ -258,7 +264,8 @@
 
 	}
 	
-	/*обновление записи из базы*/	
+/**
+ * обновление записи из базы*/	
 	function updateChecked(){
                     $id = $_GET['id_ch'];
                     $true_false = $_GET['what'];	
@@ -271,7 +278,8 @@
                     $sth->execute();
 	}
 	
-	/**Выбор данных для списка устройств*/
+/**
+ * Выбор данных для списка устройств*/
 	function getList(){
 		$sq = 'SELECT * FROM p1_value ';
 		 $dbh = self::getDbh();
@@ -282,7 +290,8 @@
 	}
         
                 
-            /*выбор всех данных для общей таблицы*/
+/**
+ * выбор всех данных для общей таблицы*/
                 function getListTable(){
                     $sq = 'SELECT * FROM p1_messages';
                      $dbh = self::getDbh();
@@ -291,7 +300,8 @@
                     return($sth->fetchAll(PDO::FETCH_ASSOC));
                     
                 }
-             /*выборка отмеченных записей*/
+/**
+ * выборка отмеченных записей*/
                 function isChecked(){         
                     $sq = 'SELECT  status FROM p1_messages where status = "checked"';
                     $dbh = self::getDbh();

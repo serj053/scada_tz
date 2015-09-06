@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head> </title> </title>
+<meta charset="UTF8" />
+<meta charset="UTF8" />
+<style>
+pre{
+	line-height:1;
+	margin:10px;
+	padding:0px;
+	}
+	
+div{
+	width:700px;
+	margin:10px;}	
+
+p,li,div{
+	font-style:italic;
+	font-size:110%;
+	}
+pre,p,ul,div{
+	margin-left:40px;}	
+p{
+	width:600px;}
+li{
+	width:600px;
+	margin-left:20px;}	
+.fun{
+	color:blue;
+	font-size:120%;
+	font-weight:bold;}	
+</style>
+</head>
+<body>
+
+<div>Блок написанный на JAVASCRIPT B предназначенный для обеспечениея интерактивности страницы списка установок (ВУ).</div>
+<ul>
+	<li>Страница отражает список устройств </li>
+	<li>Каждая строка отражает имя установки и некоторые ее параметры </li>
+	<li>При нажатии на строку ВУ открывается новая страница с этой ВУ </li>
+	<li>На странице размещается журнал операций для всех устройств </li>
+	<li> </li>
+</ul>
+<div style="text-align:center"> 
+ УПРАВЛЕНИЕ СПИСКОМ ВЕНТИЛЯТОРОВ
+ </div>
+ 
+ 
+<pre>
+window.onload = function(){
+</pre>  
+ <div>Перезагрузка страницы каждые 30 секунд</div>
+ <pre>
+   setTimeout(function(){   location.reload();}, 30000);
+</pre>
+<div>Блок кода позволяющий ставить или снимать отметки cheked на элементах checkBox </div>
+<pre>
+window.onmousedown = function(e){
+    e = e ||window.event;
+    var el_id = e.target.getAttribute('id');
+</pre>
+<div>Подбираемся к элементу checkBox </div>
+<pre>	
+    if(e.target.parentNode.className == 'status_lt'){
+</pre>	
+  <div>Меняем в элементе checkBox состояние атрибута checked после нажатия на элемент</div>
+<pre>	  
+        if(e.target.checked == false){                 
+            e.target.checked = true;
+	 /*присваиваем переменной состояние атррибута checked*/ 		
+            is_ch = 'checked';
+        }else{       
+            e.target.checked = false;
+	/*присваиваем переменной состояние атррибута checked*/ 		
+            is_ch = null;
+        }
+</pre>
+<div>Определяем название текущей закладки что бы ей же и вернуть результат </div>
+<pre>
+        var current_table = currentTable();
+        var str = 'obj=List/checked&what='+is_ch+'&id_ch='+el_id+'&table_name='+current_table;
+   
+        callServer(str,'table_list');
+        
+    }
+    
+	};//end onmousedown()
+
+ 
+};end of window.onmousedown()
+</pre>
+   <div>ПЕРЕКЛЮЧАТЕЛЬ ВКЛАДКИ ЖУРНАЛА СОБЫТИЙ </div>
+   <div>Внешний вид вкладки зависит от класса присвоенного элементу.Для открытой вкладки присваивается класс - "button_on", для закрытой вкладке присваивается класс "button_off"</div>
+   <pre>
+function logging_on_off(in_id){
+                   var fan_number = document.getElementById('NAME').innerText;
+                   var mass = new Array("EVENT","ALARM","LOG","ALL");
+                   var id_st  = document.getElementById(in_id);
+                   if(id_st.className === "button_off"){
+                           id_st.className = "button_on"; 
+   </pre>
+   <div>Обращаемся к серверу для загрузки данных в таблицу</div>
+   <pre>
+           /*переводим в нижний регистр для PHP метода*/		
+                           var status = in_id.toLowerCase();
+        /*place - клас отвечающий за страницу,  status - елемент (соотвтетсвующя кнопка)*/ 
+	</pre>
+	<div>Формируем строку для передачи её url параметру объекта XMLHTTPrequest, которая состоит из  - класс/метод  </div>
+	<pre>
+                           var req = 'obj=List/'+status;
+                           callServer(req,"table_list");
+
+   /*возвращаем остальные кнопки в исходное состояние*/			
+		   for(var i=0; i < mass.length; i++){
+			   if(in_id !== mass[i]){ 
+			   document.getElementById(mass[i]).className = "button_off";					
+				   }
+			   }
+                   }else{
+                           id_st.className = "button_off";
+                   }
+
+				document.body.onselectstart = null;
+			   return false;	 
+           }
+</pre>
+<div>Создаем объект XMLHTTPrequest для прердачи данных серверу </div>
+<pre>
+   var xmlHttp = false;
+   try {
+     xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+   } catch (e) {
+     try {
+       xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+     } catch (e2) {
+       xmlHttp = false;
+     }
+   }
+
+   if (!xmlHttp && typeof XMLHttpRequest !== 'undefined') {
+     xmlHttp = new XMLHttpRequest();
+   }	
+
+</pre>
+   <div>Соеденение с сервером  в параметрах передаем команду для контроллера и id дива
+   куда будут вставленны полученные данные</div>
+  <pre> function callServer(target_name, div_id) {
+
+           /* Получить значения из web-формы
+
+           /*передаем URL журнала предназначенного для загрузки */	
+             var url = 'index.php?'+encodeURI(target_name);
+           // Открыть соединение с сервером
+             xmlHttp.open("GET", url, true);
+           // Установить функцию для сервера, которая выполнится после его ответа
+             xmlHttp.onreadystatechange = function(){
+ // alert('onreadystate = '+xmlHttp.readyState);
+                             if (xmlHttp.readyState === 4) {
+                           var response = xmlHttp.responseText;
+
+			 document.getElementById(div_id).innerHTML = response;
+
+                   }		  
+               };
+           // SПередать запрос
+                   xmlHttp.send(null);
+           }
+           
+    </pre>    
+	<div>НАДО понять какая вкладка открыта и вставить данные соотвтетствующие это вкладке, для этого проверяем какой текущий класс элемента "button_on" или "button_off" и в зависимости от этого загружается соответсвующая страница сервера 	</div>
+  <div>Определяем активную вкладку (которая в данный момент открыта)
+	   и передаем серверу эту информацию в виде идентификатора соотвтетствующей  этой вкладке </div>
+	<pre>		
+           function currentTable(){
+                   var mass = new Array("EVENT","ALARM","LOG","ALL");
+                   for(var i=0; i < mass.length; i++){
+                           var choose_el = document.getElementById(mass[i]);
+                           if(choose_el.className ==='button_on')
+                                   txt = mass[i].toLowerCase();
+                   }
+                   return txt;
+           }	          
+
+
+// }  
+</pre>
+</body>
+</html>         
