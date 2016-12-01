@@ -11,12 +11,12 @@
 /**
  * Автозагрузка классов*/
 	function __autoload($class){
-                        $directories = array('controller/','model/');
-                        foreach($directories as $directory){
-                        $file = $directory.$class.'.php';
-                                if(file_exists($file) && is_readable($file)){
-                                        require $file;
-                                        return;
+        $directories = array('controller/','model/');
+        foreach($directories as $directory){
+        $file = $directory.$class.'.php';
+        if(file_exists($file) && is_readable($file)){
+        require $file;
+        return;
                                 }
                         }		
 	}
